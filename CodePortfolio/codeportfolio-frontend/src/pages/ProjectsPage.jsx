@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { projects as projectsApi, users as usersApi } from '../api/client';
-import { Avatar, useToast } from '../components/UI';
+import { Icon, Avatar, useToast, estadoLabel } from '../components/UI';
 import { useAuth } from '../context/AuthContext';
 
 const BASE = import.meta.env.VITE_API_URL || '';
@@ -9,10 +9,10 @@ const BASE = import.meta.env.VITE_API_URL || '';
 function Skeleton() {
   return (
     <div style={{ background: 'var(--bg-1)', border: '1px solid var(--border)', borderRadius: 20, overflow: 'hidden' }}>
-      <div style={{ height: 200, background: 'linear-gradient(90deg,var(--bg-3) 25%,var(--bg-4) 50%,var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.4s infinite' }} />
+      <div style={{ height: 200, backgroundImage: 'linear-gradient(90deg,var(--bg-3) 25%,var(--bg-4) 50%,var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.4s infinite' }} />
       <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 9 }}>
         {[['70%','13px'],['90%','11px'],['55%','11px']].map(([w,h],i) => (
-          <div key={i} style={{ height: h, width: w, borderRadius: 6, background: 'linear-gradient(90deg,var(--bg-3) 25%,var(--bg-4) 50%,var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: `shimmer 1.4s infinite ${i*0.1}s` }} />
+          <div key={i} style={{ height: h, width: w, borderRadius: 6, backgroundImage: 'linear-gradient(90deg,var(--bg-3) 25%,var(--bg-4) 50%,var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: `shimmer 1.4s infinite ${i*0.1}s` }} />
         ))}
       </div>
     </div>
@@ -24,15 +24,15 @@ function FilterChip({ active, onClick, children }) {
   return (
     <button onClick={onClick} style={{
       padding: '6px 16px', borderRadius: 99, fontSize: 12, fontWeight: 600,
-      border: `1.5px solid ${active ? 'rgba(108,99,255,0.5)' : 'var(--border)'}`,
-      background: active ? 'rgba(108,99,255,0.12)' : 'var(--bg-2)',
+      border: `1.5px solid ${active ? 'rgba(138,111,71,0.5)' : 'var(--border)'}`,
+      background: active ? 'rgba(138,111,71,0.12)' : 'var(--bg-2)',
       color: active ? 'var(--accent)' : 'var(--text-muted)',
       cursor: 'pointer', fontFamily: 'var(--sans)',
       transition: 'all 0.2s cubic-bezier(0.16,1,0.3,1)',
       whiteSpace: 'nowrap',
-      boxShadow: active ? '0 0 16px rgba(108,99,255,0.15)' : 'none',
+      boxShadow: active ? '0 0 16px rgba(138,111,71,0.15)' : 'none',
     }}
-      onMouseEnter={e => { if (!active) { e.currentTarget.style.borderColor = 'rgba(108,99,255,0.3)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}}
+      onMouseEnter={e => { if (!active) { e.currentTarget.style.borderColor = 'rgba(138,111,71,0.3)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}}
       onMouseLeave={e => { if (!active) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)'; }}}>
       {children}
     </button>
@@ -54,27 +54,28 @@ function ProjCard({ project, liked, onLike, onClick, index }) {
   return (
     <div onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
-        background: 'var(--bg-1)', border: `1px solid ${hov ? 'rgba(108,99,255,0.4)' : 'var(--border)'}`,
+        background: 'var(--bg-1)', border: `1px solid ${hov ? 'rgba(138,111,71,0.4)' : 'var(--border)'}`,
         borderRadius: 20, overflow: 'hidden', cursor: 'pointer',
         display: 'flex', flexDirection: 'column',
         transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
         transform: hov ? 'translateY(-6px) scale(1.01)' : 'translateY(0) scale(1)',
-        boxShadow: hov ? '0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(108,99,255,0.15), 0 0 40px rgba(108,99,255,0.08)' : '0 2px 12px rgba(0,0,0,0.25)',
+        boxShadow: hov ? '0 24px 60px rgba(58,49,38,0.12), 0 0 0 1px rgba(138,111,71,0.15), 0 0 40px rgba(138,111,71,0.08)' : '0 2px 12px rgba(58,49,38,0.07)',
         animation: `cardIn 0.5s cubic-bezier(0.16,1,0.3,1) ${index * 0.05}s both`,
       }}>
       {/* Imagen */}
       <div style={{ height: 190, position: 'relative', overflow: 'hidden', background: 'var(--bg-3)', flexShrink: 0 }}>
         {imgSrc
           ? <img src={imgSrc} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1)', transform: hov ? 'scale(1.08)' : 'scale(1)' }} onError={e => e.currentTarget.style.display='none'} />
-          : <div style={{ width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(135deg,var(--bg-3),var(--bg-4))', fontSize:38, fontFamily:'var(--mono)', color:'rgba(108,99,255,0.25)', fontWeight:300, letterSpacing:'-0.05em', transition:'transform 0.5s cubic-bezier(0.16,1,0.3,1)', transform: hov ? 'scale(1.06)':'scale(1)', userSelect:'none' }}>
+          : <div style={{ width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(135deg,var(--bg-3),var(--bg-4))', fontSize:38, fontFamily:'var(--mono)', color:'rgba(138,111,71,0.25)', fontWeight:300, letterSpacing:'-0.05em', transition:'transform 0.5s cubic-bezier(0.16,1,0.3,1)', transform: hov ? 'scale(1.06)':'scale(1)', userSelect:'none' }}>
               &lt;/&gt;
             </div>
         }
-        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, transparent 40%, rgba(10,10,20,0.65) 100%)', pointerEvents:'none' }} />
+        {imgSrc && <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, transparent 55%, rgba(28,24,19,0.34) 100%)', pointerEvents:'none' }} />}
+        <div style={{ position:'absolute', left:0, right:0, bottom:0, height:1, background:'rgba(31,28,24,0.08)', pointerEvents:'none' }} />
         {/* Badge */}
         {project.status && (
-          <div style={{ position:'absolute', top:10, left:10, padding:'3px 10px', borderRadius:99, fontSize:10, fontWeight:700, fontFamily:'var(--mono)', textTransform:'uppercase', letterSpacing:'0.08em', backdropFilter:'blur(10px)', background: project.status==='published' ? 'rgba(0,229,176,0.18)' : project.status==='draft' ? 'rgba(255,201,71,0.18)' : 'rgba(144,144,184,0.18)', color: project.status==='published' ? '#00e5b0' : project.status==='draft' ? '#ffc947' : '#9090b8', border:`1px solid ${project.status==='published'?'rgba(0,229,176,0.3)':project.status==='draft'?'rgba(255,201,71,0.3)':'rgba(144,144,184,0.2)'}` }}>
-            {project.status}
+          <div style={{ position:'absolute', top:10, left:10, padding:'3px 10px', borderRadius:99, fontSize:10, fontWeight:700, fontFamily:'var(--mono)', textTransform:'uppercase', letterSpacing:'0.08em', backdropFilter:'blur(10px)', background: project.status==='published' ? 'rgba(63,125,94,0.18)' : project.status==='draft' ? 'rgba(176,138,62,0.18)' : 'rgba(139,131,120,0.18)', color: project.status==='published' ? '#3f7d5e' : project.status==='draft' ? '#b08a3e' : '#8b8378', border:`1px solid ${project.status==='published'?'rgba(63,125,94,0.3)':project.status==='draft'?'rgba(176,138,62,0.3)':'rgba(139,131,120,0.2)'}` }}>
+            {estadoLabel(project.status)}
           </div>
         )}
       </div>
@@ -89,15 +90,15 @@ function ProjCard({ project, liked, onLike, onClick, index }) {
             {project.description}
           </p>
         )}
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:6, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:6, paddingTop:10, borderTop:'1px solid rgba(31,28,24,0.045)' }}>
           <div style={{ display:'flex', alignItems:'center', gap:7, minWidth:0 }}>
             <Avatar name={project.authorName||'?'} size={24} />
             <span style={{ fontSize:12, color:'var(--text-muted)', fontWeight:500, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{project.authorName}</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:12, flexShrink:0 }}>
-            <button onClick={handleLike} style={{ display:'flex', alignItems:'center', gap:5, background:'none', border:'none', cursor:'pointer', color: liked?'#ff4d6d':'var(--text-muted)', fontSize:12, fontFamily:'var(--mono)', fontWeight:600, padding:'4px 7px', borderRadius:8, transition:'all 0.18s', transform: bounce?'scale(1.4)':'scale(1)', filter: liked?'drop-shadow(0 0 5px rgba(255,77,109,0.55))':'none' }}
-              onMouseEnter={e => { e.currentTarget.style.background='rgba(255,77,109,0.1)'; e.currentTarget.style.color='#ff4d6d'; }}
-              onMouseLeave={e => { e.currentTarget.style.background='none'; e.currentTarget.style.color=liked?'#ff4d6d':'var(--text-muted)'; }}>
+            <button onClick={handleLike} style={{ display:'flex', alignItems:'center', gap:5, background:'none', border:'none', cursor:'pointer', color: liked?'#a8433f':'var(--text-muted)', fontSize:12, fontFamily:'var(--mono)', fontWeight:600, padding:'4px 7px', borderRadius:8, transition:'all 0.18s', transform: bounce?'scale(1.4)':'scale(1)', filter: liked?'drop-shadow(0 0 5px rgba(168,67,63,0.55))':'none' }}
+              onMouseEnter={e => { e.currentTarget.style.background='rgba(168,67,63,0.1)'; e.currentTarget.style.color='#a8433f'; }}
+              onMouseLeave={e => { e.currentTarget.style.background='none'; e.currentTarget.style.color=liked?'#a8433f':'var(--text-muted)'; }}>
               <svg width={13} height={13} viewBox="0 0 24 24" fill={liked?'currentColor':'none'} stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
               {project.likes??0}
             </button>
@@ -122,17 +123,17 @@ function DetailDrawer({ project, liked, onLike, onClose, onNavigate }) {
 
   return (
     <>
-      <div onClick={close} style={{ position:'fixed', inset:0, background:'rgba(6,6,16,0.72)', backdropFilter:'blur(6px)', zIndex:200, opacity:vis?1:0, transition:'opacity 0.3s ease' }} />
-      <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'100%', maxWidth:500, background:'var(--bg-1)', borderLeft:'1px solid var(--border)', zIndex:201, display:'flex', flexDirection:'column', transform:vis?'translateX(0)':'translateX(100%)', transition:'transform 0.35s cubic-bezier(0.16,1,0.3,1)', boxShadow:'-20px 0 80px rgba(0,0,0,0.5)', overflowY:'hidden' }}>
+      <div onClick={close} style={{ position:'fixed', inset:0, background:'rgba(46,40,32,0.34)', backdropFilter:'blur(6px)', zIndex:200, opacity:vis?1:0, transition:'opacity 0.3s ease' }} />
+      <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'100%', maxWidth:500, background:'var(--bg-1)', borderLeft:'1px solid var(--border)', zIndex:201, display:'flex', flexDirection:'column', transform:vis?'translateX(0)':'translateX(100%)', transition:'transform 0.35s cubic-bezier(0.16,1,0.3,1)', boxShadow:'-20px 0 80px rgba(58,49,38,0.12)', overflowY:'hidden' }}>
         {/* Header */}
         <div style={{ padding:'14px 18px', borderBottom:'1px solid var(--border)', display:'flex', alignItems:'center', gap:10, flexShrink:0, background:'var(--bg-2)' }}>
           <button onClick={close} style={{ width:34, height:34, borderRadius:'50%', background:'var(--bg-3)', border:'1px solid var(--border)', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--text-secondary)', transition:'all 0.2s', flexShrink:0 }}
-            onMouseEnter={e=>{e.currentTarget.style.background='var(--red-dim)';e.currentTarget.style.borderColor='rgba(255,77,109,0.3)';e.currentTarget.style.color='var(--red)';}}
+            onMouseEnter={e=>{e.currentTarget.style.background='var(--red-dim)';e.currentTarget.style.borderColor='rgba(168,67,63,0.3)';e.currentTarget.style.color='var(--red)';}}
             onMouseLeave={e=>{e.currentTarget.style.background='var(--bg-3)';e.currentTarget.style.borderColor='var(--border)';e.currentTarget.style.color='var(--text-secondary)';}}>
             <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
           <h2 style={{ fontSize:14, fontWeight:700, margin:0, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', flex:1 }}>{project.title}</h2>
-          <button onClick={onLike} style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 14px', borderRadius:99, border:`1.5px solid ${liked?'rgba(255,77,109,0.4)':'var(--border)'}`, background:liked?'rgba(255,77,109,0.1)':'var(--bg-3)', color:liked?'#ff4d6d':'var(--text-secondary)', cursor:'pointer', fontSize:13, fontWeight:600, transition:'all 0.2s', flexShrink:0 }}>
+          <button onClick={onLike} style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 14px', borderRadius:99, border:`1.5px solid ${liked?'rgba(168,67,63,0.4)':'var(--border)'}`, background:liked?'rgba(168,67,63,0.1)':'var(--bg-3)', color:liked?'#a8433f':'var(--text-secondary)', cursor:'pointer', fontSize:13, fontWeight:600, transition:'all 0.2s', flexShrink:0 }}>
             <svg width={13} height={13} viewBox="0 0 24 24" fill={liked?'currentColor':'none'} stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
             {project.likes??0}
           </button>
@@ -160,9 +161,9 @@ function DetailDrawer({ project, liked, onLike, onClose, onNavigate }) {
             {(project.demoUrl || project.repositoryUrl) && (
               <div style={{ display:'flex', gap:10, flexWrap:'wrap', marginBottom:28 }}>
                 {project.demoUrl && (
-                  <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" style={{ display:'inline-flex', alignItems:'center', gap:7, padding:'8px 18px', borderRadius:10, background:'linear-gradient(135deg,rgba(108,99,255,0.15),rgba(108,99,255,0.05))', border:'1px solid rgba(108,99,255,0.25)', color:'var(--accent)', fontSize:13, fontWeight:600, textDecoration:'none', transition:'all 0.2s' }}
-                    onMouseEnter={e=>{e.currentTarget.style.background='rgba(108,99,255,0.22)';e.currentTarget.style.transform='translateY(-1px)';}}
-                    onMouseLeave={e=>{e.currentTarget.style.background='linear-gradient(135deg,rgba(108,99,255,0.15),rgba(108,99,255,0.05))';e.currentTarget.style.transform='translateY(0)';}}>
+                  <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" style={{ display:'inline-flex', alignItems:'center', gap:7, padding:'8px 18px', borderRadius:10, background:'linear-gradient(135deg,rgba(138,111,71,0.15),rgba(138,111,71,0.05))', border:'1px solid rgba(138,111,71,0.25)', color:'var(--accent)', fontSize:13, fontWeight:600, textDecoration:'none', transition:'all 0.2s' }}
+                    onMouseEnter={e=>{e.currentTarget.style.background='rgba(138,111,71,0.22)';e.currentTarget.style.transform='translateY(-1px)';}}
+                    onMouseLeave={e=>{e.currentTarget.style.background='linear-gradient(135deg,rgba(138,111,71,0.15),rgba(138,111,71,0.05))';e.currentTarget.style.transform='translateY(0)';}}>
                     <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                     Ver demo
                   </a>
@@ -250,24 +251,26 @@ export function ProjectsPage({ onNavigate }) {
   return (
     <div style={{ minHeight: '100vh' }}>
       {/* Top bar */}
-      <div style={{ padding: '32px 36px 0', animation: 'slideDown 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
-        <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:16, marginBottom:24, flexWrap:'wrap' }}>
+      <div className="page-head">
+        <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:20, flexWrap:'wrap' }}>
           <div>
-            <h1 style={{ fontSize:28, fontWeight:800, letterSpacing:'-0.03em', margin:0, marginBottom:5 }}>Proyectos</h1>
-            <p style={{ fontSize:14, color:'var(--text-secondary)', margin:0 }}>Explora lo que está construyendo la comunidad</p>
+            <h1 className="page-title" style={{ fontSize:38, margin:'0 0 6px' }}>Proyectos</h1>
+            <p className="page-subtitle" style={{ margin:0 }}>Explora lo que está construyendo la comunidad</p>
           </div>
           {user && (
-            <button onClick={() => onNavigate('my-projects')} style={{ display:'flex', alignItems:'center', gap:8, padding:'10px 20px', borderRadius:12, background:'linear-gradient(135deg,var(--accent),#5a52e8)', border:'none', color:'#fff', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:'var(--sans)', boxShadow:'0 6px 24px rgba(108,99,255,0.4)', transition:'all 0.2s' }}
-              onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 10px 32px rgba(108,99,255,0.5)';}}
-              onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 6px 24px rgba(108,99,255,0.4)';}}>
+            <button onClick={() => onNavigate('my-projects')} style={{ display:'flex', alignItems:'center', gap:8, padding:'10px 20px', borderRadius:12, background:'linear-gradient(135deg,var(--accent),#6d5735)', border:'none', color:'#fff', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:'var(--sans)', boxShadow:'0 6px 24px rgba(138,111,71,0.4)', transition:'all 0.2s' }}
+              onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 10px 32px rgba(138,111,71,0.5)';}}
+              onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 6px 24px rgba(138,111,71,0.4)';}}>
               <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Mis proyectos
             </button>
           )}
         </div>
 
+        <div className="rule-gold" style={{ marginBottom:26 }} />
+
         {/* Buscador + filtros */}
-        <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'center', marginBottom:28 }}>
+        <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'center', marginBottom:30 }}>
           {/* Search */}
           <div style={{ position:'relative', flex:'1', minWidth:200 }}>
             <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'var(--text-muted)', pointerEvents:'none', transition:'color 0.2s' }}>
@@ -275,7 +278,7 @@ export function ProjectsPage({ onNavigate }) {
             </svg>
             <input ref={searchRef} type="search" placeholder="Buscar por nombre, descripción, autor..." value={search} onChange={e => setSearch(e.target.value)}
               style={{ width:'100%', height:42, paddingLeft:42, paddingRight:14, background:'var(--bg-2)', border:'1.5px solid var(--border)', borderRadius:12, color:'var(--text-primary)', fontSize:13, fontFamily:'var(--sans)', outline:'none', transition:'all 0.2s' }}
-              onFocus={e=>{e.target.style.borderColor='var(--accent)';e.target.style.boxShadow='0 0 0 3px rgba(108,99,255,0.12)';e.target.previousSibling.style.color='var(--accent)';}}
+              onFocus={e=>{e.target.style.borderColor='var(--accent)';e.target.style.boxShadow='0 0 0 3px rgba(138,111,71,0.12)';e.target.previousSibling.style.color='var(--accent)';}}
               onBlur={e=>{e.target.style.borderColor='var(--border)';e.target.style.boxShadow='none';e.target.previousSibling.style.color='var(--text-muted)';}}
             />
           </div>
@@ -287,17 +290,15 @@ export function ProjectsPage({ onNavigate }) {
       </div>
 
       {/* Grid */}
-      <div style={{ padding:'0 36px 80px' }}>
+      <div className="page-body">
         {loading ? (
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:18 }}>
             {Array.from({length:6},(_,i) => <Skeleton key={i}/>)}
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ textAlign:'center', padding:'80px 20px', animation:'fadeIn 0.4s ease' }}>
-            <div style={{ fontSize:48, marginBottom:14, animation:'float 4s ease-in-out infinite' }}>
-              {search ? '🔍' : '💻'}
-            </div>
-            <h3 style={{ fontSize:20, fontWeight:700, color:'var(--text-secondary)', marginBottom:8, letterSpacing:'-0.02em' }}>
+            <div style={{ width: 62, height: 62, borderRadius: '50%', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.72)', border: '1px solid rgba(31,28,24,0.08)', boxShadow: '0 2px 12px rgba(58,49,38,0.06)', color: 'var(--accent)' }}><Icon name={search ? 'search' : 'terminal'} size={24} /></div>
+            <h3 style={{ fontSize: 22, fontWeight: 500, fontFamily: 'var(--display)', letterSpacing: '-0.015em', color: 'var(--text-primary)', marginBottom:10 }}>
               {search ? `Sin resultados para "${search}"` : 'Sin proyectos todavía'}
             </h3>
             <p style={{ fontSize:14, color:'var(--text-muted)', maxWidth:300, margin:'0 auto' }}>

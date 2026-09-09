@@ -15,6 +15,7 @@ export function AuthProvider({ children }) {
     const userId   = sessionStorage.getItem('cp_userId');
     const role     = sessionStorage.getItem('cp_role');
     const fullName = sessionStorage.getItem('cp_fullName');
+    const avatar   = sessionStorage.getItem('cp_avatar');
 
     if (token && userId) {
       // Verificar que el token no esté expirado (decodificando el JWT localmente)
@@ -25,7 +26,7 @@ export function AuthProvider({ children }) {
           // Token expirado — limpiar sesión
           sessionStorage.clear();
         } else {
-          setUser({ token, userId, role, fullName });
+          setUser({ token, userId, role, fullName, avatar });
         }
       } catch {
         // Token malformado — limpiar
@@ -35,27 +36,30 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  function saveSession(data, fullName) {
+  function saveSession(data, fullName, avatar) {
     sessionStorage.setItem('cp_token',    data.token);
     sessionStorage.setItem('cp_refresh',  data.refreshToken);
     sessionStorage.setItem('cp_userId',   data.userId);
     sessionStorage.setItem('cp_role',     data.role);
     sessionStorage.setItem('cp_fullName', fullName || '');
-    setUser({ token: data.token, userId: data.userId, role: data.role, fullName: fullName || '' });
+    sessionStorage.setItem('cp_avatar',   avatar || '');
+    setUser({ token: data.token, userId: data.userId, role: data.role, fullName: fullName || '', avatar: avatar || '' });
   }
 
   async function login(email, password) {
     const data = await auth.login({ email, password });
     // Obtener nombre real del usuario
     let fullName = '';
+    let avatar = '';
     try {
       sessionStorage.setItem('cp_token', data.token);
       const me = await users.me();
       fullName = me?.fullName || '';
+      avatar   = me?.profilePicture || '';
     } catch {
       // El perfil se cargará en la pantalla correspondiente si esta consulta falla.
     }
-    saveSession(data, fullName);
+    saveSession(data, fullName, avatar);
     return data;
   }
 
@@ -63,6 +67,21 @@ export function AuthProvider({ children }) {
     const data = await auth.register(dto);
     saveSession(data, dto.fullName || '');
     return data;
+  }
+
+  /* Relee el perfil del servidor y actualiza la sesión (nombre visible en la
+     barra lateral) sin obligar a cerrar y volver a abrir sesión. */
+  async function refreshUser() {
+    if (!sessionStorage.getItem('cp_token')) return;
+    try {
+      const me = await users.me();
+      if (!me) return;
+      sessionStorage.setItem('cp_fullName', me.fullName || '');
+      sessionStorage.setItem('cp_avatar',   me.profilePicture || '');
+      setUser(u => (u ? { ...u, fullName: me.fullName || '', avatar: me.profilePicture || '' } : u));
+    } catch {
+      // Si la consulta falla, la sesión sigue siendo válida con el nombre previo.
+    }
   }
 
   async function logout() {
@@ -75,7 +94,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

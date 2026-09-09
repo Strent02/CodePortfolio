@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { feed, projects as projectsApi, comments as commentsApi, users as usersApi } from '../api/client';
 import { useAuth } from '../context/AuthContext';
-import { Icon, Avatar, useToast } from '../components/UI';
+import { Icon, Avatar, useToast, estadoLabel } from '../components/UI';
 
 const BASE = import.meta.env.VITE_API_URL || '';
 
@@ -9,14 +9,14 @@ const BASE = import.meta.env.VITE_API_URL || '';
 function SkeletonCard() {
   return (
     <div style={{ background: 'var(--bg-1)', border: '1px solid var(--border)', borderRadius: 20, overflow: 'hidden' }}>
-      <div style={{ height: 200, background: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
+      <div style={{ height: 200, backgroundImage: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
       <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <div style={{ height: 14, borderRadius: 7, width: '70%', background: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.1s' }} />
-        <div style={{ height: 11, borderRadius: 6, width: '90%', background: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.2s' }} />
-        <div style={{ height: 11, borderRadius: 6, width: '60%', background: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.3s' }} />
+        <div style={{ height: 14, borderRadius: 7, width: '70%', backgroundImage: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.1s' }} />
+        <div style={{ height: 11, borderRadius: 6, width: '90%', backgroundImage: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.2s' }} />
+        <div style={{ height: 11, borderRadius: 6, width: '60%', backgroundImage: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.3s' }} />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
-          <div style={{ height: 28, width: 80, borderRadius: 14, background: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.4s' }} />
-          <div style={{ height: 28, width: 60, borderRadius: 14, background: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.5s' }} />
+          <div style={{ height: 28, width: 80, borderRadius: 14, backgroundImage: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.4s' }} />
+          <div style={{ height: 28, width: 60, borderRadius: 14, backgroundImage: 'linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite 0.5s' }} />
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@ function FeedCard({ project, liked, onLike, onClick, index }) {
     onLike();
   }
 
-  const statusColors = { published: '#00e5b0', draft: '#ffc947', archived: '#9090b8' };
+  const statusColors = { published: '#3f7d5e', draft: '#b08a3e', archived: '#8b8378' };
 
   return (
     <div
@@ -45,7 +45,7 @@ function FeedCard({ project, liked, onLike, onClick, index }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: 'var(--bg-1)',
-        border: `1px solid ${hovered ? 'rgba(108,99,255,0.35)' : 'var(--border)'}`,
+        border: `1px solid ${hovered ? 'rgba(138,111,71,0.35)' : 'var(--border)'}`,
         borderRadius: 20,
         overflow: 'hidden',
         cursor: 'pointer',
@@ -54,8 +54,8 @@ function FeedCard({ project, liked, onLike, onClick, index }) {
         transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
         transform: hovered ? 'translateY(-6px) scale(1.01)' : 'translateY(0) scale(1)',
         boxShadow: hovered
-          ? '0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(108,99,255,0.2), 0 0 40px rgba(108,99,255,0.1)'
-          : '0 2px 12px rgba(0,0,0,0.3)',
+          ? '0 24px 60px rgba(58,49,38,0.12), 0 0 0 1px rgba(138,111,71,0.2), 0 0 40px rgba(138,111,71,0.1)'
+          : '0 2px 12px rgba(58,49,38,0.08)',
         animation: `cardIn 0.5s cubic-bezier(0.16,1,0.3,1) ${index * 0.06}s both`,
       }}
     >
@@ -64,16 +64,18 @@ function FeedCard({ project, liked, onLike, onClick, index }) {
         {imgSrc ? (
           <img src={imgSrc} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1)', transform: hovered ? 'scale(1.08)' : 'scale(1)' }} onError={e => e.currentTarget.style.display = 'none'} />
         ) : (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(135deg, var(--bg-3), var(--bg-4))`, fontSize: 40, fontFamily: 'var(--mono)', color: 'rgba(108,99,255,0.3)', fontWeight: 300, letterSpacing: '-0.05em', userSelect: 'none', transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1)', transform: hovered ? 'scale(1.05)' : 'scale(1)' }}>
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(135deg, var(--bg-3), var(--bg-4))`, fontSize: 40, fontFamily: 'var(--mono)', color: 'rgba(138,111,71,0.3)', fontWeight: 300, letterSpacing: '-0.05em', userSelect: 'none', transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1)', transform: hovered ? 'scale(1.05)' : 'scale(1)' }}>
             &lt;/&gt;
           </div>
         )}
-        {/* Overlay gradiente */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(12,12,26,0.7) 100%)', pointerEvents: 'none' }} />
+        {/* Velo inferior: solo tiene sentido sobre una foto real */}
+        {imgSrc && <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 55%, rgba(28,24,19,0.34) 100%)', pointerEvents: 'none' }} />}
+        {/* Filete inferior de piedra */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 1, background: 'rgba(31,28,24,0.08)', pointerEvents: 'none' }} />
         {/* Badge status */}
         {project.status && (
-          <div style={{ position: 'absolute', top: 12, left: 12, padding: '3px 10px', borderRadius: 99, fontSize: 10, fontWeight: 700, fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.08em', background: `${statusColors[project.status] || '#9090b8'}22`, color: statusColors[project.status] || '#9090b8', border: `1px solid ${statusColors[project.status] || '#9090b8'}44`, backdropFilter: 'blur(8px)' }}>
-            {project.status}
+          <div style={{ position: 'absolute', top: 12, left: 12, padding: '3px 10px', borderRadius: 99, fontSize: 10, fontWeight: 700, fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.08em', background: `${statusColors[project.status] || '#8b8378'}22`, color: statusColors[project.status] || '#8b8378', border: `1px solid ${statusColors[project.status] || '#8b8378'}44`, backdropFilter: 'blur(8px)' }}>
+            {estadoLabel(project.status)}
           </div>
         )}
       </div>
@@ -101,9 +103,9 @@ function FeedCard({ project, liked, onLike, onClick, index }) {
             {/* Like button */}
             <button
               onClick={handleLike}
-              style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', color: liked ? '#ff4d6d' : 'var(--text-muted)', fontSize: 12, fontFamily: 'var(--mono)', fontWeight: 600, padding: '4px 8px', borderRadius: 8, transition: 'all 0.2s', transform: likeAnim ? 'scale(1.35)' : 'scale(1)', filter: liked ? 'drop-shadow(0 0 6px rgba(255,77,109,0.6))' : 'none' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,77,109,0.1)'; e.currentTarget.style.color = '#ff4d6d'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = liked ? '#ff4d6d' : 'var(--text-muted)'; }}
+              style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', color: liked ? '#a8433f' : 'var(--text-muted)', fontSize: 12, fontFamily: 'var(--mono)', fontWeight: 600, padding: '4px 8px', borderRadius: 8, transition: 'all 0.2s', transform: likeAnim ? 'scale(1.35)' : 'scale(1)', filter: liked ? 'drop-shadow(0 0 6px rgba(168,67,63,0.6))' : 'none' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(168,67,63,0.1)'; e.currentTarget.style.color = '#a8433f'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = liked ? '#a8433f' : 'var(--text-muted)'; }}
             >
               <svg width={14} height={14} viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
@@ -184,7 +186,7 @@ function ProjectDrawer({ project, onClose, liked, onLike, onNavigate }) {
   return (
     <>
       {/* Backdrop */}
-      <div onClick={handleClose} style={{ position: 'fixed', inset: 0, background: 'rgba(6,6,16,0.75)', backdropFilter: 'blur(6px)', zIndex: 200, opacity: visible ? 1 : 0, transition: 'opacity 0.3s ease' }} />
+      <div onClick={handleClose} style={{ position: 'fixed', inset: 0, background: 'rgba(46,40,32,0.36)', backdropFilter: 'blur(6px)', zIndex: 200, opacity: visible ? 1 : 0, transition: 'opacity 0.3s ease' }} />
 
       {/* Drawer */}
       <div style={{
@@ -196,7 +198,7 @@ function ProjectDrawer({ project, onClose, liked, onLike, onNavigate }) {
         display: 'flex', flexDirection: 'column',
         transform: visible ? 'translateX(0)' : 'translateX(100%)',
         transition: 'transform 0.35s cubic-bezier(0.16,1,0.3,1)',
-        boxShadow: '-20px 0 80px rgba(0,0,0,0.5)',
+        boxShadow: '-20px 0 80px rgba(58,49,38,0.12)',
         overflowY: 'hidden',
       }}>
         {/* Header */}
@@ -235,7 +237,7 @@ function ProjectDrawer({ project, onClose, liked, onLike, onNavigate }) {
               </div>
               <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
                 {/* Like en drawer */}
-                <button onClick={onLike} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 99, border: `1.5px solid ${liked ? 'rgba(255,77,109,0.4)' : 'var(--border)'}`, background: liked ? 'rgba(255,77,109,0.1)' : 'var(--bg-3)', color: liked ? '#ff4d6d' : 'var(--text-secondary)', cursor: 'pointer', fontSize: 13, fontWeight: 600, transition: 'all 0.2s' }}>
+                <button onClick={onLike} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 99, border: `1.5px solid ${liked ? 'rgba(168,67,63,0.4)' : 'var(--border)'}`, background: liked ? 'rgba(168,67,63,0.1)' : 'var(--bg-3)', color: liked ? '#a8433f' : 'var(--text-secondary)', cursor: 'pointer', fontSize: 13, fontWeight: 600, transition: 'all 0.2s' }}>
                   <svg width={14} height={14} viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" /></svg>
                   {project.likes ?? 0}
                 </button>
@@ -253,9 +255,9 @@ function ProjectDrawer({ project, onClose, liked, onLike, onNavigate }) {
             {(project.demoUrl || project.repositoryUrl) && (
               <div style={{ display: 'flex', gap: 10, marginBottom: 24, flexWrap: 'wrap' }}>
                 {project.demoUrl && (
-                  <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 16px', borderRadius: 10, background: 'linear-gradient(135deg, rgba(108,99,255,0.15), rgba(108,99,255,0.05))', border: '1px solid rgba(108,99,255,0.25)', color: 'var(--accent)', fontSize: 13, fontWeight: 600, textDecoration: 'none', transition: 'all 0.2s' }}
-                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(108,99,255,0.2)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(108,99,255,0.15), rgba(108,99,255,0.05))'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+                  <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 16px', borderRadius: 10, background: 'linear-gradient(135deg, rgba(138,111,71,0.15), rgba(138,111,71,0.05))', border: '1px solid rgba(138,111,71,0.25)', color: 'var(--accent)', fontSize: 13, fontWeight: 600, textDecoration: 'none', transition: 'all 0.2s' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(138,111,71,0.2)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(138,111,71,0.15), rgba(138,111,71,0.05))'; e.currentTarget.style.transform = 'translateY(0)'; }}>
                     <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                     Ver demo
                   </a>
@@ -273,7 +275,7 @@ function ProjectDrawer({ project, onClose, liked, onLike, onNavigate }) {
 
             {/* Divider comentarios */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)' }}>
+              <span style={{ fontSize: 15, fontWeight: 500, fontFamily: 'var(--display)', letterSpacing: '-0.015em', color: 'var(--text-primary)' }}>
                 Comentarios {!loadingComments && `(${comments.length})`}
               </span>
               <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
@@ -286,13 +288,13 @@ function ProjectDrawer({ project, onClose, liked, onLike, onNavigate }) {
               </div>
             ) : comments.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '28px 0', color: 'var(--text-muted)', fontSize: 13 }}>
-                <div style={{ fontSize: 28, marginBottom: 8 }}>💬</div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 10, color: 'var(--text-muted)' }}><Icon name="message-circle" size={22} /></div>
                 Sé el primero en comentar
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {comments.map((c, i) => (
-                  <div key={c.commentId} style={{ display: 'flex', gap: 10, padding: '12px 0', borderBottom: i < comments.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none', animation: `slideUp 0.3s cubic-bezier(0.16,1,0.3,1) ${i * 0.04}s both` }}>
+                  <div key={c.commentId} style={{ display: 'flex', gap: 10, padding: '12px 0', borderBottom: i < comments.length - 1 ? '1px solid rgba(31,28,24,0.035)' : 'none', animation: `slideUp 0.3s cubic-bezier(0.16,1,0.3,1) ${i * 0.04}s both` }}>
                     <Avatar name={c.authorName || '?'} size={32} style={{ flexShrink: 0, marginTop: 1 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
@@ -325,21 +327,21 @@ function ProjectDrawer({ project, onClose, liked, onLike, onNavigate }) {
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitComment(); } }}
                   rows={1}
                   style={{ width: '100%', minHeight: 42, maxHeight: 120, resize: 'none', padding: '10px 48px 10px 14px', borderRadius: 12, background: 'var(--bg-3)', border: '1.5px solid var(--border)', color: 'var(--text-primary)', fontSize: 13, fontFamily: 'var(--sans)', outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s', overflow: 'hidden' }}
-                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px rgba(108,99,255,0.15)'; }}
+                  onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px rgba(138,111,71,0.15)'; }}
                   onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
                 />
                 <button onClick={submitComment} disabled={commenting || !commentText.trim()} style={{ position: 'absolute', right: 8, bottom: 8, width: 28, height: 28, borderRadius: 8, background: commentText.trim() ? 'var(--accent)' : 'var(--bg-4)', border: 'none', cursor: commentText.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', transition: 'all 0.2s', transform: commentText.trim() ? 'scale(1)' : 'scale(0.9)', opacity: commentText.trim() ? 1 : 0.4 }}>
                   {commenting
-                    ? <div style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.65s linear infinite' }} />
+                    ? <div style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,0.55)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.65s linear infinite' }} />
                     : <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                   }
                 </button>
               </div>
             </div>
           ) : (
-            <button onClick={() => { handleClose(); setTimeout(() => onNavigate('login'), 350); }} style={{ width: '100%', padding: '12px', borderRadius: 12, background: 'rgba(108,99,255,0.1)', border: '1.5px solid rgba(108,99,255,0.25)', color: 'var(--accent)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sans)', transition: 'all 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(108,99,255,0.18)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'rgba(108,99,255,0.1)'}>
+            <button onClick={() => { handleClose(); setTimeout(() => onNavigate('login'), 350); }} style={{ width: '100%', padding: '12px', borderRadius: 12, background: 'rgba(138,111,71,0.1)', border: '1.5px solid rgba(138,111,71,0.25)', color: 'var(--accent)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sans)', transition: 'all 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(138,111,71,0.18)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(138,111,71,0.1)'}>
               Inicia sesión para comentar →
             </button>
           )}
@@ -361,23 +363,23 @@ function FeedTopBar({ tab, setTab, hasUser }) {
   }, []);
 
   return (
-    <div style={{
+    <div className="sticky-head" style={{
       position: 'sticky', top: 0, zIndex: 50,
-      padding: '0 36px',
-      background: scrolled ? 'rgba(6,6,16,0.9)' : 'transparent',
-      backdropFilter: scrolled ? 'blur(20px)' : 'none',
-      borderBottom: scrolled ? '1px solid var(--border)' : '1px solid transparent',
-      transition: 'all 0.3s ease',
+      background: scrolled ? 'rgba(246,243,238,0.82)' : 'transparent',
+      backdropFilter: scrolled ? 'blur(20px) saturate(1.15)' : 'none',
+      WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.15)' : 'none',
+      borderBottom: `1px solid ${scrolled ? 'rgba(31,28,24,0.08)' : 'transparent'}`,
+      transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60, gap: 16 }}>
-        <div>
-          <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>Feed</span>
-          <span style={{ fontSize: 13, color: 'var(--text-muted)', marginLeft: 10, fontFamily: 'var(--mono)' }}>Descubre proyectos</span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: scrolled ? 66 : 92, gap: 16, transition: 'height 0.35s cubic-bezier(0.16,1,0.3,1)' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, minWidth: 0 }}>
+          <h1 className="page-title" style={{ fontSize: scrolled ? 24 : 34, margin: 0, transition: 'font-size 0.35s cubic-bezier(0.16,1,0.3,1)' }}>Feed</h1>
+          <span className="eyebrow" style={{ whiteSpace: 'nowrap' }}>Descubre proyectos</span>
         </div>
         {hasUser && (
-          <div style={{ display: 'flex', gap: 2, background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', borderRadius: 12, padding: 4 }}>
+          <div style={{ display: 'flex', gap: 3, background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(31,28,24,0.08)', borderRadius: 12, padding: 4, boxShadow: '0 1px 2px rgba(58,49,38,0.05)', flexShrink: 0 }}>
             {['public', 'following'].map(t => (
-              <button key={t} onClick={() => setTab(t)} style={{ padding: '6px 18px', borderRadius: 9, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', background: tab === t ? 'var(--bg-4)' : 'transparent', color: tab === t ? 'var(--text-primary)' : 'var(--text-muted)', transition: 'all 0.2s', boxShadow: tab === t ? '0 2px 8px rgba(0,0,0,0.3)' : 'none' }}>
+              <button key={t} onClick={() => setTab(t)} style={{ padding: '7px 18px', borderRadius: 9, fontSize: 12.5, fontWeight: tab === t ? 600 : 450, border: 'none', cursor: 'pointer', background: tab === t ? 'linear-gradient(135deg, var(--accent), var(--accent-deep))' : 'transparent', color: tab === t ? '#fffaf2' : 'var(--text-secondary)', transition: 'all 0.24s cubic-bezier(0.16,1,0.3,1)', boxShadow: tab === t ? '0 3px 10px rgba(109,87,53,0.24)' : 'none', fontFamily: 'var(--sans)', letterSpacing: '0.01em' }}>
                 {t === 'public' ? 'Público' : 'Siguiendo'}
               </button>
             ))}
@@ -438,17 +440,15 @@ export function FeedPage({ onNavigate }) {
     <div style={{ minHeight: '100vh' }}>
       <FeedTopBar tab={tab} setTab={setTab} hasUser={!!user} />
 
-      <div style={{ padding: '24px 36px 64px' }}>
+      <div className="page-body-t">
         {loading ? (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
             {Array.from({ length: 6 }, (_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : items.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 20px', animation: 'fadeIn 0.4s ease' }}>
-            <div style={{ fontSize: 52, marginBottom: 16, display: 'block', animation: 'float 4s ease-in-out infinite' }}>
-              {tab === 'following' ? '🔭' : '🚀'}
-            </div>
-            <h3 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 8, letterSpacing: '-0.02em' }}>
+            <div style={{ width: 62, height: 62, borderRadius: '50%', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.72)', border: '1px solid rgba(31,28,24,0.08)', boxShadow: '0 2px 12px rgba(58,49,38,0.06)', color: 'var(--accent)' }}><Icon name={tab === 'following' ? 'compass' : 'layers'} size={24} /></div>
+            <h3 style={{ fontSize: 22, fontWeight: 500, fontFamily: 'var(--display)', letterSpacing: '-0.015em', color: 'var(--text-primary)', marginBottom: 10 }}>
               {tab === 'following' ? 'Tu feed está vacío' : 'Nadie ha publicado aún'}
             </h3>
             <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 320, margin: '0 auto 24px' }}>

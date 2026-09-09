@@ -18,21 +18,21 @@ function AppLoader() {
   }, []);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--bg-0)', flexDirection: 'column', gap: 28 }}>
-      {/* Logo animado */}
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', flexDirection: 'column', gap: 26 }}>
+      {/* Emblema en latón */}
       <div style={{ position: 'relative' }}>
-        <div style={{ width: 64, height: 64, background: 'linear-gradient(135deg, var(--accent), var(--accent-2))', borderRadius: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, fontFamily: 'var(--mono)', fontWeight: 700, color: '#fff', boxShadow: '0 12px 40px rgba(108,99,255,0.5)', animation: 'pulse-glow 2s ease-in-out infinite' }}>
+        <div className="brand-mark" style={{ width: 62, height: 62, borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontFamily: 'var(--mono)', fontWeight: 600, color: '#fffaf2', animation: 'pulse-glow 3.2s ease-in-out infinite' }}>
           &lt;/&gt;
         </div>
         {/* Anillo giratorio */}
-        <div style={{ position: 'absolute', inset: -8, border: '2px solid transparent', borderTopColor: 'var(--accent)', borderRightColor: 'rgba(108,99,255,0.3)', borderRadius: 36, animation: 'spin 1s linear infinite' }} />
+        <div style={{ position: 'absolute', inset: -10, border: '1.5px solid rgba(31,28,24,0.07)', borderTopColor: 'var(--accent)', borderRadius: 30, animation: 'spin 1.1s linear infinite' }} />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 14, color: 'var(--text-secondary)', fontWeight: 600 }}>
+        <div style={{ fontFamily: 'var(--display)', fontSize: 22, fontWeight: 500, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
           Cargando<span style={{ color: 'var(--accent)' }}>{'...'.slice(0, dot + 1)}</span>
         </div>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-          CodePortfolio v1.0
+        <div className="eyebrow" style={{ marginTop: 8 }}>
+          CodePortfolio · v1.0
         </div>
       </div>
     </div>
@@ -53,12 +53,12 @@ function MobileNav({ page, navigate, user }) {
     <nav style={{
       display: 'none',
       position: 'fixed', bottom: 0, left: 0, right: 0,
-      background: 'rgba(6,6,16,0.94)',
+      background: 'rgba(253,251,248,0.92)',
       backdropFilter: 'blur(24px)',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      borderTop: '1px solid rgba(31,28,24,0.08)',
       zIndex: 90, alignItems: 'center', justifyContent: 'space-around',
       height: 64, paddingBottom: 'env(safe-area-inset-bottom, 0)',
-      boxShadow: '0 -8px 32px rgba(0,0,0,0.4)',
+      boxShadow: '0 -8px 32px rgba(58,49,38,0.08)',
     }} className="mobile-nav">
       {items.map(item => {
         const active = page === item.id;
@@ -67,18 +67,18 @@ function MobileNav({ page, navigate, user }) {
             style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
               padding: '8px 14px', borderRadius: 14, border: 'none', cursor: 'pointer',
-              background: active ? 'rgba(108,99,255,0.12)' : 'transparent',
+              background: active ? 'rgba(138,111,71,0.12)' : 'transparent',
               color: active ? 'var(--accent)' : 'var(--text-muted)',
               fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 600,
               transition: 'all 0.2s cubic-bezier(0.16,1,0.3,1)',
               flex: 1, position: 'relative',
             }}
-            onMouseEnter={e => { if (!active) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; } }}
+            onMouseEnter={e => { if (!active) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'rgba(31,28,24,0.035)'; } }}
             onMouseLeave={e => { if (!active) { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'transparent'; } }}>
             <div style={{
               width: 26, height: 26, borderRadius: 9,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: active ? 'rgba(108,99,255,0.15)' : 'transparent',
+              background: active ? 'rgba(138,111,71,0.15)' : 'transparent',
               transition: 'all 0.2s',
               transform: active ? 'translateY(-1px)' : 'translateY(0)',
             }}>
@@ -89,7 +89,7 @@ function MobileNav({ page, navigate, user }) {
             {item.label}
             {/* Punto activo */}
             {active && (
-              <div style={{ position: 'absolute', top: 6, right: 12, width: 5, height: 5, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 6px rgba(108,99,255,0.8)' }} />
+              <div style={{ position: 'absolute', top: 6, right: 12, width: 5, height: 5, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 0 2px rgba(194,168,124,0.35)' }} />
             )}
           </button>
         );
@@ -104,6 +104,19 @@ function AppInner() {
   const initialRoute = window.location.hash.replace(/^#\/?/, '') || 'feed';
   const [page, setPage] = useState(initialRoute.split('/')[0]);
   const [profileUserId, setProfileUserId] = useState(initialRoute.split('/')[1] || null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    try { return localStorage.getItem('cp:sidebar-collapsed') === '1'; }
+    catch { return false; }
+  });
+
+  const toggleSidebar = useCallback(() => {
+    setSidebarCollapsed(prev => {
+      const next = !prev;
+      try { localStorage.setItem('cp:sidebar-collapsed', next ? '1' : '0'); }
+      catch { /* almacenamiento no disponible: la preferencia dura la sesión */ }
+      return next;
+    });
+  }, []);
 
   const navigate = useCallback((target, param) => {
     if (target === 'logout') { logout(); window.location.hash = '/feed'; return; }
@@ -143,8 +156,13 @@ function AppInner() {
   }
 
   return (
-    <div className="app-layout">
-      <Sidebar currentPage={page} onNavigate={navigate} />
+    <div className="app-layout" style={{ '--sidebar-w': sidebarCollapsed ? 'var(--sidebar-w-collapsed)' : 'var(--sidebar-w-expanded)' }}>
+      <Sidebar
+        currentPage={page}
+        onNavigate={navigate}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={toggleSidebar}
+      />
       <main className="main-content" key={page} style={{ animation: 'fadeIn 0.3s cubic-bezier(0.16,1,0.3,1)' }}>
         {page === 'feed'          && <FeedPage          onNavigate={navigate} />}
         {page === 'projects'      && <ProjectsPage      onNavigate={navigate} />}

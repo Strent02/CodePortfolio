@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+
+  # ── SQL Server ────────────────────────────────────────────────────────────────
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: codeportfolio-db
+    environment:
+      SA_PASSWORD: "CodePortfolio_SA_2025!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'CodePortfolio_SA_2025!' -Q 'SELECT 1' -No || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  # ── Backend ASP.NET Core 8 ────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./proyecto_final
+      dockerfile: Dockerfile
+    container_name: codeportfolio-backend
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__CodePortfolioConnection: "Server=db,1433;Database=CodePortfolioDB;User Id=sa;Password=CodePortfolio_SA_2025!;TrustServerCertificate=True;"
+      Jwt__Key: "CodePortfolio_SuperSecretKey_2025!@#$%"
+      Jwt__Issuer: "CodePortfolioAPI"
+      Jwt__Audience: "CodePortfolioClient"
+      Jwt__ExpiresInMinutes: "60"
+      Cors__AllowedOrigins__0: "http://localhost:3000"
+      Cors__AllowedOrigins__1: "http://localhost:5173"
+      Cors__AllowedOrigins__2: "http://localhost:4200"
+    ports:
+      - "5102:5102"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads_images:/app/wwwroot/images
+    restart: unless-stopped
+
+  # ── Frontend React + Vite (servido por Nginx) ─────────────────────────────────
+  frontend:
+    build:
+      context: ./codeportfolio-frontend
+      dockerfile: Dockerfile
+    container_name: codeportfolio-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  sqlserver_data:
+  uploads_images:

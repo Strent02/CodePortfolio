@@ -3,6 +3,7 @@ using System;
 using CodePortfolio.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodePortfolio.Migrations
 {
     [DbContext(typeof(CodePortfolioContext))]
-    partial class CodePortfolioContextModelSnapshot : ModelSnapshot
+    [Migration("20260909165011_CascadeDeleteDependientes")]
+    partial class CascadeDeleteDependientes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

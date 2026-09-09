@@ -56,8 +56,19 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetProject(Guid id)
         {
             var p = await _projectRepo.GetProject(id);
-            if (p == null) return NotFound("Project not found.");
+            if (p == null) return NotFound("Proyecto no encontrado.");
+            // Un borrador es privado: solo su dueño (o un admin) puede leerlo, aun
+            // conociendo el identificador. Se responde 404 para no confirmar que existe.
+            if (!EsVisiblePara(p)) return NotFound("Proyecto no encontrado.");
             return Ok(await BuildResponse(p));
+        }
+
+        // Un proyecto no publicado solo es visible para su dueño o un administrador.
+        private bool EsVisiblePara(Models.Project project)
+        {
+            if (project.Status == "published") return true;
+            if (User?.Identity?.IsAuthenticated != true) return false;
+            return project.UserId == ClaimsHelper.GetUserId(User) || ClaimsHelper.IsAdmin(User);
         }
 
         // GET api/project/user/{userId}
@@ -91,7 +102,7 @@ namespace CodePortfolio.Controllers
             };
 
             if (!await _projectRepo.CreateProject(project))
-                return BadRequest("Could not create project.");
+                return BadRequest("No se pudo crear el proyecto.");
 
             return CreatedAtAction(nameof(GetProject), new { id = project.ProjectId }, await BuildResponse(project));
         }
@@ -103,15 +114,15 @@ namespace CodePortfolio.Controllers
         {
             var userId  = ClaimsHelper.GetUserId(User);
             var project = await _projectRepo.GetProject(id);
-            if (project == null) return NotFound("Project not found.");
+            if (project == null) return NotFound("Proyecto no encontrado.");
             if (project.UserId != userId) return Forbid();
 
             if (file == null || file.Length == 0)
-                return BadRequest("No file provided.");
+                return BadRequest("No se adjuntó ningún archivo.");
 
             var ext = await ImageUploadHelper.GetSafeExtensionAsync(file);
             if (ext == null)
-                return BadRequest("Invalid image. Use a real JPG, PNG, WEBP or GIF file up to 5 MB.");
+                return BadRequest("Imagen no válida. Usa un archivo JPG, PNG, WEBP o GIF de hasta 5 MB.");
 
             var folder   = Path.Combine("wwwroot", "images", "projects");
             Directory.CreateDirectory(folder);
@@ -137,7 +148,7 @@ namespace CodePortfolio.Controllers
 
             var userId  = ClaimsHelper.GetUserId(User);
             var project = await _projectRepo.GetProject(id);
-            if (project == null) return NotFound("Project not found.");
+            if (project == null) return NotFound("Proyecto no encontrado.");
             if (project.UserId != userId) return Forbid();
 
             project.Title         = dto.Title;
@@ -147,7 +158,7 @@ namespace CodePortfolio.Controllers
             project.Status        = dto.Status;
 
             if (!await _projectRepo.UpdateProject(project))
-                return BadRequest("Could not update project.");
+                return BadRequest("No se pudo actualizar el proyecto.");
 
             return Ok(await BuildResponse(project));
         }
@@ -159,15 +170,15 @@ namespace CodePortfolio.Controllers
         {
             var userId  = ClaimsHelper.GetUserId(User);
             var project = await _projectRepo.GetProject(id);
-            if (project == null) return NotFound("Project not found.");
+            if (project == null) return NotFound("Proyecto no encontrado.");
             if (project.UserId != userId && !ClaimsHelper.IsAdmin(User)) return Forbid();
 
             if (!await _projectRepo.DeleteProject(id))
-                return BadRequest("Could not delete project.");
+                return BadRequest("No se pudo eliminar el proyecto.");
 
             DeleteProjectImages(Path.Combine("wwwroot", "images", "projects"), id);
 
-            return Ok("Project deleted.");
+            return Ok("Proyecto eliminado.");
         }
 
         // POST api/project/{id}/like
@@ -177,7 +188,7 @@ namespace CodePortfolio.Controllers
         {
             var userId  = ClaimsHelper.GetUserId(User);
             var project = await _projectRepo.GetProject(id);
-            if (project == null) return NotFound("Project not found.");
+            if (project == null || !EsVisiblePara(project)) return NotFound("Proyecto no encontrado.");
 
             var reaction = new Reaction
             {
@@ -203,7 +214,7 @@ namespace CodePortfolio.Controllers
                 {
                     NotificationId = Guid.NewGuid(),
                     UserId         = project.UserId,
-                    Message        = $"{liker?.FullName ?? "Someone"} liked your project '{project.Title}'.",
+                    Message        = $"A {liker?.FullName ?? "alguien"} le gustó tu proyecto «{project.Title}».",
                     SentDate       = DateTime.UtcNow
                 });
             }
@@ -219,7 +230,7 @@ namespace CodePortfolio.Controllers
         {
             var userId   = ClaimsHelper.GetUserId(User);
             var reaction = await _reactionRepo.GetReactionByUserAndProject(userId, id);
-            if (reaction == null) return NotFound("You have not liked this project.");
+            if (reaction == null) return NotFound("No le has dado me gusta a este proyecto.");
 
             await _reactionRepo.DeleteReaction(reaction.ReactionId);
             var likes = await _reactionRepo.GetLikesCount(id);
@@ -240,7 +251,7 @@ namespace CodePortfolio.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string q)
         {
-            if (string.IsNullOrWhiteSpace(q)) return BadRequest("Query is required.");
+            if (string.IsNullOrWhiteSpace(q)) return BadRequest("Escribe algo para buscar.");
             var results = await _projectRepo.Search(q);
             return Ok(await BuildResponseList(results));
         }

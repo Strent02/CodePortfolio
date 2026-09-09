@@ -25,10 +25,10 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> Follow(Guid targetUserId)
         {
             var userId = ClaimsHelper.GetUserId(User);
-            if (userId == targetUserId) return BadRequest("You cannot follow yourself.");
+            if (userId == targetUserId) return BadRequest("No puedes seguirte a ti mismo.");
 
             var target = await _userRepo.GetUser(targetUserId);
-            if (target == null) return NotFound("User not found.");
+            if (target == null) return NotFound("Usuario no encontrado.");
 
             var existing = await _followRepo.GetFollowByUsers(userId, targetUserId);
             // Idempotente: si ya sigue, devolver 200 con el conteo actual en lugar de 409
@@ -44,7 +44,7 @@ namespace CodePortfolio.Controllers
             };
 
             if (!await _followRepo.CreateFollow(follow))
-                return BadRequest("Could not follow user.");
+                return BadRequest("No se pudo seguir a este usuario.");
 
             return Ok(new { followersCount = await _followRepo.GetFollowersCount(targetUserId) });
         }
@@ -55,7 +55,7 @@ namespace CodePortfolio.Controllers
         {
             var userId   = ClaimsHelper.GetUserId(User);
             var existing = await _followRepo.GetFollowByUsers(userId, targetUserId);
-            if (existing == null) return NotFound("You are not following this user.");
+            if (existing == null) return NotFound("No sigues a este usuario.");
 
             await _followRepo.DeleteFollow(existing.FollowId);
             return Ok(new { followersCount = await _followRepo.GetFollowersCount(targetUserId) });

@@ -28,7 +28,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> Me()
         {
             var user = await _userRepo.GetUser(ClaimsHelper.GetUserId(User));
-            if (user == null) return NotFound("User not found.");
+            if (user == null) return NotFound("Usuario no encontrado.");
             return Ok(new { user.UserId, user.FullName, user.Email, user.Bio, user.Location, user.ProfilePicture, user.RegistrationDate });
         }
 
@@ -40,7 +40,7 @@ namespace CodePortfolio.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var userId = ClaimsHelper.GetUserId(User);
             var user   = await _userRepo.GetUser(userId);
-            if (user == null) return NotFound("User not found.");
+            if (user == null) return NotFound("Usuario no encontrado.");
             user.FullName = dto.FullName; user.Bio = dto.Bio; user.Location = dto.Location; user.ProfilePicture = dto.ProfilePicture;
             if (!await _userRepo.UpdateUser(user)) return StatusCode(500, "Could not update profile.");
             return Ok(new { user.UserId, user.FullName, user.Email, user.Bio, user.Location, user.ProfilePicture });
@@ -53,10 +53,10 @@ namespace CodePortfolio.Controllers
         {
             var userId = ClaimsHelper.GetUserId(User);
             var user   = await _userRepo.GetUser(userId);
-            if (user == null) return NotFound("User not found.");
-            if (file == null || file.Length == 0) return BadRequest("No file provided.");
+            if (user == null) return NotFound("Usuario no encontrado.");
+            if (file == null || file.Length == 0) return BadRequest("No se adjuntó ningún archivo.");
             var ext = await ImageUploadHelper.GetSafeExtensionAsync(file);
-            if (ext == null) return BadRequest("Invalid image. Use a real JPG, PNG, WEBP or GIF file up to 5 MB.");
+            if (ext == null) return BadRequest("Imagen no válida. Usa un archivo JPG, PNG, WEBP o GIF de hasta 5 MB.");
 
             var folder = Path.Combine("wwwroot", "images", "avatars");
             Directory.CreateDirectory(folder);
@@ -80,12 +80,12 @@ namespace CodePortfolio.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var userId = ClaimsHelper.GetUserId(User);
             var user   = await _userRepo.GetUser(userId);
-            if (user == null) return NotFound("User not found.");
-            if (!BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.Password)) return BadRequest("Current password is incorrect.");
+            if (user == null) return NotFound("Usuario no encontrado.");
+            if (!BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.Password)) return BadRequest("La contraseña actual es incorrecta.");
             user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
             if (!await _userRepo.UpdateUser(user)) return StatusCode(500, "Could not change password.");
             await _refreshStore.RevokeAllAsync(userId);
-            return Ok("Password changed successfully.");
+            return Ok("Contraseña actualizada correctamente.");
         }
 
         // DELETE /api/user/me  — el propio usuario elimina su cuenta
@@ -96,8 +96,8 @@ namespace CodePortfolio.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var userId = ClaimsHelper.GetUserId(User);
             var user   = await _userRepo.GetUser(userId);
-            if (user == null) return NotFound("User not found.");
-            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password)) return BadRequest("Password is incorrect.");
+            if (user == null) return NotFound("Usuario no encontrado.");
+            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password)) return BadRequest("La contraseña es incorrecta.");
 
             // Eliminar avatar del disco si existe
             if (!string.IsNullOrEmpty(user.ProfilePicture))
@@ -108,7 +108,7 @@ namespace CodePortfolio.Controllers
 
             if (!await _userRepo.DeleteUser(userId)) return StatusCode(500, "Could not delete account.");
             await _refreshStore.RevokeAllAsync(userId);
-            return Ok("Account deleted successfully.");
+            return Ok("Cuenta eliminada correctamente.");
         }
 
         // GET /api/user/me/likes
@@ -126,7 +126,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetUser(Guid userId)
         {
             var user = await _userRepo.GetUser(userId);
-            if (user == null) return NotFound("User not found.");
+            if (user == null) return NotFound("Usuario no encontrado.");
             return Ok(new { user.UserId, user.FullName, user.Bio, user.Location, user.ProfilePicture, user.RegistrationDate });
         }
 
@@ -135,7 +135,7 @@ namespace CodePortfolio.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string q)
         {
-            if (string.IsNullOrWhiteSpace(q)) return BadRequest("Query is required.");
+            if (string.IsNullOrWhiteSpace(q)) return BadRequest("Escribe algo para buscar.");
             var users = await _userRepo.Search(q);
             return Ok(users.Select(u => new { u.UserId, u.FullName, u.Bio, u.ProfilePicture }));
         }
@@ -154,8 +154,8 @@ namespace CodePortfolio.Controllers
         [HttpDelete("{userId:guid}")]
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
-            if (!await _userRepo.DeleteUser(userId)) return NotFound("User not found.");
-            return Ok("User deleted.");
+            if (!await _userRepo.DeleteUser(userId)) return NotFound("Usuario no encontrado.");
+            return Ok("Usuario eliminado.");
         }
     }
 }

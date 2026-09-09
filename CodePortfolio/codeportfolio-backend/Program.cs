@@ -3,6 +3,7 @@ using CodePortfolio.Repositories;
 using CodePortfolio.Repositories.Interfaces;
 using CodePortfolio.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -11,6 +12,15 @@ using System.Text;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// No revelar el servidor en las respuestas
+builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
+
+// Detrás del proxy (nginx) todas las peticiones llegarían con la misma IP y el
+// limitador de intentos protegería a todos como si fueran uno solo. Con esto se
+// recupera la IP real del cliente. ForwardLimit = 1 toma el último valor de
+// X-Forwarded-For (el que añade nuestro proxy), así que un cliente no puede
+// falsearlo enviando su propia cabecera.
 
 // ── Database ──────────────────────────────────────────────────────────────────
 var connectionString = builder.Configuration.GetConnectionString("CodePortfolioConnection")
@@ -92,6 +102,14 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.ForwardLimit     = 1;
+    options.KnownNetworks.Clear();   // el proxy tiene IP dinámica dentro de la red de contenedores
+    options.KnownProxies.Clear();
+});
+
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -145,16 +163,35 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // ── Middleware pipeline ───────────────────────────────────────────────────────
-// Global 500 handler — DEBE ir primero
+app.UseForwardedHeaders();   // antes que nada: fija la IP real del cliente
+
+// Global 500 handler
 app.UseExceptionHandler(errApp =>
 {
     errApp.Run(async ctx =>
     {
         ctx.Response.StatusCode  = 500;
         ctx.Response.ContentType = "application/json";
-        await ctx.Response.WriteAsync("{\"error\":\"An unexpected server error occurred.\"}");
+        await ctx.Response.WriteAsync("{\"error\":\"Ocurrió un error inesperado en el servidor.\"}");
     });
 });
+
+// ── Cabeceras de seguridad ────────────────────────────────────────────────────
+// Se aplican también a los ficheros estáticos (imágenes subidas por usuarios).
+app.Use(async (ctx, next) =>
+{
+    var h = ctx.Response.Headers;
+    h["X-Content-Type-Options"] = "nosniff";        // no adivinar el tipo del contenido
+    h["X-Frame-Options"]        = "DENY";           // no embeber en marcos
+    h["Referrer-Policy"]        = "no-referrer";
+    h["Permissions-Policy"]     = "camera=(), microphone=(), geolocation=()";
+    // El API solo devuelve JSON e imágenes: nada de scripts ni marcos.
+    h["Content-Security-Policy"] = "default-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
+    await next();
+});
+
+if (!app.Environment.IsDevelopment())
+    app.UseHsts();
 
 if (app.Environment.IsDevelopment())
 {

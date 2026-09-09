@@ -33,6 +33,15 @@ namespace CodePortfolio.Controllers
         [HttpGet("project/{projectId:guid}")]
         public async Task<IActionResult> GetByProject(Guid projectId)
         {
+            var project = await _projectRepo.GetProject(projectId);
+            if (project == null) return NotFound("Proyecto no encontrado.");
+            if (project.Status != "published")
+            {
+                var quien = ClaimsHelper.GetUserId(User);
+                if (project.UserId != quien && !ClaimsHelper.IsAdmin(User))
+                    return NotFound("Proyecto no encontrado.");
+            }
+
             var comments = await _commentRepo.GetCommentsByProject(projectId);
             var result   = new List<CommentResponseDto>();
             foreach (var c in comments)
@@ -59,7 +68,11 @@ namespace CodePortfolio.Controllers
 
             var userId  = ClaimsHelper.GetUserId(User);
             var project = await _projectRepo.GetProject(projectId);
-            if (project == null) return NotFound("Project not found.");
+            // No se comenta un proyecto que no está publicado (salvo su dueño o un admin)
+            if (project == null || (project.Status != "published"
+                                    && project.UserId != userId
+                                    && !ClaimsHelper.IsAdmin(User)))
+                return NotFound("Proyecto no encontrado.");
 
             var comment = new Comment
             {
@@ -71,7 +84,7 @@ namespace CodePortfolio.Controllers
             };
 
             if (!await _commentRepo.CreateComment(comment))
-                return BadRequest("Could not create comment.");
+                return BadRequest("No se pudo publicar el comentario.");
 
             // Notificación al dueño del proyecto
             if (project.UserId != userId)
@@ -81,7 +94,7 @@ namespace CodePortfolio.Controllers
                 {
                     NotificationId = Guid.NewGuid(),
                     UserId         = project.UserId,
-                    Message        = $"{commenter?.FullName ?? "Someone"} commented on your project '{project.Title}'.",
+                    Message        = $"{commenter?.FullName ?? "Alguien"} comentó tu proyecto «{project.Title}».",
                     SentDate       = DateTime.UtcNow
                 });
             }
@@ -105,13 +118,13 @@ namespace CodePortfolio.Controllers
         {
             var userId  = ClaimsHelper.GetUserId(User);
             var comment = await _commentRepo.GetComment(id);
-            if (comment == null) return NotFound("Comment not found.");
+            if (comment == null) return NotFound("Comentario no encontrado.");
             if (comment.UserId != userId && !ClaimsHelper.IsAdmin(User)) return Forbid();
 
             if (!await _commentRepo.DeleteComment(id))
-                return BadRequest("Could not delete comment.");
+                return BadRequest("No se pudo eliminar el comentario.");
 
-            return Ok("Comment deleted.");
+            return Ok("Comentario eliminado.");
         }
     }
 }

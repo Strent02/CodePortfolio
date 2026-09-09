@@ -25,7 +25,7 @@ namespace CodePortfolio.Controllers
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] string q)
         {
-            if (string.IsNullOrWhiteSpace(q)) return BadRequest("Query required.");
+            if (string.IsNullOrWhiteSpace(q)) return BadRequest("Escribe algo para buscar.");
 
             var projects  = await _projectRepo.Search(q);
             var users     = await _userRepo.Search(q);

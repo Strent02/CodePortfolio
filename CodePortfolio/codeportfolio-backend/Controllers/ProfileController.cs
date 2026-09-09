@@ -33,7 +33,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetProfile(Guid userId)
         {
             var user = await _userRepo.GetUser(userId);
-            if (user == null) return NotFound("User not found.");
+            if (user == null) return NotFound("Usuario no encontrado.");
 
             var projects       = await _projectRepo.GetProjectsByUser(userId);
             var pubProjects    = projects.Where(p => p.Status == "published").ToList();
@@ -59,7 +59,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetUserProjects(Guid userId)
         {
             var user = await _userRepo.GetUser(userId);
-            if (user == null) return NotFound("User not found.");
+            if (user == null) return NotFound("Usuario no encontrado.");
 
             var projects = await _projectRepo.GetProjectsByUser(userId);
             var published = projects.Where(p => p.Status == "published").ToList();

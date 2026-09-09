@@ -184,7 +184,7 @@ namespace CodePortfolio.Context
                 entity.HasOne<Project>()
                       .WithMany()
                       .HasForeignKey(e => e.ProjectId)
-                      .OnDelete(DeleteBehavior.NoAction);
+                      .OnDelete(DeleteBehavior.Cascade);   // sin proyecto no hay comentario
             });
 
             /* =========================
@@ -210,7 +210,7 @@ namespace CodePortfolio.Context
                 entity.HasOne<Project>()
                       .WithMany()
                       .HasForeignKey(e => e.ProjectId)
-                      .OnDelete(DeleteBehavior.NoAction);
+                      .OnDelete(DeleteBehavior.Cascade);   // sin proyecto no hay reacción
             });
 
             /* =========================
@@ -232,7 +232,7 @@ namespace CodePortfolio.Context
                 entity.HasIndex(e => new { e.UserId, e.FollowedUserId }).IsUnique();
 
                 entity.HasOne<User>().WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Cascade);
-                entity.HasOne<User>().WithMany().HasForeignKey(e => e.FollowedUserId).OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne<User>().WithMany().HasForeignKey(e => e.FollowedUserId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne<Project>().WithMany().HasForeignKey(e => e.ProjectId).OnDelete(DeleteBehavior.SetNull);
             });
 

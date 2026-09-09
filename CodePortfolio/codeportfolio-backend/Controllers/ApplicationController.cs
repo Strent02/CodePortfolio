@@ -30,7 +30,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetApplication(Guid id)
         {
             var item = await _applicationRepository.GetApplication(id);
-            if (item == null) return NotFound("Application not found.");
+            if (item == null) return NotFound("Postulación no encontrada.");
             return Ok(item);
         }
 

@@ -22,7 +22,7 @@ namespace CodePortfolio.Controllers
         {
             var items = await _reactionRepository.GetReactions();
             if (items == null || !items.Any())
-                return NotFound("No reactions found.");
+                return NotFound("No hay reacciones.");
             return Ok(items);
         }
 
@@ -30,7 +30,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetReaction(Guid id)
         {
             var item = await _reactionRepository.GetReaction(id);
-            if (item == null) return NotFound("Reaction not found.");
+            if (item == null) return NotFound("Reacción no encontrada.");
             return Ok(item);
         }
 
@@ -43,7 +43,7 @@ namespace CodePortfolio.Controllers
             reaction.ReactionDate = DateTime.UtcNow;
 
             var result = await _reactionRepository.CreateReaction(reaction);
-            if (!result) return Conflict("This user has already reacted to this project.");
+            if (!result) return Conflict("Ya reaccionaste a este proyecto.");
 
             return CreatedAtAction(nameof(GetReaction), new { id = reaction.ReactionId }, reaction);
         }
@@ -52,20 +52,20 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> UpdateReaction(Guid id, [FromBody] Reaction reaction)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (id != reaction.ReactionId) return BadRequest("Reaction ID mismatch.");
+            if (id != reaction.ReactionId) return BadRequest("El identificador de la reacción no coincide.");
 
             var result = await _reactionRepository.UpdateReaction(reaction);
-            if (!result) return NotFound("Reaction not found or could not be updated.");
+            if (!result) return NotFound("No se encontró la reacción o no se pudo actualizar.");
 
-            return Ok("Reaction updated successfully.");
+            return Ok("Reacción actualizada.");
         }
 
         [HttpDelete("DeleteReaction/{id:guid}")]
         public async Task<IActionResult> DeleteReaction(Guid id)
         {
             var result = await _reactionRepository.DeleteReaction(id);
-            if (!result) return NotFound("Reaction not found or could not be deleted.");
-            return Ok("Reaction deleted successfully.");
+            if (!result) return NotFound("No se encontró la reacción o no se pudo eliminar.");
+            return Ok("Reacción eliminada.");
         }
     }
 }

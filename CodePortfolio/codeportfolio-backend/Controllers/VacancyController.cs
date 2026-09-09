@@ -52,7 +52,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetVacancy(Guid id)
         {
             var j = await _jobRepo.GetJobOpening(id);
-            if (j == null) return NotFound("Vacancy not found.");
+            if (j == null) return NotFound("Vacante no encontrada.");
             var company = await _companyRepo.GetCompany(j.CompanyId);
             return Ok(new
             {
@@ -69,7 +69,7 @@ namespace CodePortfolio.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string q)
         {
-            if (string.IsNullOrWhiteSpace(q)) return BadRequest("Query required.");
+            if (string.IsNullOrWhiteSpace(q)) return BadRequest("Escribe algo para buscar.");
             var results = await _jobRepo.Search(q);
             return Ok(results.Select(j => new { j.JobOpeningId, j.Title, j.Description, j.ContractType, j.WorkMode }));
         }
@@ -81,7 +81,7 @@ namespace CodePortfolio.Controllers
         {
             var userId = ClaimsHelper.GetUserId(User);
             var job    = await _jobRepo.GetJobOpening(id);
-            if (job == null) return NotFound("Vacancy not found.");
+            if (job == null) return NotFound("Vacante no encontrada.");
 
             var app = new Application
             {
@@ -95,7 +95,7 @@ namespace CodePortfolio.Controllers
             };
 
             if (!await _appRepo.CreateApplication(app))
-                return Conflict("You have already applied to this vacancy.");
+                return Conflict("Ya te postulaste a esta vacante.");
 
             return Ok(new { app.ApplicationId, app.Status, message = "Application submitted successfully." });
         }
@@ -149,7 +149,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> ChangeStatus(Guid appId, [FromBody] ChangeApplicationStatusDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (!await _appRepo.ChangeStatus(appId, dto.Status)) return NotFound("Application not found.");
+            if (!await _appRepo.ChangeStatus(appId, dto.Status)) return NotFound("Postulación no encontrada.");
             return Ok(new { appId, dto.Status });
         }
 
@@ -169,7 +169,7 @@ namespace CodePortfolio.Controllers
                 WorkMode     = dto.WorkMode,
                 PublishDate  = DateTime.UtcNow
             };
-            if (!await _jobRepo.CreateJobOpening(job)) return BadRequest("Could not create vacancy.");
+            if (!await _jobRepo.CreateJobOpening(job)) return BadRequest("No se pudo crear la vacante.");
             return CreatedAtAction(nameof(GetVacancy), new { id = job.JobOpeningId }, job);
         }
     }

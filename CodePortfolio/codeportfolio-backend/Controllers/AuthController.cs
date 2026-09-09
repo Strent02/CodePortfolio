@@ -37,7 +37,7 @@ namespace CodePortfolio.Controllers
 
             var normalizedEmail = dto.Email.Trim().ToLowerInvariant();
             if (await _userRepo.GetUserByEmail(normalizedEmail) != null)
-                return Conflict("An account with this email already exists.");
+                return Conflict("Ya existe una cuenta con este correo.");
 
             var defaultRole = await _roleRepo.GetRoleByName("User");
             if (defaultRole == null)
@@ -75,7 +75,7 @@ namespace CodePortfolio.Controllers
 
             var user = await _userRepo.GetUserByEmail(dto.Email.Trim().ToLowerInvariant());
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
-                return Unauthorized("Invalid email or password.");
+                return Unauthorized("Correo o contraseña incorrectos.");
 
             var role         = await _roleRepo.GetRole(user.RoleId);
             var roleName     = role?.Name ?? "User";
@@ -92,10 +92,10 @@ namespace CodePortfolio.Controllers
         {
             var entry = await _refreshStore.GetAsync(dto.RefreshToken);
             if (entry == null || entry.ExpiresAt < DateTime.UtcNow)
-                return Unauthorized("Refresh token is invalid or expired. Please login again.");
+                return Unauthorized("Tu sesión expiró. Vuelve a iniciar sesión.");
 
             var user = await _userRepo.GetUser(entry.UserId);
-            if (user == null) return Unauthorized("User not found.");
+            if (user == null) return Unauthorized("Usuario no encontrado.");
 
             await _refreshStore.RevokeAsync(dto.RefreshToken);
 
@@ -113,7 +113,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> Logout([FromBody] RefreshTokenDto dto)
         {
             await _refreshStore.RevokeAsync(dto.RefreshToken);
-            return Ok("Logged out successfully.");
+            return Ok("Sesión cerrada correctamente.");
         }
     }
 }

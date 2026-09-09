@@ -28,11 +28,11 @@ namespace CodePortfolio.Controllers
         {
             var userId = ClaimsHelper.GetUserId(User);
             var notif  = await _notifRepo.GetNotification(id);
-            if (notif == null) return NotFound("Notification not found.");
+            if (notif == null) return NotFound("Notificación no encontrada.");
             if (notif.UserId != userId) return Forbid();
 
             await _notifRepo.MarkAsRead(id);
-            return Ok("Notification marked as read.");
+            return Ok("Notificación marcada como leída.");
         }
     }
 }

@@ -8,12 +8,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Database ──────────────────────────────────────────────────────────────────
-builder.Services.AddDbContext<CodePortfolioContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CodePortfolioConnection")));
+var connectionString = builder.Configuration.GetConnectionString("CodePortfolioConnection")
+    ?? throw new InvalidOperationException("ConnectionStrings:CodePortfolioConnection must be configured.");
+builder.Services.AddDbContext<CodePortfolioContext>(options => options.UseNpgsql(connectionString));
 
 // ── Repositories ──────────────────────────────────────────────────────────────
 builder.Services.AddScoped<IUserRepository,         UserRepository>();
@@ -31,7 +33,7 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 // ── Services ──────────────────────────────────────────────────────────────────
 builder.Services.AddSingleton<JwtService>();
-builder.Services.AddSingleton<RefreshTokenStore>();
+builder.Services.AddScoped<RefreshTokenStore>();
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
 var allowedOrigins = builder.Configuration
@@ -48,7 +50,10 @@ builder.Services.AddCors(options =>
 });
 
 // ── JWT Authentication ────────────────────────────────────────────────────────
-var jwtKey = builder.Configuration["Jwt:Key"]!;
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("Jwt:Key must be configured through secrets or environment variables.");
+if (Encoding.UTF8.GetByteCount(jwtKey) < 32 || jwtKey.StartsWith("replace-with", StringComparison.OrdinalIgnoreCase))
+    throw new InvalidOperationException("Jwt:Key must contain at least 32 bytes.");
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -87,6 +92,18 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("auth", httpContext => RateLimitPartition.GetFixedWindowLimiter(
+        httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 10,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 0
+        }));
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -99,11 +116,10 @@ builder.Services.AddSwaggerGen(c =>
         Version     = "v1",
         Description = "REST API para la plataforma CodePortfolio.\n\n" +
                       "**Flujo de uso:**\n" +
-                      "1. `POST /api/role/CreateRole` → crear rol `{\"name\":\"User\"}`\n" +
-                      "2. `POST /api/auth/register` → registrar usuario\n" +
-                      "3. `POST /api/auth/login` → obtener token\n" +
-                      "4. Clic en **Authorize** → pegar el token\n" +
-                      "5. Usar cualquier endpoint protegido"
+                      "1. `POST /api/auth/register` → registrar usuario\n" +
+                      "2. `POST /api/auth/login` → obtener token\n" +
+                      "3. Clic en **Authorize** → pegar el token\n" +
+                      "4. Usar cualquier endpoint protegido"
     });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -155,11 +171,12 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();          // wwwroot/ para imágenes subidas
 app.UseHttpsRedirection();
 app.UseCors("FrontendPolicy"); // CORS ANTES de auth
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
 // ── Auto-seed roles al arrancar ──────────────────────────────────────────────
-await SeedService.SeedRolesAsync(app.Services);
+await SeedService.InitializeDatabaseAsync(app.Services);
 
 app.Run();

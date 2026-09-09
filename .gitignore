@@ -1,0 +1,12 @@
+.DS_Store
+CodePortfolio/.env
+CodePortfolio/.env.*
+!CodePortfolio/.env.example
+**/bin/
+**/obj/
+**/.vs/
+*.user
+*.suo
+node_modules/
+dist/
+coverage/

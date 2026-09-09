@@ -3,7 +3,7 @@ import { feed, projects as projectsApi, comments as commentsApi, users as usersA
 import { useAuth } from '../context/AuthContext';
 import { Icon, Avatar, useToast } from '../components/UI';
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5102';
+const BASE = import.meta.env.VITE_API_URL || '';
 
 /* ─── Skeleton card ──────────────────────────────────────────────────────── */
 function SkeletonCard() {
@@ -140,6 +140,8 @@ function ProjectDrawer({ project, onClose, liked, onLike, onNavigate }) {
     setTimeout(() => setVisible(true), 10);
     loadComments();
     return () => setVisible(false);
+    // The project id is the complete input for this reload.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project?.projectId]);
 
   async function loadComments() {

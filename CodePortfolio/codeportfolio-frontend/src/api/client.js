@@ -1,12 +1,12 @@
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5102';
+const BASE = import.meta.env.VITE_API_URL || '';
 
 function getToken() {
-  return localStorage.getItem('cp_token');
+  return sessionStorage.getItem('cp_token');
 }
 
 // En lugar de hard-reload, dispara un evento que App.jsx escucha
 function forceLogout() {
-  localStorage.clear();
+  sessionStorage.clear();
   window.dispatchEvent(new CustomEvent('cp:session-expired'));
 }
 
@@ -41,7 +41,7 @@ async function request(path, options = {}) {
 }
 
 async function tryRefresh() {
-  const refreshToken = localStorage.getItem('cp_refresh');
+  const refreshToken = sessionStorage.getItem('cp_refresh');
   if (!refreshToken) return false;
   try {
     const res = await fetch(`${BASE}/api/auth/refresh`, {
@@ -51,8 +51,8 @@ async function tryRefresh() {
     });
     if (!res.ok) return false;
     const data = await res.json();
-    localStorage.setItem('cp_token',   data.token);
-    localStorage.setItem('cp_refresh', data.refreshToken);
+    sessionStorage.setItem('cp_token',   data.token);
+    sessionStorage.setItem('cp_refresh', data.refreshToken);
     return true;
   } catch {
     return false;

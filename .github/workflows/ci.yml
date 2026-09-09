@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore CodePortfolio/codeportfolio-backend.Tests/CodePortfolio.Tests.csproj
+      - run: dotnet test CodePortfolio/codeportfolio-backend.Tests/CodePortfolio.Tests.csproj --no-restore --configuration Release
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.19
+          cache: npm
+          cache-dependency-path: CodePortfolio/codeportfolio-frontend/package-lock.json
+      - working-directory: CodePortfolio/codeportfolio-frontend
+        run: npm ci
+      - working-directory: CodePortfolio/codeportfolio-frontend
+        run: npm run lint
+      - working-directory: CodePortfolio/codeportfolio-frontend
+        run: npm run build

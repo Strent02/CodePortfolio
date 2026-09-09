@@ -5,19 +5,19 @@ namespace CodePortfolio.DTOs
     public class CreateProjectDto
     {
         [Required][MaxLength(150)] public string  Title         { get; set; } = string.Empty;
-        public string? Description  { get; set; }
-        [MaxLength(255)]           public string? DemoUrl       { get; set; }
-        [MaxLength(255)]           public string? RepositoryUrl { get; set; }
-        [MaxLength(50)]            public string  Status        { get; set; } = "draft";
+        [MaxLength(10000)]         public string? Description  { get; set; }
+        [Url, MaxLength(255)]      public string? DemoUrl       { get; set; }
+        [Url, MaxLength(255)]      public string? RepositoryUrl { get; set; }
+        [RegularExpression("^(draft|published)$")] public string Status { get; set; } = "draft";
     }
 
     public class UpdateProjectDto
     {
         [Required][MaxLength(150)] public string  Title         { get; set; } = string.Empty;
-        public string? Description  { get; set; }
-        [MaxLength(255)]           public string? DemoUrl       { get; set; }
-        [MaxLength(255)]           public string? RepositoryUrl { get; set; }
-        [MaxLength(50)]            public string  Status        { get; set; } = "draft";
+        [MaxLength(10000)]         public string? Description  { get; set; }
+        [Url, MaxLength(255)]      public string? DemoUrl       { get; set; }
+        [Url, MaxLength(255)]      public string? RepositoryUrl { get; set; }
+        [RegularExpression("^(draft|published)$")] public string Status { get; set; } = "draft";
     }
 
     public class ProjectResponseDto
@@ -80,7 +80,7 @@ namespace CodePortfolio.DTOs
     public class CreateVacancyDto
     {
         [Required][MaxLength(150)] public string  Title        { get; set; } = string.Empty;
-        public string? Description  { get; set; }
+        [MaxLength(10000)]         public string? Description  { get; set; }
         [MaxLength(50)]            public string? ContractType { get; set; }
         [MaxLength(50)]            public string? WorkMode     { get; set; }
         [Required]                 public Guid    CompanyId    { get; set; }

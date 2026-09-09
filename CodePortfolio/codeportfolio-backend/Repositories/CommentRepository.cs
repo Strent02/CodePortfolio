@@ -24,6 +24,15 @@ namespace CodePortfolio.Repositories
         public async Task<int> GetCommentsCount(Guid projectId)
             => await _context.Comments.CountAsync(c => c.ProjectId == projectId);
 
+        public async Task<Dictionary<Guid, int>> GetCommentsCounts(IEnumerable<Guid> projectIds)
+        {
+            var ids = projectIds.Distinct().ToArray();
+            return await _context.Comments.Where(c => ids.Contains(c.ProjectId))
+                .GroupBy(c => c.ProjectId)
+                .Select(g => new { ProjectId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.ProjectId, x => x.Count);
+        }
+
         public async Task<bool> CreateComment(Comment comment)
         {
             _context.Comments.Add(comment);

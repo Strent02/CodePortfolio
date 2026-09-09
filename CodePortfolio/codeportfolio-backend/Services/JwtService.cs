@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace CodePortfolio.Services
 {
@@ -44,10 +45,7 @@ namespace CodePortfolio.Services
         // El operador '+' sobre byte[] en C# NO concatena — hace ToString() implícito
         public string GenerateRefreshToken()
         {
-            var part1 = Guid.NewGuid().ToByteArray();
-            var part2 = Guid.NewGuid().ToByteArray();
-            var combined = part1.Concat(part2).ToArray(); // 32 bytes random
-            return Convert.ToBase64String(combined);
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         }
     }
 }

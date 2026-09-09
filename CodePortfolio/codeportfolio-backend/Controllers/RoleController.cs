@@ -7,7 +7,7 @@ namespace CodePortfolio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleRepository _roleRepository;
@@ -34,7 +34,6 @@ namespace CodePortfolio.Controllers
             return Ok(item);
         }
 
-        [AllowAnonymous]
         [HttpPost("CreateRole")]
         public async Task<IActionResult> CreateRole([FromBody] Role role)
         {

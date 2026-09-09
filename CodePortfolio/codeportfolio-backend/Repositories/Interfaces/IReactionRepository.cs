@@ -8,6 +8,7 @@ namespace CodePortfolio.Repositories.Interfaces
         Task<Reaction?> GetReaction(Guid reactionId);
         Task<Reaction?> GetReactionByUserAndProject(Guid userId, Guid projectId);
         Task<int> GetLikesCount(Guid projectId);
+        Task<Dictionary<Guid, int>> GetLikesCounts(IEnumerable<Guid> projectIds);
         Task<List<Guid>> GetLikedProjectIds(Guid userId);  // para GET /api/user/me/likes
         Task<bool> CreateReaction(Reaction reaction);
         Task<bool> UpdateReaction(Reaction reaction);

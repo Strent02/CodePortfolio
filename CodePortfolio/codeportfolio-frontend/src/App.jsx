@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/UI';
 import { Sidebar } from './components/UI';
@@ -25,7 +25,7 @@ function AppLoader() {
           &lt;/&gt;
         </div>
         {/* Anillo giratorio */}
-        <div style={{ position: 'absolute', inset: -8, borderRadius: '50%', border: '2px solid transparent', borderTopColor: 'var(--accent)', borderRightColor: 'rgba(108,99,255,0.3)', borderRadius: 36, animation: 'spin 1s linear infinite' }} />
+        <div style={{ position: 'absolute', inset: -8, border: '2px solid transparent', borderTopColor: 'var(--accent)', borderRightColor: 'rgba(108,99,255,0.3)', borderRadius: 36, animation: 'spin 1s linear infinite' }} />
       </div>
       <div style={{ textAlign: 'center' }}>
         <div style={{ fontFamily: 'var(--mono)', fontSize: 14, color: 'var(--text-secondary)', fontWeight: 600 }}>
@@ -101,24 +101,37 @@ function MobileNav({ page, navigate, user }) {
 /* ─── App inner ──────────────────────────────────────────────────────────── */
 function AppInner() {
   const { user, logout, loading } = useAuth();
-  const [page, setPage] = useState('feed');
-  const [profileUserId, setProfileUserId] = useState(null);
+  const initialRoute = window.location.hash.replace(/^#\/?/, '') || 'feed';
+  const [page, setPage] = useState(initialRoute.split('/')[0]);
+  const [profileUserId, setProfileUserId] = useState(initialRoute.split('/')[1] || null);
 
-  useEffect(() => {
-    function onSessionExpired() { logout(); setPage('login'); }
-    window.addEventListener('cp:session-expired', onSessionExpired);
-    return () => window.removeEventListener('cp:session-expired', onSessionExpired);
-  }, [logout]);
-
-  function navigate(target, param) {
-    if (target === 'logout') { logout(); setPage('feed'); return; }
+  const navigate = useCallback((target, param) => {
+    if (target === 'logout') { logout(); window.location.hash = '/feed'; return; }
     if (target === 'profile') {
       if (!param && !user) { setPage('login'); return; }
       setProfileUserId(param || user?.userId);
     }
     setPage(target);
+    window.location.hash = `/${target}${target === 'profile' && param ? `/${param}` : ''}`;
     window.scrollTo(0, 0);
-  }
+  }, [logout, user]);
+
+  useEffect(() => {
+    function onRouteChange() {
+      const route = window.location.hash.replace(/^#\/?/, '') || 'feed';
+      const [nextPage, parameter] = route.split('/');
+      setPage(nextPage);
+      if (nextPage === 'profile') setProfileUserId(parameter || null);
+    }
+    window.addEventListener('hashchange', onRouteChange);
+    return () => window.removeEventListener('hashchange', onRouteChange);
+  }, []);
+
+  useEffect(() => {
+    function onSessionExpired() { logout(); window.location.hash = '/login'; }
+    window.addEventListener('cp:session-expired', onSessionExpired);
+    return () => window.removeEventListener('cp:session-expired', onSessionExpired);
+  }, [logout]);
 
   if (loading) return <AppLoader />;
 

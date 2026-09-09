@@ -3,7 +3,7 @@ import { vacancies, search as searchApi, notifications as notifApi, users as use
 import { useAuth } from '../context/AuthContext';
 import { Avatar, useToast } from '../components/UI';
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5102';
+const BASE = import.meta.env.VITE_API_URL || '';
 
 /* ─── Helpers ────────────────────────────────────────────────────────────── */
 function Ico({ d, size = 16 }) {
@@ -34,7 +34,6 @@ function PageHeader({ title, subtitle, right }) {
 
 /* ─── Apply Drawer ───────────────────────────────────────────────────────── */
 function ApplyDrawer({ job, onClose, onApplied }) {
-  const { user } = useAuth();
   const toast = useToast();
   const [msg, setMsg]         = useState('');
   const [sending, setSending] = useState(false);
@@ -130,6 +129,8 @@ export function JobsPage({ onNavigate }) {
   const [applying, setApplying] = useState(null); // job a postular
   const [hovered,  setHovered]  = useState(null);
 
+  // `load` intentionally follows authentication changes only.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { load(); }, [user]);
 
   async function load() {
@@ -475,7 +476,7 @@ export function NotificationsPage({ onNavigate }) {
   const [notifs,   setNotifs]   = useState([]);
   const [loading,  setLoading]  = useState(true);
 
-  useEffect(() => { if (!user) { onNavigate('login'); return; } load(); }, [user]);
+  useEffect(() => { if (!user) { onNavigate('login'); return; } load(); }, [user, onNavigate]);
 
   async function load() {
     setLoading(true);
@@ -578,12 +579,12 @@ export function SettingsPage({ onNavigate }) {
   const [showCurr,   setShowCurr]   = useState(false);
   const [showNew,    setShowNew]    = useState(false);
 
-  useEffect(() => { if (!user) onNavigate('login'); }, [user]);
+  useEffect(() => { if (!user) onNavigate('login'); }, [user, onNavigate]);
 
   async function changePassword(e) {
     e.preventDefault();
     if (passForm.newPassword !== passForm.confirmPassword) { toast('Las contraseñas no coinciden', 'error'); return; }
-    if (passForm.newPassword.length < 6) { toast('Mínimo 6 caracteres', 'error'); return; }
+    if (passForm.newPassword.length < 8) { toast('Mínimo 8 caracteres', 'error'); return; }
     setSaving(true);
     try {
       await usersApi.changePassword({ currentPassword: passForm.currentPassword, newPassword: passForm.newPassword });
@@ -649,7 +650,7 @@ export function SettingsPage({ onNavigate }) {
             <div>
               <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>Nueva contraseña</label>
               <div style={{ position: 'relative' }}>
-                <input type={showNew ? 'text' : 'password'} value={passForm.newPassword} onChange={e => setPassForm(f => ({ ...f, newPassword: e.target.value }))} required minLength={6} style={inputCss} onFocus={onF} onBlur={onB} />
+                <input type={showNew ? 'text' : 'password'} value={passForm.newPassword} onChange={e => setPassForm(f => ({ ...f, newPassword: e.target.value }))} required minLength={8} style={inputCss} onFocus={onF} onBlur={onB} />
                 <EyeBtn show={showNew} toggle={() => setShowNew(v => !v)} />
               </div>
             </div>

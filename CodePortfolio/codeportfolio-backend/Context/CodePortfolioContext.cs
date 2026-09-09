@@ -22,6 +22,7 @@ namespace CodePortfolio.Context
         public DbSet<Collaborator> Collaborators { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +36,7 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.RoleId)        .HasColumnName("role_id");
                 entity.Property(e => e.Name)           .HasColumnName("name")        .IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Description)    .HasColumnName("description") .HasMaxLength(255);
+                entity.HasIndex(e => e.Name).IsUnique();
             });
 
             /* =========================
@@ -53,6 +55,7 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.Location)        .HasColumnName("location")          .HasMaxLength(100);
                 entity.Property(e => e.RegistrationDate).HasColumnName("registration_date");
                 entity.Property(e => e.ProfilePicture)  .HasColumnName("profile_picture")   .HasMaxLength(255);
+                entity.HasIndex(e => e.Email).IsUnique();
 
                 entity.HasOne<Role>()
                       .WithMany()
@@ -75,6 +78,7 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.Location)         .HasColumnName("location")          .HasMaxLength(100);
                 entity.Property(e => e.RegistrationDate) .HasColumnName("registration_date");
                 entity.Property(e => e.Logo)             .HasColumnName("logo")              .HasMaxLength(255);
+                entity.HasIndex(e => e.Email).IsUnique();
             });
 
             /* =========================
@@ -82,7 +86,8 @@ namespace CodePortfolio.Context
             ========================= */
             modelBuilder.Entity<Project>(entity =>
             {
-                entity.ToTable("Project");
+                entity.ToTable("Project", table =>
+                    table.HasCheckConstraint("CK_Project_Status", "status IS NULL OR status IN ('draft', 'published')"));
                 entity.HasKey(e => e.ProjectId);
                 entity.Property(e => e.ProjectId)    .HasColumnName("project_id");
                 entity.Property(e => e.UserId)       .HasColumnName("user_id");
@@ -93,6 +98,8 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.DemoUrl)      .HasColumnName("demo_url")       .HasMaxLength(255);
                 entity.Property(e => e.RepositoryUrl).HasColumnName("repository_url") .HasMaxLength(255);
                 entity.Property(e => e.Status)       .HasColumnName("status")         .HasMaxLength(50);
+                entity.HasIndex(e => e.UserId);
+                entity.HasIndex(e => e.PublishDate);
 
                 entity.HasOne<User>()
                       .WithMany()
@@ -114,6 +121,7 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.ContractType) .HasColumnName("contract_type") .HasMaxLength(50);
                 entity.Property(e => e.WorkMode)     .HasColumnName("work_mode")     .HasMaxLength(50);
                 entity.Property(e => e.PublishDate)  .HasColumnName("publish_date");
+                entity.HasIndex(e => e.CompanyId);
 
                 entity.HasOne<Company>()
                       .WithMany()
@@ -126,7 +134,8 @@ namespace CodePortfolio.Context
             ========================= */
             modelBuilder.Entity<Application>(entity =>
             {
-                entity.ToTable("Application");
+                entity.ToTable("Application", table =>
+                    table.HasCheckConstraint("CK_Application_Status", "status IN ('pending', 'accepted', 'rejected')"));
                 entity.HasKey(e => e.ApplicationId);
                 entity.Property(e => e.ApplicationId) .HasColumnName("application_id");
                 entity.Property(e => e.UserId)        .HasColumnName("user_id");
@@ -135,6 +144,7 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.ApplicationDate) .HasColumnName("application_date");
                 entity.Property(e => e.ProjectId)       .HasColumnName("project_id");
                 entity.Property(e => e.Status)          .HasColumnName("status").HasMaxLength(50);
+                entity.HasIndex(e => new { e.UserId, e.JobOpeningId }).IsUnique();
 
                 entity.HasOne<User>()
                       .WithMany()
@@ -145,6 +155,11 @@ namespace CodePortfolio.Context
                       .WithMany()
                       .HasForeignKey(e => e.JobOpeningId)
                       .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne<Project>()
+                      .WithMany()
+                      .HasForeignKey(e => e.ProjectId)
+                      .OnDelete(DeleteBehavior.SetNull);
             });
 
             /* =========================
@@ -159,6 +174,7 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.ProjectId)  .HasColumnName("project_id");
                 entity.Property(e => e.Content)    .HasColumnName("content")     .IsRequired();
                 entity.Property(e => e.CommentDate).HasColumnName("comment_date");
+                entity.HasIndex(e => e.ProjectId);
 
                 entity.HasOne<User>()
                       .WithMany()
@@ -176,13 +192,15 @@ namespace CodePortfolio.Context
             ========================= */
             modelBuilder.Entity<Reaction>(entity =>
             {
-                entity.ToTable("Reaction");
+                entity.ToTable("Reaction", table =>
+                    table.HasCheckConstraint("CK_Reaction_Type", "type = 'like'"));
                 entity.HasKey(e => e.ReactionId);
                 entity.Property(e => e.ReactionId)  .HasColumnName("reaction_id");
                 entity.Property(e => e.UserId)      .HasColumnName("user_id");
                 entity.Property(e => e.ProjectId)   .HasColumnName("project_id");
                 entity.Property(e => e.Type)        .HasColumnName("type")         .HasMaxLength(50);
                 entity.Property(e => e.ReactionDate).HasColumnName("reaction_date");
+                entity.HasIndex(e => new { e.UserId, e.ProjectId }).IsUnique();
 
                 entity.HasOne<User>()
                       .WithMany()
@@ -200,13 +218,22 @@ namespace CodePortfolio.Context
             ========================= */
             modelBuilder.Entity<Follow>(entity =>
             {
-                entity.ToTable("Follow");
+                entity.ToTable("Follow", table =>
+                {
+                    table.HasCheckConstraint("CK_Follow_Target", "followed_user_id IS NOT NULL OR project_id IS NOT NULL");
+                    table.HasCheckConstraint("CK_Follow_NotSelf", "followed_user_id IS NULL OR user_id <> followed_user_id");
+                });
                 entity.HasKey(e => e.FollowId);
                 entity.Property(e => e.FollowId)      .HasColumnName("follow_id");
                 entity.Property(e => e.UserId)        .HasColumnName("user_id");
                 entity.Property(e => e.FollowedUserId).HasColumnName("followed_user_id");
                 entity.Property(e => e.ProjectId)     .HasColumnName("project_id");
                 entity.Property(e => e.FollowDate)    .HasColumnName("follow_date");
+                entity.HasIndex(e => new { e.UserId, e.FollowedUserId }).IsUnique();
+
+                entity.HasOne<User>().WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne<User>().WithMany().HasForeignKey(e => e.FollowedUserId).OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne<Project>().WithMany().HasForeignKey(e => e.ProjectId).OnDelete(DeleteBehavior.SetNull);
             });
 
             /* =========================
@@ -220,6 +247,9 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.UserId)        .HasColumnName("user_id");
                 entity.Property(e => e.ProjectId)     .HasColumnName("project_id");
                 entity.Property(e => e.ProjectRole)   .HasColumnName("project_role").HasMaxLength(50);
+                entity.HasIndex(e => new { e.UserId, e.ProjectId }).IsUnique();
+                entity.HasOne<User>().WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne<Project>().WithMany().HasForeignKey(e => e.ProjectId).OnDelete(DeleteBehavior.Cascade);
             });
 
             /* =========================
@@ -227,7 +257,8 @@ namespace CodePortfolio.Context
             ========================= */
             modelBuilder.Entity<Message>(entity =>
             {
-                entity.ToTable("Message");
+                entity.ToTable("Message", table =>
+                    table.HasCheckConstraint("CK_Message_Sender", "sender_type IN ('user', 'company')"));
                 entity.HasKey(e => e.MessageId);
                 entity.Property(e => e.MessageId) .HasColumnName("message_id");
                 entity.Property(e => e.CompanyId) .HasColumnName("company_id");
@@ -236,6 +267,8 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.SentDate)  .HasColumnName("sent_date");
                 entity.Property(e => e.IsRead)    .HasColumnName("is_read");
                 entity.Property(e => e.SenderType).HasColumnName("sender_type") .HasMaxLength(20);
+                entity.HasOne<User>().WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne<Company>().WithMany().HasForeignKey(e => e.CompanyId).OnDelete(DeleteBehavior.Cascade);
             });
 
             /* =========================
@@ -243,7 +276,8 @@ namespace CodePortfolio.Context
             ========================= */
             modelBuilder.Entity<Notification>(entity =>
             {
-                entity.ToTable("Notification");
+                entity.ToTable("Notification", table =>
+                    table.HasCheckConstraint("CK_Notification_Recipient", "(user_id IS NULL) <> (company_id IS NULL)"));
                 entity.HasKey(e => e.NotificationId);
                 entity.Property(e => e.NotificationId).HasColumnName("notification_id");
                 entity.Property(e => e.UserId)        .HasColumnName("user_id");
@@ -251,6 +285,24 @@ namespace CodePortfolio.Context
                 entity.Property(e => e.Message)       .HasColumnName("message")  .IsRequired();
                 entity.Property(e => e.IsRead)        .HasColumnName("is_read");
                 entity.Property(e => e.SentDate)      .HasColumnName("sent_date");
+                entity.HasIndex(e => e.UserId);
+                entity.HasOne<User>().WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne<Company>().WithMany().HasForeignKey(e => e.CompanyId).OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.ToTable("RefreshToken");
+                entity.HasKey(e => e.RefreshTokenId);
+                entity.Property(e => e.RefreshTokenId).HasColumnName("refresh_token_id");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.TokenHash).HasColumnName("token_hash").HasMaxLength(64).IsRequired();
+                entity.Property(e => e.ExpiresAt).HasColumnName("expires_at");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+                entity.Property(e => e.RevokedAt).HasColumnName("revoked_at");
+                entity.HasIndex(e => e.TokenHash).IsUnique();
+                entity.HasIndex(e => e.UserId);
+                entity.HasOne<User>().WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Cascade);
             });
 
             base.OnModelCreating(modelBuilder);

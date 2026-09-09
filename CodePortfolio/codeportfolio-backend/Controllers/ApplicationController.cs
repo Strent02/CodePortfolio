@@ -7,7 +7,7 @@ namespace CodePortfolio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ApplicationController : ControllerBase
     {
         private readonly IApplicationRepository _applicationRepository;

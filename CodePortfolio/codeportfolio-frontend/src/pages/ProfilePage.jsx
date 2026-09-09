@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { profile as profileApi, follows as followsApi, users as usersApi, projects as projectsApi, users } from '../api/client';
+import { profile as profileApi, follows as followsApi, users as usersApi } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import { Avatar, useToast } from '../components/UI';
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5102';
+const BASE = import.meta.env.VITE_API_URL || '';
 
 /* ─── Helpers ────────────────────────────────────────────────────────────── */
 function avatarSrc(pic) {
@@ -18,7 +18,7 @@ function ProfileSkeleton() {
   return (
     <div style={{ padding: '0 36px', animation: 'fadeIn 0.3s ease' }}>
       {/* Banner */}
-      <div style={{ height: 220, borderRadius: '0 0 24px 24px', marginBottom: 0, ...s, borderRadius: 24 }} />
+      <div style={{ height: 220, marginBottom: 0, ...s, borderRadius: '0 0 24px 24px' }} />
       <div style={{ padding: '0 24px', marginTop: -48 }}>
         <div style={{ width: 96, height: 96, borderRadius: '50%', border: '4px solid var(--bg-0)', ...s, marginBottom: 16 }} />
         <div style={{ height: 22, width: '30%', ...s, marginBottom: 10 }} />
@@ -291,7 +291,9 @@ export function ProfilePage({ userId: propUserId, onNavigate }) {
   useEffect(() => {
     if (!userId) { onNavigate('login'); return; }
     load();
-  }, [userId]);
+    // `load` is scoped to the selected profile and must rerun when it changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, onNavigate]);
 
   async function load() {
     setLoading(true);
@@ -393,7 +395,6 @@ export function ProfilePage({ userId: propUserId, onNavigate }) {
               boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(108,99,255,0.2)',
               cursor: isOwn ? 'pointer' : 'default', transition: 'transform 0.2s',
               fontSize: 36, fontWeight: 800,
-              background: picSrc ? 'transparent' : undefined,
             }}
               onClick={() => isOwn && setShowEdit(true)}
               onMouseEnter={e => { if (isOwn) e.currentTarget.style.transform = 'scale(1.04)'; }}

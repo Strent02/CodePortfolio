@@ -7,7 +7,7 @@ namespace CodePortfolio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class MessageController : ControllerBase
     {
         private readonly IMessageRepository _messageRepository;

@@ -1,21 +1,19 @@
-version: '3.9'
-
 services:
 
-  # ── SQL Server ────────────────────────────────────────────────────────────────
+  # ── PostgreSQL ────────────────────────────────────────────────────────────────
   db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: postgres:16-alpine
     container_name: codeportfolio-db
     environment:
-      SA_PASSWORD: "CodePortfolio_SA_2025!"
-      ACCEPT_EULA: "Y"
-      MSSQL_PID: "Express"
+      POSTGRES_DB: ${POSTGRES_DB:-codeportfolio}
+      POSTGRES_USER: ${POSTGRES_USER:-codeportfolio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD in .env}
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sqlserver_data:/var/opt/mssql
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'CodePortfolio_SA_2025!' -Q 'SELECT 1' -No || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 15s
       timeout: 10s
       retries: 10
@@ -24,16 +22,18 @@ services:
   # ── Backend ASP.NET Core 8 ────────────────────────────────────────────────────
   backend:
     build:
-      context: ./proyecto_final
+      context: ./codeportfolio-backend
       dockerfile: Dockerfile
     container_name: codeportfolio-backend
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      ConnectionStrings__CodePortfolioConnection: "Server=db,1433;Database=CodePortfolioDB;User Id=sa;Password=CodePortfolio_SA_2025!;TrustServerCertificate=True;"
-      Jwt__Key: "CodePortfolio_SuperSecretKey_2025!@#$%"
+      ConnectionStrings__CodePortfolioConnection: "Host=db;Port=5432;Database=${POSTGRES_DB:-codeportfolio};Username=${POSTGRES_USER:-codeportfolio};Password=${POSTGRES_PASSWORD}"
+      Jwt__Key: ${JWT_KEY:?Define JWT_KEY in .env}
       Jwt__Issuer: "CodePortfolioAPI"
       Jwt__Audience: "CodePortfolioClient"
       Jwt__ExpiresInMinutes: "60"
+      BootstrapAdmin__Email: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      BootstrapAdmin__Password: ${BOOTSTRAP_ADMIN_PASSWORD:-}
       Cors__AllowedOrigins__0: "http://localhost:3000"
       Cors__AllowedOrigins__1: "http://localhost:5173"
       Cors__AllowedOrigins__2: "http://localhost:4200"
@@ -59,5 +59,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  sqlserver_data:
+  postgres_data:
   uploads_images:

@@ -21,6 +21,15 @@ namespace CodePortfolio.Repositories
         public async Task<int> GetLikesCount(Guid projectId)
             => await _context.Reactions.CountAsync(r => r.ProjectId == projectId);
 
+        public async Task<Dictionary<Guid, int>> GetLikesCounts(IEnumerable<Guid> projectIds)
+        {
+            var ids = projectIds.Distinct().ToArray();
+            return await _context.Reactions.Where(r => ids.Contains(r.ProjectId))
+                .GroupBy(r => r.ProjectId)
+                .Select(g => new { ProjectId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.ProjectId, x => x.Count);
+        }
+
         public async Task<List<Guid>> GetLikedProjectIds(Guid userId)
             => await _context.Reactions
                 .Where(r => r.UserId == userId)

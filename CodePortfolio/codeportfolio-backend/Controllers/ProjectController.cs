@@ -109,13 +109,13 @@ namespace CodePortfolio.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest("No file provided.");
 
-            var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
-            var ext     = Path.GetExtension(file.FileName).ToLower();
-            if (!allowed.Contains(ext))
-                return BadRequest("File type not allowed. Use jpg, png, webp or gif.");
+            var ext = await ImageUploadHelper.GetSafeExtensionAsync(file);
+            if (ext == null)
+                return BadRequest("Invalid image. Use a real JPG, PNG, WEBP or GIF file up to 5 MB.");
 
             var folder   = Path.Combine("wwwroot", "images", "projects");
             Directory.CreateDirectory(folder);
+            DeleteProjectImages(folder, id);
             var fileName = $"{id}{ext}";
             var filePath = Path.Combine(folder, fileName);
 
@@ -164,6 +164,8 @@ namespace CodePortfolio.Controllers
 
             if (!await _projectRepo.DeleteProject(id))
                 return BadRequest("Could not delete project.");
+
+            DeleteProjectImages(Path.Combine("wwwroot", "images", "projects"), id);
 
             return Ok("Project deleted.");
         }
@@ -268,10 +270,33 @@ namespace CodePortfolio.Controllers
 
         private async Task<List<ProjectResponseDto>> BuildResponseList(List<Project> projects)
         {
+            var projectIds = projects.Select(p => p.ProjectId).ToArray();
+            var authors = (await _userRepo.GetUsersByIds(projects.Select(p => p.UserId))).ToDictionary(u => u.UserId);
+            var likes = await _reactionRepo.GetLikesCounts(projectIds);
+            var comments = await _commentRepo.GetCommentsCounts(projectIds);
             var result = new List<ProjectResponseDto>();
             foreach (var p in projects)
-                result.Add(await BuildResponse(p));
+            {
+                authors.TryGetValue(p.UserId, out var author);
+                result.Add(new ProjectResponseDto
+                {
+                    ProjectId = p.ProjectId, UserId = p.UserId,
+                    AuthorName = author?.FullName ?? "Unknown", Title = p.Title,
+                    Description = p.Description, PublishDate = p.PublishDate,
+                    FeaturedImage = p.FeaturedImage, DemoUrl = p.DemoUrl,
+                    RepositoryUrl = p.RepositoryUrl, Status = p.Status,
+                    Likes = likes.GetValueOrDefault(p.ProjectId),
+                    CommentsCount = comments.GetValueOrDefault(p.ProjectId)
+                });
+            }
             return result;
+        }
+
+        private static void DeleteProjectImages(string folder, Guid projectId)
+        {
+            if (!Directory.Exists(folder)) return;
+            foreach (var path in Directory.GetFiles(folder, $"{projectId}.*"))
+                System.IO.File.Delete(path);
         }
     }
 }

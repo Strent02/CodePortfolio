@@ -3,7 +3,7 @@ import { projects as projectsApi } from '../api/client';
 import { Avatar, useToast } from '../components/UI';
 import { useAuth } from '../context/AuthContext';
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5102';
+const BASE = import.meta.env.VITE_API_URL || '';
 
 /* ─── Stat card ──────────────────────────────────────────────────────────── */
 function StatCard({ value, label, color, icon, delay }) {
@@ -327,7 +327,7 @@ export function MyProjectsPage({ onNavigate }) {
   const [editor,  setEditor]  = useState(null); // null | 'new' | project
   const [deleting,setDeleting]= useState(null);
 
-  useEffect(() => { if (!user) { onNavigate('login'); return; } load(); }, [user]);
+  useEffect(() => { if (!user) { onNavigate('login'); return; } load(); }, [user, onNavigate]);
 
   async function load() {
     setLoading(true);

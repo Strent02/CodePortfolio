@@ -11,10 +11,10 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token    = localStorage.getItem('cp_token');
-    const userId   = localStorage.getItem('cp_userId');
-    const role     = localStorage.getItem('cp_role');
-    const fullName = localStorage.getItem('cp_fullName');
+    const token    = sessionStorage.getItem('cp_token');
+    const userId   = sessionStorage.getItem('cp_userId');
+    const role     = sessionStorage.getItem('cp_role');
+    const fullName = sessionStorage.getItem('cp_fullName');
 
     if (token && userId) {
       // Verificar que el token no esté expirado (decodificando el JWT localmente)
@@ -23,24 +23,24 @@ export function AuthProvider({ children }) {
         const expired = payload.exp && payload.exp * 1000 < Date.now();
         if (expired) {
           // Token expirado — limpiar sesión
-          localStorage.clear();
+          sessionStorage.clear();
         } else {
           setUser({ token, userId, role, fullName });
         }
       } catch {
         // Token malformado — limpiar
-        localStorage.clear();
+        sessionStorage.clear();
       }
     }
     setLoading(false);
   }, []);
 
   function saveSession(data, fullName) {
-    localStorage.setItem('cp_token',    data.token);
-    localStorage.setItem('cp_refresh',  data.refreshToken);
-    localStorage.setItem('cp_userId',   data.userId);
-    localStorage.setItem('cp_role',     data.role);
-    localStorage.setItem('cp_fullName', fullName || '');
+    sessionStorage.setItem('cp_token',    data.token);
+    sessionStorage.setItem('cp_refresh',  data.refreshToken);
+    sessionStorage.setItem('cp_userId',   data.userId);
+    sessionStorage.setItem('cp_role',     data.role);
+    sessionStorage.setItem('cp_fullName', fullName || '');
     setUser({ token: data.token, userId: data.userId, role: data.role, fullName: fullName || '' });
   }
 
@@ -49,10 +49,12 @@ export function AuthProvider({ children }) {
     // Obtener nombre real del usuario
     let fullName = '';
     try {
-      localStorage.setItem('cp_token', data.token);
+      sessionStorage.setItem('cp_token', data.token);
       const me = await users.me();
       fullName = me?.fullName || '';
-    } catch {}
+    } catch {
+      // El perfil se cargará en la pantalla correspondiente si esta consulta falla.
+    }
     saveSession(data, fullName);
     return data;
   }
@@ -64,9 +66,11 @@ export function AuthProvider({ children }) {
   }
 
   async function logout() {
-    const refreshToken = localStorage.getItem('cp_refresh');
-    try { await auth.logout(refreshToken); } catch {}
-    localStorage.clear();
+    const refreshToken = sessionStorage.getItem('cp_refresh');
+    try { await auth.logout(refreshToken); } catch {
+      // La sesión local debe cerrarse aunque el servidor no esté disponible.
+    }
+    sessionStorage.clear();
     setUser(null);
   }
 

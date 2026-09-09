@@ -17,6 +17,12 @@ namespace CodePortfolio.Repositories
                 .Where(u => u.FullName.Contains(query) || u.Email.Contains(query))
                 .ToListAsync();
 
+        public async Task<List<User>> GetUsersByIds(IEnumerable<Guid> userIds)
+        {
+            var ids = userIds.Distinct().ToArray();
+            return await _context.Users.Where(u => ids.Contains(u.UserId)).AsNoTracking().ToListAsync();
+        }
+
         public async Task<User?> GetUser(Guid id) => await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
         public async Task<User?> GetUserByEmail(string email) => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 

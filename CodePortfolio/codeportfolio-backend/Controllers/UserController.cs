@@ -55,10 +55,8 @@ namespace CodePortfolio.Controllers
             var user   = await _userRepo.GetUser(userId);
             if (user == null) return NotFound("User not found.");
             if (file == null || file.Length == 0) return BadRequest("No file provided.");
-
-            var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
-            var ext     = Path.GetExtension(file.FileName).ToLower();
-            if (!allowed.Contains(ext)) return BadRequest("File type not allowed. Use jpg, png, webp or gif.");
+            var ext = await ImageUploadHelper.GetSafeExtensionAsync(file);
+            if (ext == null) return BadRequest("Invalid image. Use a real JPG, PNG, WEBP or GIF file up to 5 MB.");
 
             var folder = Path.Combine("wwwroot", "images", "avatars");
             Directory.CreateDirectory(folder);
@@ -86,6 +84,7 @@ namespace CodePortfolio.Controllers
             if (!BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.Password)) return BadRequest("Current password is incorrect.");
             user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
             if (!await _userRepo.UpdateUser(user)) return StatusCode(500, "Could not change password.");
+            await _refreshStore.RevokeAllAsync(userId);
             return Ok("Password changed successfully.");
         }
 
@@ -108,6 +107,7 @@ namespace CodePortfolio.Controllers
             }
 
             if (!await _userRepo.DeleteUser(userId)) return StatusCode(500, "Could not delete account.");
+            await _refreshStore.RevokeAllAsync(userId);
             return Ok("Account deleted successfully.");
         }
 

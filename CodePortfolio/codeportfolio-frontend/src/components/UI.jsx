@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, useRef } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 /* ─── SVG Icon ───────────────────────────────────────────────────────────── */

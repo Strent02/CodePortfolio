@@ -62,12 +62,14 @@ namespace CodePortfolio.Controllers
             if (user == null) return NotFound("User not found.");
 
             var projects = await _projectRepo.GetProjectsByUser(userId);
+            var published = projects.Where(p => p.Status == "published").ToList();
+            var projectIds = published.Select(p => p.ProjectId).ToArray();
+            var likeCounts = await _reactionRepo.GetLikesCounts(projectIds);
+            var commentCounts = await _commentRepo.GetCommentsCounts(projectIds);
             var result   = new List<ProjectResponseDto>();
 
-            foreach (var p in projects.Where(p => p.Status == "published"))
+            foreach (var p in published)
             {
-                var likes = await _reactionRepo.GetLikesCount(p.ProjectId);
-                var comms = await _commentRepo.GetCommentsCount(p.ProjectId);
                 result.Add(new ProjectResponseDto
                 {
                     ProjectId     = p.ProjectId,
@@ -80,8 +82,8 @@ namespace CodePortfolio.Controllers
                     DemoUrl       = p.DemoUrl,
                     RepositoryUrl = p.RepositoryUrl,
                     Status        = p.Status,
-                    Likes         = likes,
-                    CommentsCount = comms
+                    Likes         = likeCounts.GetValueOrDefault(p.ProjectId),
+                    CommentsCount = commentCounts.GetValueOrDefault(p.ProjectId)
                 });
             }
 

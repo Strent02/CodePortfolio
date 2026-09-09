@@ -8,6 +8,7 @@ namespace CodePortfolio.Repositories.Interfaces
         Task<List<Comment>> GetCommentsByProject(Guid projectId);
         Task<Comment?> GetComment(Guid commentId);
         Task<int> GetCommentsCount(Guid projectId);
+        Task<Dictionary<Guid, int>> GetCommentsCounts(IEnumerable<Guid> projectIds);
         Task<bool> CreateComment(Comment comment);
         Task<bool> UpdateComment(Comment comment);
         Task<bool> DeleteComment(Guid commentId);

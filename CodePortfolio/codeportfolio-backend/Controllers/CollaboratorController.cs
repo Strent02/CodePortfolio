@@ -7,7 +7,7 @@ namespace CodePortfolio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class CollaboratorController : ControllerBase
     {
         private readonly ICollaboratorRepository _collaboratorRepository;

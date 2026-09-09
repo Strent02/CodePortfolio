@@ -6,6 +6,7 @@ namespace CodePortfolio.Repositories.Interfaces
     {
         Task<List<User>> GetUsers();
         Task<List<User>> Search(string query);
+        Task<List<User>> GetUsersByIds(IEnumerable<Guid> userIds);
         Task<User?> GetUser(Guid userId);
         Task<User?> GetUserByEmail(string email);
         Task<bool> CreateUser(User user);

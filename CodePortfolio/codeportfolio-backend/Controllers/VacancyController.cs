@@ -123,7 +123,7 @@ namespace CodePortfolio.Controllers
         }
 
         // GET api/vacancy/{id}/applications — Recruiter o Admin
-        [Authorize(Roles = "Recruiter,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:guid}/applications")]
         public async Task<IActionResult> GetApplications(Guid id)
         {
@@ -144,7 +144,7 @@ namespace CodePortfolio.Controllers
         }
 
         // PUT api/vacancy/application/{appId}/status — Recruiter o Admin
-        [Authorize(Roles = "Recruiter,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("application/{appId:guid}/status")]
         public async Task<IActionResult> ChangeStatus(Guid appId, [FromBody] ChangeApplicationStatusDto dto)
         {
@@ -154,7 +154,7 @@ namespace CodePortfolio.Controllers
         }
 
         // POST api/vacancy — Recruiter o Admin
-        [Authorize(Roles = "Recruiter,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateVacancy([FromBody] CreateVacancyDto dto)
         {

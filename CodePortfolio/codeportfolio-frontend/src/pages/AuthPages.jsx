@@ -392,7 +392,7 @@ export function LoginPage({ onNavigate }) {
 
           <div style={{ marginTop: 28, textAlign: 'center' }}>
             <span style={{ fontSize: 14, color: 'var(--text-muted)' }}>¿No tienes cuenta? </span>
-            <button onClick={() => onNavigate('register')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, fontFamily: 'var(--sans)', background: 'linear-gradient(135deg, var(--accent), var(--accent-2))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', transition: 'opacity 0.2s' }}
+            <button onClick={() => onNavigate('register')} style={{ border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, fontFamily: 'var(--sans)', background: 'linear-gradient(135deg, var(--accent), var(--accent-2))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', transition: 'opacity 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
               Regístrate gratis →
@@ -423,7 +423,7 @@ export function RegisterPage({ onNavigate }) {
     e.preventDefault();
     if (!form.fullName.trim()) { setError('El nombre es obligatorio'); return; }
     if (!form.email.includes('@')) { setError('Ingresa un email válido'); return; }
-    if (form.password.length < 6) { setError('La contraseña debe tener mínimo 6 caracteres'); return; }
+    if (form.password.length < 8) { setError('La contraseña debe tener mínimo 8 caracteres'); return; }
     setError('');
     setCurrentStep(2);
   }
@@ -510,7 +510,7 @@ export function RegisterPage({ onNavigate }) {
               <FloatingInput label="Nombre completo" value={form.fullName} onChange={e => setForm(f => ({ ...f, fullName: e.target.value }))} placeholder="Ada Lovelace" required icon={<Ico d={ICONS.user} size={17} />} />
               <FloatingInput label="Correo electrónico" type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="ada@example.com" autoComplete="email" required icon={<Ico d={ICONS.email} size={17} />} />
               <div style={{ position: 'relative' }}>
-                <FloatingInput label="Contraseña" type={showPass ? 'text' : 'password'} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} placeholder="Mínimo 6 caracteres" autoComplete="new-password" required icon={<Ico d={ICONS.lock} size={17} />} />
+                <FloatingInput label="Contraseña" type={showPass ? 'text' : 'password'} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} placeholder="Mínimo 8 caracteres" autoComplete="new-password" required icon={<Ico d={ICONS.lock} size={17} />} />
                 <button type="button" onClick={() => setShowPass(v => !v)} style={{ position: 'absolute', right: 14, top: 29, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', transition: 'color 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
@@ -567,7 +567,7 @@ export function RegisterPage({ onNavigate }) {
 
           <div style={{ marginTop: 28, textAlign: 'center' }}>
             <span style={{ fontSize: 14, color: 'var(--text-muted)' }}>¿Ya tienes cuenta? </span>
-            <button onClick={() => onNavigate('login')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, fontFamily: 'var(--sans)', background: 'linear-gradient(135deg, var(--accent), var(--accent-2))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+            <button onClick={() => onNavigate('login')} style={{ border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, fontFamily: 'var(--sans)', background: 'linear-gradient(135deg, var(--accent), var(--accent-2))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
               onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
               Inicia sesión →

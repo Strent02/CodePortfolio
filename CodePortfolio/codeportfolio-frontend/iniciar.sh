@@ -28,12 +28,13 @@ fi
 
 # ── Directorio del script ─────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # ── Instalar dependencias del frontend si hace falta ─────────────────────────
-if [ ! -d "$SCRIPT_DIR/codeportfolio-frontend/node_modules" ]; then
+if [ ! -d "$SCRIPT_DIR/node_modules" ]; then
     echo -e "${YELLOW} [INFO] Instalando dependencias del frontend...${NC}"
-    cd "$SCRIPT_DIR/codeportfolio-frontend"
-    npm install
+    cd "$SCRIPT_DIR"
+    npm ci
     cd "$SCRIPT_DIR"
 fi
 
@@ -54,7 +55,7 @@ trap cleanup SIGINT SIGTERM
 
 # ── Lanzar backend ────────────────────────────────────────────────────────────
 echo -e "${GREEN} [1/2] Iniciando backend en http://localhost:5102 ...${NC}"
-cd "$SCRIPT_DIR/proyecto_final"
+cd "$PROJECT_DIR/codeportfolio-backend"
 dotnet run &
 BACKEND_PID=$!
 cd "$SCRIPT_DIR"
@@ -71,16 +72,9 @@ for i in {1..20}; do
 done
 echo ""
 
-# ── Crear rol User automáticamente ───────────────────────────────────────────
-echo -e "${YELLOW} [INFO] Creando rol base...${NC}"
-curl -s -X POST http://localhost:5102/api/role/CreateRole \
-  -H "Content-Type: application/json" \
-  -d '{"name": "User"}' > /dev/null 2>&1
-echo -e "${GREEN} [OK] Rol verificado.${NC}"
-
 # ── Lanzar frontend ───────────────────────────────────────────────────────────
 echo -e "${GREEN} [2/2] Iniciando frontend en http://localhost:3000 ...${NC}"
-cd "$SCRIPT_DIR/codeportfolio-frontend"
+cd "$SCRIPT_DIR"
 npm run dev &
 FRONTEND_PID=$!
 cd "$SCRIPT_DIR"

@@ -3,7 +3,7 @@ import { projects as projectsApi, users as usersApi } from '../api/client';
 import { Avatar, useToast } from '../components/UI';
 import { useAuth } from '../context/AuthContext';
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5102';
+const BASE = import.meta.env.VITE_API_URL || '';
 
 /* ─── Skeleton ───────────────────────────────────────────────────────────── */
 function Skeleton() {
@@ -197,6 +197,8 @@ export function ProjectsPage({ onNavigate }) {
   const [filter,   setFilter]   = useState('all');
   const searchRef  = useRef(null);
 
+  // `load` intentionally follows authentication changes only.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { load(); }, [user]);
 
   async function load() {

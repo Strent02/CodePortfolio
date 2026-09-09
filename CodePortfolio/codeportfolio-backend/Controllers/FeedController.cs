@@ -31,6 +31,7 @@ namespace CodePortfolio.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFeed([FromQuery] int page = 1, [FromQuery] int size = 10)
         {
+            if (page < 1 || size is < 1 or > 50) return BadRequest("Page must be >= 1 and size between 1 and 50.");
             var skip     = (page - 1) * size;
             var projects = await _projectRepo.GetFeed(skip, size);
             return Ok(await Enrich(projects));
@@ -41,6 +42,7 @@ namespace CodePortfolio.Controllers
         [HttpGet("following")]
         public async Task<IActionResult> GetFollowingFeed([FromQuery] int page = 1, [FromQuery] int size = 10)
         {
+            if (page < 1 || size is < 1 or > 50) return BadRequest("Page must be >= 1 and size between 1 and 50.");
             var userId   = ClaimsHelper.GetUserId(User);
             var skip     = (page - 1) * size;
             var projects = await _projectRepo.GetFeedForUser(userId, skip, size);
@@ -49,12 +51,14 @@ namespace CodePortfolio.Controllers
 
         private async Task<List<object>> Enrich(List<CodePortfolio.Models.Project> projects)
         {
+            var projectIds = projects.Select(p => p.ProjectId).ToArray();
+            var authors = (await _userRepo.GetUsersByIds(projects.Select(p => p.UserId))).ToDictionary(u => u.UserId);
+            var likeCounts = await _reactionRepo.GetLikesCounts(projectIds);
+            var commentCounts = await _commentRepo.GetCommentsCounts(projectIds);
             var result = new List<object>();
             foreach (var p in projects)
             {
-                var author = await _userRepo.GetUser(p.UserId);
-                var likes  = await _reactionRepo.GetLikesCount(p.ProjectId);
-                var comms  = await _commentRepo.GetCommentsCount(p.ProjectId);
+                authors.TryGetValue(p.UserId, out var author);
                 result.Add(new
                 {
                     p.ProjectId, p.Title, p.Description, p.FeaturedImage,
@@ -62,8 +66,8 @@ namespace CodePortfolio.Controllers
                     // authorName plano para compatibilidad con el frontend (ProjectCard usa project.authorName)
                     authorName    = author?.FullName ?? "Unknown",
                     author        = new { author?.UserId, author?.FullName, author?.ProfilePicture },
-                    likes,
-                    commentsCount = comms
+                    likes = likeCounts.GetValueOrDefault(p.ProjectId),
+                    commentsCount = commentCounts.GetValueOrDefault(p.ProjectId)
                 });
             }
             return result;

@@ -1,69 +1,54 @@
-# CodePortfolio — Backend
+# CodePortfolio API
 
-API REST en ASP.NET Core 8 con SQL Server.
+API REST en ASP.NET Core 8 con PostgreSQL 16, EF Core, JWT y BCrypt.
 
----
+## Inicio rápido con Docker
 
-## Opción A — Con Docker (recomendado)
-
-**Requisito:** tener Docker Desktop instalado.
+Desde la raíz del repositorio:
 
 ```bash
+cp .env.example .env
+# Sustituye todos los valores de ejemplo en .env
 docker compose up --build
 ```
 
-Eso levanta SQL Server + el backend automáticamente.  
-La base de datos se crea sola gracias a EF Core Migrations.
+- Aplicación: <http://localhost:3000>
+- API: <http://localhost:5102>
+- Swagger (Development): <http://localhost:5102/swagger>
+- PostgreSQL: `localhost:5432`
 
-| Recurso   | URL                           |
-|-----------|-------------------------------|
-| API       | http://localhost:5102         |
-| Swagger   | http://localhost:5102/swagger |
-| SQL Server| localhost,1433  •  usuario: sa  •  pass: CodePortfolio_SA_2025! |
+El backend aplica automáticamente la migración inicial y crea los roles `User`,
+`Recruiter` y `Admin`. Las credenciales administrativas iniciales se toman de
+`BOOTSTRAP_ADMIN_EMAIL` y `BOOTSTRAP_ADMIN_PASSWORD`; nunca se guardan en Git.
 
----
+## Ejecución local
 
-## Opción B — En local (sin Docker)
-
-**Requisitos:** .NET 8 SDK + SQL Server local.
-
-1. Edita `appsettings.json` y pon el nombre de tu servidor en `ConnectionStrings`:
-
-```json
-"CodePortfolioConnection": "Server=TU_SERVIDOR;Database=CodePortfolioDB;Trusted_Connection=True;TrustServerCertificate=True;"
-```
-
-2. Crea la base de datos con migraciones:
+Requiere .NET 8, Node.js 20+ y una base PostgreSQL ya creada.
 
 ```bash
-dotnet ef database update
+export ConnectionStrings__CodePortfolioConnection='Host=localhost;Port=5432;Database=codeportfolio;Username=codeportfolio;Password=...'
+export Jwt__Key='una-clave-aleatoria-de-al-menos-32-bytes'
+dotnet run --project codeportfolio-backend/CodePortfolio.csproj
 ```
 
-3. Corre el proyecto:
+En otra terminal:
 
 ```bash
-dotnet run
+cd codeportfolio-frontend
+npm ci
+npm run dev
 ```
 
----
+El esquema PostgreSQL independiente está en `database/init.sql`. La misma versión
+se incrusta en la migración EF inicial para mantener un único esquema de referencia.
 
-## Primer uso (cualquier opción)
+## Seguridad
 
-El rol `User` se crea automáticamente al arrancar.  
-Solo regístrate y empieza a usar la API:
+- El registro público siempre asigna el rol `User`.
+- Los roles y los CRUD administrativos requieren el rol `Admin`.
+- Las contraseñas se almacenan con BCrypt y nunca se incluyen en respuestas.
+- Los refresh tokens se guardan en PostgreSQL únicamente como hashes SHA-256.
+- Las imágenes se limitan a 5 MB y se validan por firma binaria.
 
-1. `POST /api/auth/register` — crear cuenta
-2. `POST /api/auth/login` — obtener token JWT
-3. Pega el token en **Authorize** (Swagger) para usar los endpoints protegidos
-
----
-
-## Detener Docker
-
-```bash
-# Detener sin borrar datos
-docker compose down
-
-# Detener y borrar base de datos
-docker compose down -v
-```
+Para detener Docker sin borrar datos usa `docker compose down`. Para eliminar
+también el volumen local de PostgreSQL usa `docker compose down -v`.

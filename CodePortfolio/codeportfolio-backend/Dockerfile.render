@@ -1,0 +1,23 @@
+# Contexto de compilación: raíz del repositorio Git. Así el backend puede
+# incluir database/init.sql, que el proyecto incrusta como recurso.
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src/CodePortfolio/codeportfolio-backend
+
+COPY CodePortfolio/codeportfolio-backend/*.csproj ./
+RUN dotnet restore
+
+COPY CodePortfolio/codeportfolio-backend/ ./
+COPY CodePortfolio/database/ ../database/
+RUN dotnet publish CodePortfolio.csproj -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+RUN mkdir -p wwwroot/images/projects wwwroot/images/avatars
+COPY --from=build /app/publish .
+
+EXPOSE 5102
+ENV ASPNETCORE_URLS=http://+:5102
+
+# Render inyecta PORT; el valor por defecto conserva la ejecución local.
+ENTRYPOINT ["sh", "-c", "dotnet CodePortfolio.dll --urls http://0.0.0.0:${PORT:-5102}"]

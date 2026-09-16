@@ -4,8 +4,8 @@ services:
     runtime: docker
     plan: free
     region: oregon
-    dockerfilePath: ./CodePortfolio/codeportfolio-backend/Dockerfile
-    dockerContext: ./CodePortfolio/codeportfolio-backend
+    dockerfilePath: ./CodePortfolio/codeportfolio-backend/Dockerfile.render
+    dockerContext: .
     healthCheckPath: /health
     autoDeployTrigger: commit
     envVars:

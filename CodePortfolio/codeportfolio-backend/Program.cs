@@ -75,6 +75,13 @@ var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? new[] { "http://localhost:3000", "http://localhost:5173", "http://localhost:4200" };
 
+// URL pública de la SPA en el despliegue gratuito de Render. Se conserva junto
+// a las variables configurables porque las referencias entre servicios pueden
+// resolver al hostname interno, que no coincide con el origen del navegador.
+allowedOrigins = allowedOrigins
+    .Append("https://codeportfolio-web-strent02.onrender.com")
+    .ToArray();
+
 // Las referencias entre servicios de Render pueden llegar como hostname, sin
 // esquema. CORS requiere un origen completo.
 allowedOrigins = allowedOrigins

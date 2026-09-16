@@ -23,9 +23,34 @@ builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
 // falsearlo enviando su propia cabecera.
 
 // ── Database ──────────────────────────────────────────────────────────────────
-var connectionString = builder.Configuration.GetConnectionString("CodePortfolioConnection")
+var configuredConnectionString = builder.Configuration.GetConnectionString("CodePortfolioConnection")
     ?? throw new InvalidOperationException("ConnectionStrings:CodePortfolioConnection must be configured.");
+var connectionString = NormalizePostgreSqlConnectionString(configuredConnectionString);
 builder.Services.AddDbContext<CodePortfolioContext>(options => options.UseNpgsql(connectionString));
+
+// Render expone PostgreSQL como una URL postgres://..., mientras Npgsql espera
+// normalmente pares Host=...;Username=.... Aceptamos ambos formatos sin afectar
+// la configuración local ni exponer la contraseña en logs.
+static string NormalizePostgreSqlConnectionString(string value)
+{
+    if (!Uri.TryCreate(value, UriKind.Absolute, out var uri) ||
+        !(uri.Scheme.Equals("postgres", StringComparison.OrdinalIgnoreCase) ||
+          uri.Scheme.Equals("postgresql", StringComparison.OrdinalIgnoreCase)))
+        return value;
+
+    var credentials = uri.UserInfo.Split(':', 2);
+    if (credentials.Length != 2 || string.IsNullOrWhiteSpace(uri.Host) || string.IsNullOrWhiteSpace(uri.AbsolutePath.Trim('/')))
+        return value;
+
+    return new Npgsql.NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.IsDefaultPort ? 5432 : uri.Port,
+        Database = Uri.UnescapeDataString(uri.AbsolutePath.Trim('/')),
+        Username = Uri.UnescapeDataString(credentials[0]),
+        Password = Uri.UnescapeDataString(credentials[1])
+    }.ConnectionString;
+}
 
 // ── Repositories ──────────────────────────────────────────────────────────────
 builder.Services.AddScoped<IUserRepository,         UserRepository>();

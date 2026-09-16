@@ -23,4 +23,6 @@ EXPOSE 5102
 
 ENV ASPNETCORE_URLS=http://+:5102
 
-ENTRYPOINT ["dotnet", "CodePortfolio.dll"]
+# Render asigna el puerto en la variable PORT. El valor por defecto conserva el
+# comportamiento de Docker Compose para desarrollo local.
+ENTRYPOINT ["sh", "-c", "dotnet CodePortfolio.dll --urls http://0.0.0.0:${PORT:-5102}"]

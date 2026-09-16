@@ -1,0 +1,57 @@
+services:
+  # API ASP.NET Core y PostgreSQL. Render genera la clave JWT y las credenciales
+  # de la base de datos; no se almacenan secretos en el repositorio.
+  - type: web
+    name: codeportfolio-api-strent02
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./codeportfolio-backend/Dockerfile
+    dockerContext: ./codeportfolio-backend
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__CodePortfolioConnection
+        fromDatabase:
+          name: codeportfolio-db
+          property: connectionString
+      - key: Jwt__Key
+        generateValue: true
+      - key: Jwt__Issuer
+        value: CodePortfolioAPI
+      - key: Jwt__Audience
+        value: CodePortfolioClient
+      - key: Cors__AllowedOrigins__0
+        fromService:
+          name: codeportfolio-web-strent02
+          type: web
+          property: host
+
+  # SPA React publicada por CDN. La URL de la API se inyecta al compilar.
+  - type: web
+    name: codeportfolio-web-strent02
+    runtime: static
+    rootDir: codeportfolio-frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    autoDeployTrigger: commit
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: codeportfolio-api-strent02
+          type: web
+          property: host
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  - name: codeportfolio-db
+    databaseName: codeportfolio
+    user: codeportfolio
+    plan: free
+    postgresMajorVersion: "16"
+    ipAllowList: []

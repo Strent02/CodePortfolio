@@ -50,6 +50,18 @@ var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? new[] { "http://localhost:3000", "http://localhost:5173", "http://localhost:4200" };
 
+// Las referencias entre servicios de Render pueden llegar como hostname, sin
+// esquema. CORS requiere un origen completo.
+allowedOrigins = allowedOrigins
+    .Where(origin => !string.IsNullOrWhiteSpace(origin))
+    .Select(origin => origin.Trim().TrimEnd('/'))
+    .Select(origin => origin.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                      origin.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+        ? origin
+        : $"https://{origin}")
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendPolicy", policy =>
@@ -212,6 +224,7 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 // ── Auto-seed roles al arrancar ──────────────────────────────────────────────
 await SeedService.InitializeDatabaseAsync(app.Services);

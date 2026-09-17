@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { vacancies, search as searchApi, notifications as notifApi, users as usersApi } from '../api/client';
+import { API_BASE as BASE } from '../api/config';
 import { useAuth } from '../context/AuthContext';
 import { Icon, Avatar, useToast, estadoLabel } from '../components/UI';
-
-const BASE = import.meta.env.VITE_API_URL || '';
 
 /* ─── Helpers ────────────────────────────────────────────────────────────── */
 function Ico({ d, size = 16 }) {

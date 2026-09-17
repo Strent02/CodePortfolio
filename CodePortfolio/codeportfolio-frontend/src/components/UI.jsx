@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE } from '../api/config';
 
 /* ─── SVG Icon ───────────────────────────────────────────────────────────── */
 export function Icon({ name, size = 16 }) {
@@ -62,7 +63,6 @@ export function estadoLabel(status) {
 }
 
 /* ─── Ruta absoluta de una imagen servida por el backend ─────────────────── */
-const API_BASE = import.meta.env.VITE_API_URL || '';
 export function mediaUrl(path) {
   if (!path) return null;
   return /^(https?:|data:)/.test(path) ? path : `${API_BASE}${path}`;

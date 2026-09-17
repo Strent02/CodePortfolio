@@ -1,9 +1,4 @@
-const configuredApiUrl = import.meta.env.VITE_API_URL?.trim() || '';
-// Render expone las referencias de servicios como host; para desarrollo local
-// también se acepta una URL completa o se conserva el proxy relativo.
-const BASE = configuredApiUrl && !/^https?:\/\//i.test(configuredApiUrl)
-  ? `https://${configuredApiUrl}`
-  : configuredApiUrl;
+import { API_BASE as BASE } from './config';
 
 function getToken() {
   return sessionStorage.getItem('cp_token');

@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { projects as projectsApi } from '../api/client';
+import { API_BASE as BASE } from '../api/config';
 import { Icon, Avatar, useToast, estadoLabel } from '../components/UI';
 import { useAuth } from '../context/AuthContext';
-
-const BASE = import.meta.env.VITE_API_URL || '';
 
 /* ─── Stat card ──────────────────────────────────────────────────────────── */
 function StatCard({ value, label, rgb, icon, delay }) {

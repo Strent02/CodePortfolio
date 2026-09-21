@@ -266,6 +266,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+app.MapGet("/version", () => Results.Ok(new
+{
+    commit = Environment.GetEnvironmentVariable("RENDER_GIT_COMMIT") ?? "development"
+}));
 
 // ── Auto-seed roles al arrancar ──────────────────────────────────────────────
 await SeedService.InitializeDatabaseAsync(app.Services);

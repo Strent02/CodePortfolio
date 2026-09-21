@@ -34,7 +34,7 @@ services:
     name: codeportfolio-web-strent02
     runtime: static
     rootDir: codeportfolio-frontend
-    buildCommand: npm ci && npm run build
+    buildCommand: npm ci && VITE_GIT_COMMIT=$RENDER_GIT_COMMIT npm run build
     staticPublishPath: ./dist
     autoDeployTrigger: commit
     envVars:
@@ -43,6 +43,19 @@ services:
           name: codeportfolio-api-strent02
           type: web
           property: host
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=()
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://codeportfolio-api-strent02.onrender.com"
     routes:
       - type: rewrite
         source: /*

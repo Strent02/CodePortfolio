@@ -12,18 +12,19 @@ namespace CodePortfolio.DTOs
 
     public class ChangePasswordDto
     {
-        [Required]               public string CurrentPassword { get; set; } = string.Empty;
-        [Required][MinLength(8)] public string NewPassword     { get; set; } = string.Empty;
+        [Required][MaxLength(150)]               public string CurrentPassword { get; set; } = string.Empty;
+        [Required][MinLength(8)][MaxLength(150)] public string NewPassword     { get; set; } = string.Empty;
     }
 
     public class DeleteAccountDto
     {
         [Required(ErrorMessage = "Password is required to confirm account deletion.")]
+        [MaxLength(150)]
         public string Password { get; set; } = string.Empty;
     }
 
     public class RefreshTokenDto
     {
-        [Required] public string RefreshToken { get; set; } = string.Empty;
+        [Required][MaxLength(128)] public string RefreshToken { get; set; } = string.Empty;
     }
 }

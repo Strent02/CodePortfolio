@@ -10,6 +10,7 @@ namespace CodePortfolio.Controllers
     [Route("api/auth")]
     [ApiController]
     [EnableRateLimiting("auth")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class AuthController : ControllerBase
     {
         private readonly IUserRepository   _userRepo;
@@ -57,7 +58,7 @@ namespace CodePortfolio.Controllers
             };
 
             if (!await _userRepo.CreateUser(user))
-                return StatusCode(500, "Could not register user.");
+                return Conflict("Ya existe una cuenta con este correo.");
 
             var roleName     = (await _roleRepo.GetRole(resolvedRoleId))!.Name;
             var token        = _jwt.GenerateToken(user, roleName);
@@ -90,14 +91,14 @@ namespace CodePortfolio.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto dto)
         {
-            var entry = await _refreshStore.GetAsync(dto.RefreshToken);
-            if (entry == null || entry.ExpiresAt < DateTime.UtcNow)
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var entry = await _refreshStore.ConsumeAsync(dto.RefreshToken);
+            if (entry == null)
                 return Unauthorized("Tu sesión expiró. Vuelve a iniciar sesión.");
 
             var user = await _userRepo.GetUser(entry.UserId);
             if (user == null) return Unauthorized("Usuario no encontrado.");
-
-            await _refreshStore.RevokeAsync(dto.RefreshToken);
 
             var role         = await _roleRepo.GetRole(user.RoleId);
             var roleName     = role?.Name ?? "User";
@@ -112,6 +113,7 @@ namespace CodePortfolio.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout([FromBody] RefreshTokenDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             await _refreshStore.RevokeAsync(dto.RefreshToken);
             return Ok("Sesión cerrada correctamente.");
         }

@@ -23,9 +23,22 @@ namespace CodePortfolio.Services
             await _db.SaveChangesAsync();
         }
 
-        public Task<RefreshToken?> GetAsync(string token) => _db.RefreshTokens
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.TokenHash == Hash(token) && x.RevokedAt == null);
+        // Consume el token mediante un UPDATE condicional. Dos solicitudes concurrentes
+        // no pueden rotar el mismo refresh token: solo una consigue actualizar una fila.
+        public async Task<RefreshToken?> ConsumeAsync(string token)
+        {
+            var hash = Hash(token);
+            var now = DateTime.UtcNow;
+            var consumed = await _db.RefreshTokens
+                .Where(x => x.TokenHash == hash && x.RevokedAt == null && x.ExpiresAt > now)
+                .ExecuteUpdateAsync(update => update.SetProperty(x => x.RevokedAt, now));
+
+            if (consumed != 1) return null;
+
+            return await _db.RefreshTokens
+                .AsNoTracking()
+                .FirstAsync(x => x.TokenHash == hash);
+        }
 
         public async Task RevokeAsync(string token)
         {

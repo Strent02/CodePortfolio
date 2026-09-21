@@ -6,11 +6,15 @@ const configuredApiUrl = import.meta.env.VITE_API_URL?.trim() || '';
 const deployedApiUrl = typeof window === 'undefined'
   ? ''
   : RENDER_API_BY_FRONTEND_HOST[window.location.hostname] || '';
-const selectedApiUrl = configuredApiUrl || deployedApiUrl;
+const configuredHost = configuredApiUrl.replace(/^https?:\/\//i, '').split('/')[0].split(':')[0];
+const isInternalServiceHost = configuredHost && configuredHost !== 'localhost' && !configuredHost.includes('.');
+const selectedApiUrl = isInternalServiceHost && deployedApiUrl
+  ? deployedApiUrl
+  : configuredApiUrl || deployedApiUrl;
 
-// Render puede exponer una referencia de servicio como hostname sin protocolo.
-// El fallback mantiene operativo el Static Site aunque esa variable no quede
-// disponible durante el build. Local y Docker conservan sus proxies relativos.
+// Render puede inyectar el hostname privado del servicio (sin dominio), que el
+// navegador no puede resolver. En ese caso se usa el endpoint público conocido.
+// Desarrollo y Docker conservan sus proxies relativos cuando no hay URL.
 export const API_BASE = (selectedApiUrl && !/^https?:\/\//i.test(selectedApiUrl)
   ? `https://${selectedApiUrl}`
   : selectedApiUrl).replace(/\/+$/, '');

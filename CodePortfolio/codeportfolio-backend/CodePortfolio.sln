@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodePortfolio", "CodePortfolio.csproj", "{4B90C07B-BCCF-4F25-9F0F-B1ADC9D1BA21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodePortfolio.Tests", "..\codeportfolio-backend.Tests\CodePortfolio.Tests.csproj", "{8ED12589-1856-4D61-A97E-5D2A0E981A2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4B90C07B-BCCF-4F25-9F0F-B1ADC9D1BA21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B90C07B-BCCF-4F25-9F0F-B1ADC9D1BA21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B90C07B-BCCF-4F25-9F0F-B1ADC9D1BA21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ED12589-1856-4D61-A97E-5D2A0E981A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ED12589-1856-4D61-A97E-5D2A0E981A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ED12589-1856-4D61-A97E-5D2A0E981A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ED12589-1856-4D61-A97E-5D2A0E981A2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

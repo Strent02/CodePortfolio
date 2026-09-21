@@ -2,6 +2,7 @@ using CodePortfolio.Context;
 using CodePortfolio.Models;
 using CodePortfolio.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace CodePortfolio.Repositories
 {
@@ -41,7 +42,16 @@ namespace CodePortfolio.Repositories
             var exists = await _context.Reactions.AnyAsync(r => r.UserId == reaction.UserId && r.ProjectId == reaction.ProjectId);
             if (exists) return false;
             _context.Reactions.Add(reaction);
-            return await _context.SaveChangesAsync() > 0;
+            try
+            {
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException
+                { SqlState: PostgresErrorCodes.UniqueViolation })
+            {
+                _context.Entry(reaction).State = EntityState.Detached;
+                return false;
+            }
         }
 
         public async Task<bool> UpdateReaction(Reaction reaction)

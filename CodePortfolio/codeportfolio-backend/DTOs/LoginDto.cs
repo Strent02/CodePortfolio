@@ -9,6 +9,7 @@ namespace CodePortfolio.DTOs
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required.")]
+        [MaxLength(150, ErrorMessage = "Password cannot exceed 150 characters.")]
         public string Password { get; set; } = string.Empty;
     }
 }

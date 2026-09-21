@@ -1,0 +1,147 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Plan de Aseguramiento de la Calidad del Software</title>
+  <style>
+    @page { size: Letter; margin: 18mm 16mm 18mm 16mm; @bottom-center { content: "CodePortfolio · CP-SQAP-002 · Página " counter(page) " de " counter(pages); color: #756b60; font: 8pt Arial; } }
+    @page:first { margin: 16mm; @bottom-center { content: ""; } }
+    * { box-sizing: border-box; }
+    html { color: #27231f; font-family: Arial, Helvetica, sans-serif; font-size: 10.2pt; line-height: 1.45; }
+    body { margin: 0; background: white; }
+    .cover { min-height: 235mm; display: flex; flex-direction: column; justify-content: center; padding: 12mm 8mm; }
+    .brand { width: 24mm; height: 24mm; border-radius: 7mm; display: grid; place-items: center; background: linear-gradient(145deg,#9b7d50,#665033); color: white; font: bold 20pt Consolas, monospace; box-shadow: 0 5mm 14mm rgba(85,65,40,.18); }
+    .kicker { margin-top: 18mm; color: #8a6f47; font-size: 8.5pt; font-weight: 700; letter-spacing: 1.8pt; }
+    h1 { margin: 4mm 0 3mm; font-family: Georgia, serif; font-size: 30pt; font-weight: 500; line-height: 1.08; color: #201d19; }
+    .subtitle { max-width: 145mm; font: 13pt/1.45 Georgia, serif; color: #665f57; }
+    .accent-line { width: 36mm; height: 1.5mm; border-radius: 2mm; background: #3f7d5e; margin: 7mm 0; }
+    .confidential { margin-top: auto; color: #877e73; font-size: 8.5pt; }
+    h2 { break-after: avoid; margin: 9mm 0 4mm; padding-bottom: 2mm; border-bottom: .35mm solid #d8c9b5; font: 19pt Georgia, serif; color: #2f2a25; }
+    h2 span { color: #8a6f47; margin-right: 2mm; }
+    h3 { break-after: avoid; margin: 6mm 0 2.2mm; font-size: 12pt; color: #3f6d55; }
+    p { margin: 0 0 3mm; text-align: justify; }
+    .lead { font-size: 11pt; color: #514b44; }
+    ul, ol { margin: 1.5mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin-bottom: 1.3mm; }
+    table { width: 100%; border-collapse: collapse; margin: 2.5mm 0 5mm; font-size: 8.5pt; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th { padding: 2.2mm; text-align: left; vertical-align: bottom; color: white; background: #6d5735; border: .2mm solid #6d5735; }
+    td { padding: 2mm 2.2mm; vertical-align: top; border: .2mm solid #d9d2c8; }
+    tbody tr:nth-child(even) td { background: #f7f4ef; }
+    aside { break-inside: avoid; margin: 4mm 0; padding: 3.2mm 4mm; border-left: 1.4mm solid #8a6f47; background: #f6f0e7; }
+    aside strong { display: block; margin-bottom: 1mm; color: #6d5735; }
+    aside.warn { border-left-color: #b36b35; background: #fff4e9; }
+    aside.good { border-left-color: #3f7d5e; background: #edf7f1; }
+    aside.risk { border-left-color: #a8433f; background: #fff0ef; }
+    pre { white-space: pre-wrap; break-inside: avoid; padding: 3mm; border: .2mm solid #d9d2c8; border-radius: 2mm; background: #f5f3ef; font: 7.7pt/1.4 Consolas, monospace; color: #3d3934; }
+    .status { display: inline-block; white-space: nowrap; padding: .5mm 1.5mm; border-radius: 4mm; font-size: 7.4pt; font-weight: 700; text-transform: uppercase; letter-spacing: .25pt; }
+    .ok { background:#dcefe4; color:#2f694c; } .partial { background:#fff0ce; color:#805d18; }
+    .pending { background:#f3e3dc; color:#934638; } .info { background:#e5eaf1; color:#495d79; }
+    .page-break { break-after: page; }
+    .small { font-size: 8.5pt; color: #6f675f; }
+    .signature { height: 15mm; }
+    a { color: #3f6d55; text-decoration: none; }
+  </style></head><body><section class="cover">
+    <div class="brand">&lt;/&gt;</div>
+    <div class="kicker">CODEPORTFOLIO · GOBIERNO Y CALIDAD</div>
+    <h1>Plan de Aseguramiento de la Calidad del Software</h1>
+    <p class="subtitle">Entregable de calidad adaptado a IEEE 730-2026 · CodePortfolio 1.0</p>
+    <div class="accent-line"></div>
+
+  <table>
+    <colgroup><col style="width:32%"><col style="width:68%"></colgroup>
+    <thead><tr><th>Control</th><th>Valor</th></tr></thead>
+    <tbody><tr><td>Código documental</td><td>CP-SQAP-002</td></tr><tr><td>Versión</td><td>2.0</td></tr><tr><td>Fecha de corte</td><td>14 de septiembre de 2026</td></tr><tr><td>Autor / responsable</td><td>Pedro Bonilla</td></tr><tr><td>Estado</td><td>Línea base propuesta para revisión y aprobación</td></tr><tr><td>Proyecto</td><td>CodePortfolio — red social de portafolios de código</td></tr></tbody>
+  </table>
+    <p class="confidential">Documento interno · Copia controlada al aprobarse</p>
+  </section><div class="page-break"></div><h2>Control del documento</h2>
+  <h3>Historia de revisiones</h3>
+
+  <table>
+    <colgroup><col style="width:17%"><col style="width:12%"><col style="width:51%"><col style="width:20%"></colgroup>
+    <thead><tr><th>Fecha</th><th>Versión</th><th>Descripción</th><th>Responsable</th></tr></thead>
+    <tbody><tr><td>09/09/2026</td><td>1.0</td><td>Versiones iniciales y documento consolidado.</td><td>Pedro Bonilla</td></tr><tr><td>14/09/2026</td><td>2.0</td><td>Separación por entregable, contraste con el código, trazabilidad, criterios medibles y registros de evidencia.</td><td>Pedro Bonilla</td></tr></tbody>
+  </table>
+  <h3>Aprobación</h3>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Rol</th><th>Nombre</th><th>Decisión</th><th>Firma / fecha</th></tr></thead>
+    <tbody><tr><td>Responsable del producto</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr><tr><td>Aseguramiento de calidad</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr><tr><td>Responsable de implantación</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr></tbody>
+  </table>
+  <h2><span>1.</span>Propósito, alcance y adaptación</h2>
+  <p class="lead">Este plan define cómo se inicia, planifica, controla, ejecuta y evidencia el aseguramiento de calidad de CodePortfolio. Cubre la SPA React, la API ASP.NET Core, PostgreSQL, el almacenamiento de imágenes, la configuración de contenedores y los documentos del producto.</p>
+  <aside class="note"><strong>Declaración de conformidad</strong>El documento está <em>adaptado</em> a IEEE 730-2026 para un proyecto académico de una sola persona. No declara certificación ni conformidad total: esta requiere aplicar el plan, conservar evidencias, resolver hallazgos y obtener aprobaciones independientes cuando corresponda.</aside>
+  <h3>1.1 Productos incluidos y exclusiones</h3>
+
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>Incluido</th><th>Excluido / diferido</th></tr></thead>
+    <tbody><tr><td>Requisitos; diseño y código; migraciones; API; interfaz web; imágenes; contenedores; pruebas; implantación; capacitación; riesgos.</td><td>Mensajería directa y colaboración en la interfaz; panel gráfico de administración; correo electrónico; pagos; ejecución o alojamiento de repositorios; pruebas de carga por encima de 10.000 usuarios.</td></tr></tbody>
+  </table>
+  <h3>1.2 Referencias</h3>
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>Referencia</th><th>Uso</th></tr></thead>
+    <tbody><tr><td>IEEE 730-2026</td><td>Estándar activo para procesos de aseguramiento de calidad de software; sustituye IEEE 730-2014.</td></tr><tr><td>ISO/IEC/IEEE 29148:2018</td><td>Ingeniería de requisitos; edición vigente confirmada en 2024 y sucesora del IEEE 830-1998.</td></tr><tr><td>Repositorio CodePortfolio</td><td>Código fuente, configuración, migraciones, pruebas automatizadas y guías de ejecución examinados al 14/09/2026.</td></tr><tr><td>Modelo de Casos de Prueba v1.0</td><td>Detalle preexistente de casos unitarios, integración, sistema y documentos.</td></tr><tr><td>Plan de Implantación v1.0</td><td>Runbook preexistente de despliegue, humo y reversión.</td></tr></tbody>
+  </table>
+  <h2><span>2.</span>Organización, independencia y responsabilidades</h2>
+  <p>Pedro Bonilla concentra producto, desarrollo, calidad, implantación y capacitación. Esa realidad es aceptable para el alcance académico, pero crea un riesgo de independencia. Las revisiones de salida y la aceptación final deberán ser realizadas, cuando sea posible, por docente, cliente o revisor distinto del autor.</p>
+
+  <table>
+    <colgroup><col><col><col><col><col></colgroup>
+    <thead><tr><th>Actividad</th><th>Producto</th><th>Desarrollo</th><th>Calidad</th><th>Revisor externo</th></tr></thead>
+    <tbody><tr><td>Aprobar alcance y prioridades</td><td>A/R</td><td>C</td><td>C</td><td>I</td></tr><tr><td>Implementar y revisar código</td><td>I</td><td>R</td><td>C</td><td>C</td></tr><tr><td>Mantener requisitos y trazabilidad</td><td>A</td><td>C</td><td>R</td><td>C</td></tr><tr><td>Ejecutar pruebas y registrar evidencia</td><td>I</td><td>C</td><td>R</td><td>C</td></tr><tr><td>Autorizar liberación</td><td>A</td><td>C</td><td>R</td><td>C</td></tr><tr><td>Auditar entregables</td><td>I</td><td>C</td><td>R</td><td>A/R recomendado</td></tr></tbody>
+  </table>
+  <h2><span>3.</span>Objetivos de calidad y métricas</h2>
+
+  <table>
+    <colgroup><col><col><col><col><col></colgroup>
+    <thead><tr><th>ID</th><th>Objetivo / métrica</th><th>Meta</th><th>Evidencia</th><th>Frecuencia</th></tr></thead>
+    <tbody><tr><td>OC-01</td><td>Cobertura de requisitos funcionales por casos trazados</td><td>100 % RF con ≥1 caso</td><td>Matriz RF–CP</td><td>Cada versión</td></tr><tr><td>OC-02</td><td>Resultado de pruebas críticas y de seguridad</td><td>100 % aprobadas</td><td>Reportes y capturas</td><td>Cada candidato</td></tr><tr><td>OC-03</td><td>Defectos abiertos al liberar</td><td>0 críticos; 0 altos</td><td>Registro de defectos</td><td>Go/no-go</td></tr><tr><td>OC-04</td><td>Calidad estática</td><td>Frontend lint y build sin error; backend build/test sin error</td><td>Registros de comandos</td><td>Cada cambio</td></tr><tr><td>OC-05</td><td>Rendimiento de lectura</td><td>p95 ≤ 500 ms con carga acordada</td><td>Informe de rendimiento</td><td>Antes de liberar</td></tr><tr><td>OC-06</td><td>Seguridad de dependencias</td><td>0 vulnerabilidades críticas/altas sin aceptación</td><td>Inventario y escaneo</td><td>Semanal / liberación</td></tr><tr><td>OC-07</td><td>Recuperabilidad</td><td>RPO ≤ 24 h; RTO ≤ 60 min; rollback de despliegue ≤ 30 min</td><td>Prueba de restauración</td><td>Mensual / liberación</td></tr><tr><td>OC-08</td><td>Capacitación</td><td>≥80 % en evaluación y ≥80 % de asistencia</td><td>Lista, prueba y encuesta</td><td>Cada cohorte</td></tr></tbody>
+  </table>
+  <h2><span>4.</span>Actividades, controles y puertas de calidad</h2>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Puerta</th><th>Entrada</th><th>Controles obligatorios</th><th>Salida / autoridad</th></tr></thead>
+    <tbody><tr><td>G0 · Alcance</td><td>Necesidad y restricciones</td><td>ERS revisada; riesgos iniciales; criterios de aceptación</td><td>Producto aprueba</td></tr><tr><td>G1 · Construcción</td><td>RF priorizados</td><td>Revisión de código; lint/build; pruebas unitarias; migración revisada</td><td>Desarrollo propone</td></tr><tr><td>G2 · Verificación</td><td>Candidato inmutable</td><td>Integración, sistema, seguridad, accesibilidad y regresión; defectos clasificados</td><td>Calidad acepta</td></tr><tr><td>G3 · Liberación</td><td>G2 conforme</td><td>Etiqueta/commit; backup restaurado; variables; runbook; plan de reversión</td><td>Producto decide go/no-go</td></tr><tr><td>G4 · Producción</td><td>Servicios desplegados</td><td>Pruebas de humo; logs; integridad; TLS</td><td>Calidad recomienda y producto aprueba</td></tr><tr><td>G5 · Cierre</td><td>Período de observación</td><td>Métricas, incidencias, lecciones, actualización de riesgos</td><td>Producto cierra</td></tr></tbody>
+  </table>
+  <h3>4.1 Normas y prácticas aplicables</h3>
+  <ul><li><strong>Requisitos:</strong> identificador único, lenguaje inequívoco, prioridad, fuente, estado, criterio verificable y trazabilidad bidireccional.</li><li><strong>Código:</strong> revisión antes de integrar; secretos fuera del repositorio; validación de entradas; autorización por recurso; migraciones versionadas.</li><li><strong>Configuración:</strong> cada liberación debe vincular versión, commit, migraciones, imágenes, variables documentadas y resultado de pruebas.</li><li><strong>Pruebas:</strong> evidencia reproducible con fecha, versión, entorno, datos, ejecutor, resultado y defecto asociado.</li><li><strong>Documentación:</strong> versión, responsable, aprobación, referencias, historial y estado; los valores por completar no se presentan como hechos.</li></ul>
+  <h3>4.2 Revisiones y auditorías</h3>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Revisión / auditoría</th><th>Qué comprueba</th><th>Momento</th><th>Registro</th></tr></thead>
+    <tbody><tr><td>Revisión de requisitos</td><td>Completitud, consistencia, factibilidad, verificabilidad y trazabilidad</td><td>Antes de G1</td><td>Lista de revisión y acta</td></tr><tr><td>Revisión técnica</td><td>Arquitectura, seguridad, migraciones y mantenibilidad</td><td>Por cambio material</td><td>Comentarios / acta</td></tr><tr><td>Auditoría funcional</td><td>Producto contra RF y casos</td><td>G2</td><td>Informe de ejecución</td></tr><tr><td>Auditoría de configuración</td><td>Commit, etiqueta, artefactos y migraciones coinciden</td><td>G3</td><td>Lista de configuración</td></tr><tr><td>Auditoría física de liberación</td><td>Artefactos entregados son completos, legibles y recuperables</td><td>G3/G5</td><td>Acta de liberación</td></tr><tr><td>Revisión posterior</td><td>Incidentes, métricas, riesgos y acciones</td><td>24–48 h después</td><td>Informe de cierre</td></tr></tbody>
+  </table>
+  <h2><span>5.</span>Gestión de defectos y acciones correctivas</h2>
+  <ol><li>Registrar el hallazgo con identificador, versión, entorno, pasos, evidencia, resultado esperado/real y severidad.</li><li>Triage por producto, desarrollo y calidad: aceptar, duplicar, diferir o asignar.</li><li>Corregir en una rama/cambio trazable y añadir o actualizar una prueba de regresión.</li><li>Verificar la corrección en el mismo entorno y revisar impactos laterales.</li><li>Cerrar únicamente con evidencia. Un defecto diferido exige riesgo aceptado, responsable y fecha objetivo.</li></ol>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Severidad</th><th>Ejemplo</th><th>Objetivo de respuesta</th><th>Regla de liberación</th></tr></thead>
+    <tbody><tr><td>Crítica</td><td>Pérdida/exposición de datos; indisponibilidad total; control de acceso eludido</td><td>Contención inmediata</td><td>Bloquea</td></tr><tr><td>Alta</td><td>Flujo principal inutilizable sin alternativa</td><td>≤1 día hábil</td><td>Bloquea</td></tr><tr><td>Media</td><td>Función degradada con alternativa</td><td>≤3 días hábiles</td><td>Decisión documentada</td></tr><tr><td>Baja</td><td>Presentación, texto o mejora menor</td><td>Siguiente iteración</td><td>Puede diferirse</td></tr></tbody>
+  </table>
+  <h2><span>6.</span>Registros, herramientas y conservación</h2>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Registro</th><th>Ubicación propuesta</th><th>Responsable</th><th>Conservación mínima</th></tr></thead>
+    <tbody><tr><td>ERS y matrices aprobadas</td><td>documentacion/ y copia de entrega</td><td>Calidad</td><td>Vida del proyecto + 1 año</td></tr><tr><td>Resultados de pruebas</td><td>evidencias/pruebas/<versión>/<fecha></td><td>Calidad</td><td>Vida del proyecto + 1 año</td></tr><tr><td>Defectos y acciones</td><td>Rastreador o registro controlado</td><td>Calidad</td><td>Vida del proyecto + 1 año</td></tr><tr><td>Artefactos y SBOM</td><td>liberaciones/<versión></td><td>Desarrollo</td><td>Mientras la versión esté soportada</td></tr><tr><td>Backups y restauraciones</td><td>Repositorio cifrado de respaldos</td><td>Implantación</td><td>Según política; nunca en Git</td></tr><tr><td>Asistencia y evaluación</td><td>evidencias/capacitacion</td><td>Capacitación</td><td>1 año</td></tr></tbody>
+  </table>
+  <p>Herramientas previstas: Git; .NET 8; xUnit; Node.js 20+; ESLint; Vite; Docker Compose; PostgreSQL 16; navegador automatizado; escáner de dependencias. La ausencia de una herramienta no autoriza omitir el control: debe usarse una alternativa y registrarse.</p>
+  <h2><span>7.</span>Estado de la línea base y brechas encontradas</h2>
+
+  <table>
+    <colgroup><col style="width:49%"><col style="width:17%"><col style="width:34%"></colgroup>
+    <thead><tr><th>Hallazgo al 14/09/2026</th><th>Estado</th><th>Acción necesaria antes de producción</th></tr></thead>
+    <tbody><tr><td>Frontend: <code>npm run lint</code> y <code>npm run build</code> ejecutados correctamente.</td><td><span class="status ok">Conforme</span></td><td>Conservar los registros y repetir sobre el commit candidato.</td></tr><tr><td>Backend: existen 9 métodos de prueba xUnit (incluyen teorías), pero no hay runtime .NET disponible en este entorno para ejecutarlos.</td><td><span class="status pending">Sin evidencia</span></td><td>Ejecutar restore/build/test con .NET 8 y adjuntar TRX.</td></tr><tr><td>No existen pruebas automatizadas del frontend ni evidencia actual de integración/sistema.</td><td><span class="status pending">Brecha</span></td><td>Automatizar flujos críticos y ejecutar plan manual completo.</td></tr><tr><td>El repositorio no tiene etiqueta de liberación y contiene cambios locales no confirmados.</td><td><span class="status pending">Bloquea G3</span></td><td>Integrar cambios, revisar, fijar commit y crear etiqueta aprobada.</td></tr><tr><td>Hay respuestas de la API todavía en inglés, mientras RNF-10 exige español.</td><td><span class="status partial">Parcial</span></td><td>Unificar mensajes o ajustar explícitamente el requisito.</td></tr><tr><td>No hay evidencia de prueba de restauración, rendimiento, accesibilidad ni navegador cruzado.</td><td><span class="status pending">Pendiente</span></td><td>Ejecutar y archivar los informes definidos.</td></tr><tr><td>El Compose local publica frontend por HTTP: producción requiere TLS y exposición únicamente mediante proxy autorizado.</td><td><span class="status partial">Pendiente producción</span></td><td>Aplicar overlay/configuración de producción y comprobar desde red externa.</td></tr></tbody>
+  </table>
+  <aside class="warn"><strong>Conclusión de calidad</strong>La documentación inicial era una base útil, pero el PDF consolidado no reemplazaba un SQAP ejecutable. Esta versión incorpora métricas, puertas, auditorías, control de configuración, defectos, registros y un diagnóstico verificable. El producto no está autorizado para producción hasta cerrar los elementos marcados como bloqueantes.</aside>
+  <h2><span>8.</span>Aceptación y mantenimiento del plan</h2>
+  <p>El plan se revisa ante cambios de alcance, arquitectura, riesgos, proceso o estándar, y al menos en cada liberación. Las excepciones deben identificar control omitido, causa, riesgo, compensación, responsable, vencimiento y aprobación. La firma de este documento aprueba el proceso; no sustituye la evidencia de que se ejecutó.</p>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Decisión</th><th>Nombre</th><th>Firma</th><th>Fecha</th></tr></thead>
+    <tbody><tr><td>[ ] Aprobar  [ ] Aprobar con acciones  [ ] Rechazar</td><td></td><td></td><td></td></tr></tbody>
+  </table></body></html>

@@ -32,6 +32,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetFeed([FromQuery] int page = 1, [FromQuery] int size = 10)
         {
             if (page < 1 || size is < 1 or > 50) return BadRequest("Page must be >= 1 and size between 1 and 50.");
+            if ((long)(page - 1) * size > int.MaxValue) return BadRequest("Page is too large.");
             var skip     = (page - 1) * size;
             var projects = await _projectRepo.GetFeed(skip, size);
             return Ok(await Enrich(projects));
@@ -43,6 +44,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> GetFollowingFeed([FromQuery] int page = 1, [FromQuery] int size = 10)
         {
             if (page < 1 || size is < 1 or > 50) return BadRequest("Page must be >= 1 and size between 1 and 50.");
+            if ((long)(page - 1) * size > int.MaxValue) return BadRequest("Page is too large.");
             var userId   = ClaimsHelper.GetUserId(User);
             var skip     = (page - 1) * size;
             var projects = await _projectRepo.GetFeedForUser(userId, skip, size);

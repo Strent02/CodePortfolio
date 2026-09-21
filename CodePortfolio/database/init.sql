@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS "Application" (
 CREATE TABLE IF NOT EXISTS "Comment" (
     comment_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id uuid NOT NULL REFERENCES "User"(user_id) ON DELETE CASCADE,
-    project_id uuid NOT NULL REFERENCES "Project"(project_id) ON DELETE RESTRICT,
+    project_id uuid NOT NULL REFERENCES "Project"(project_id) ON DELETE CASCADE,
     content varchar(2000) NOT NULL,
     comment_date timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -80,8 +80,8 @@ CREATE INDEX IF NOT EXISTS ix_comment_project_id ON "Comment"(project_id);
 CREATE TABLE IF NOT EXISTS "Reaction" (
     reaction_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id uuid NOT NULL REFERENCES "User"(user_id) ON DELETE CASCADE,
-    project_id uuid NOT NULL REFERENCES "Project"(project_id) ON DELETE RESTRICT,
-    type varchar(50) NOT NULL DEFAULT 'like',
+    project_id uuid NOT NULL REFERENCES "Project"(project_id) ON DELETE CASCADE,
+    type varchar(50) NOT NULL DEFAULT 'like' CONSTRAINT "CK_Reaction_Type" CHECK (type = 'like'),
     reaction_date timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_reaction_user_project UNIQUE (user_id, project_id)
 );
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS "Reaction" (
 CREATE TABLE IF NOT EXISTS "Follow" (
     follow_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id uuid NOT NULL REFERENCES "User"(user_id) ON DELETE CASCADE,
-    followed_user_id uuid REFERENCES "User"(user_id) ON DELETE RESTRICT,
+    followed_user_id uuid REFERENCES "User"(user_id) ON DELETE CASCADE,
     project_id uuid REFERENCES "Project"(project_id) ON DELETE SET NULL,
     follow_date timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT ck_follow_target CHECK (followed_user_id IS NOT NULL OR project_id IS NOT NULL),

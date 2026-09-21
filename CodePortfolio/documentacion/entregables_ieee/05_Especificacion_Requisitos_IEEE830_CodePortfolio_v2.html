@@ -1,0 +1,135 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Especificación de Requisitos del Software</title>
+  <style>
+    @page { size: Letter; margin: 18mm 16mm 18mm 16mm; @bottom-center { content: "CodePortfolio · CP-SRS-002 · Página " counter(page) " de " counter(pages); color: #756b60; font: 8pt Arial; } }
+    @page:first { margin: 16mm; @bottom-center { content: ""; } }
+    * { box-sizing: border-box; }
+    html { color: #27231f; font-family: Arial, Helvetica, sans-serif; font-size: 10.2pt; line-height: 1.45; }
+    body { margin: 0; background: white; }
+    .cover { min-height: 235mm; display: flex; flex-direction: column; justify-content: center; padding: 12mm 8mm; }
+    .brand { width: 24mm; height: 24mm; border-radius: 7mm; display: grid; place-items: center; background: linear-gradient(145deg,#9b7d50,#665033); color: white; font: bold 20pt Consolas, monospace; box-shadow: 0 5mm 14mm rgba(85,65,40,.18); }
+    .kicker { margin-top: 18mm; color: #8a6f47; font-size: 8.5pt; font-weight: 700; letter-spacing: 1.8pt; }
+    h1 { margin: 4mm 0 3mm; font-family: Georgia, serif; font-size: 30pt; font-weight: 500; line-height: 1.08; color: #201d19; }
+    .subtitle { max-width: 145mm; font: 13pt/1.45 Georgia, serif; color: #665f57; }
+    .accent-line { width: 36mm; height: 1.5mm; border-radius: 2mm; background: #3f7d5e; margin: 7mm 0; }
+    .confidential { margin-top: auto; color: #877e73; font-size: 8.5pt; }
+    h2 { break-after: avoid; margin: 9mm 0 4mm; padding-bottom: 2mm; border-bottom: .35mm solid #d8c9b5; font: 19pt Georgia, serif; color: #2f2a25; }
+    h2 span { color: #8a6f47; margin-right: 2mm; }
+    h3 { break-after: avoid; margin: 6mm 0 2.2mm; font-size: 12pt; color: #3f6d55; }
+    p { margin: 0 0 3mm; text-align: justify; }
+    .lead { font-size: 11pt; color: #514b44; }
+    ul, ol { margin: 1.5mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin-bottom: 1.3mm; }
+    table { width: 100%; border-collapse: collapse; margin: 2.5mm 0 5mm; font-size: 8.5pt; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th { padding: 2.2mm; text-align: left; vertical-align: bottom; color: white; background: #6d5735; border: .2mm solid #6d5735; }
+    td { padding: 2mm 2.2mm; vertical-align: top; border: .2mm solid #d9d2c8; }
+    tbody tr:nth-child(even) td { background: #f7f4ef; }
+    aside { break-inside: avoid; margin: 4mm 0; padding: 3.2mm 4mm; border-left: 1.4mm solid #8a6f47; background: #f6f0e7; }
+    aside strong { display: block; margin-bottom: 1mm; color: #6d5735; }
+    aside.warn { border-left-color: #b36b35; background: #fff4e9; }
+    aside.good { border-left-color: #3f7d5e; background: #edf7f1; }
+    aside.risk { border-left-color: #a8433f; background: #fff0ef; }
+    pre { white-space: pre-wrap; break-inside: avoid; padding: 3mm; border: .2mm solid #d9d2c8; border-radius: 2mm; background: #f5f3ef; font: 7.7pt/1.4 Consolas, monospace; color: #3d3934; }
+    .status { display: inline-block; white-space: nowrap; padding: .5mm 1.5mm; border-radius: 4mm; font-size: 7.4pt; font-weight: 700; text-transform: uppercase; letter-spacing: .25pt; }
+    .ok { background:#dcefe4; color:#2f694c; } .partial { background:#fff0ce; color:#805d18; }
+    .pending { background:#f3e3dc; color:#934638; } .info { background:#e5eaf1; color:#495d79; }
+    .page-break { break-after: page; }
+    .small { font-size: 8.5pt; color: #6f675f; }
+    .signature { height: 15mm; }
+    a { color: #3f6d55; text-decoration: none; }
+  </style></head><body><section class="cover">
+    <div class="brand">&lt;/&gt;</div>
+    <div class="kicker">CODEPORTFOLIO · GOBIERNO Y CALIDAD</div>
+    <h1>Especificación de Requisitos del Software</h1>
+    <p class="subtitle">Estructura solicitada IEEE 830, actualizada con criterios ISO/IEC/IEEE 29148:2018 · CodePortfolio 1.0</p>
+    <div class="accent-line"></div>
+
+  <table>
+    <colgroup><col style="width:32%"><col style="width:68%"></colgroup>
+    <thead><tr><th>Control</th><th>Valor</th></tr></thead>
+    <tbody><tr><td>Código documental</td><td>CP-SRS-002</td></tr><tr><td>Versión</td><td>2.0</td></tr><tr><td>Fecha de corte</td><td>14 de septiembre de 2026</td></tr><tr><td>Autor / responsable</td><td>Pedro Bonilla</td></tr><tr><td>Estado</td><td>Línea base propuesta para revisión y aprobación</td></tr><tr><td>Proyecto</td><td>CodePortfolio — red social de portafolios de código</td></tr></tbody>
+  </table>
+    <p class="confidential">Documento interno · Copia controlada al aprobarse</p>
+  </section><div class="page-break"></div><h2>Control del documento</h2>
+  <h3>Historia de revisiones</h3>
+
+  <table>
+    <colgroup><col style="width:17%"><col style="width:12%"><col style="width:51%"><col style="width:20%"></colgroup>
+    <thead><tr><th>Fecha</th><th>Versión</th><th>Descripción</th><th>Responsable</th></tr></thead>
+    <tbody><tr><td>09/09/2026</td><td>1.0</td><td>Versiones iniciales y documento consolidado.</td><td>Pedro Bonilla</td></tr><tr><td>14/09/2026</td><td>2.0</td><td>Separación por entregable, contraste con el código, trazabilidad, criterios medibles y registros de evidencia.</td><td>Pedro Bonilla</td></tr></tbody>
+  </table>
+  <h3>Aprobación</h3>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Rol</th><th>Nombre</th><th>Decisión</th><th>Firma / fecha</th></tr></thead>
+    <tbody><tr><td>Responsable del producto</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr><tr><td>Aseguramiento de calidad</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr><tr><td>Responsable de implantación</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr></tbody>
+  </table>
+  <h2><span>1.</span>Introducción</h2>
+  <p class="lead">Esta ERS establece una línea base verificable de lo que CodePortfolio 1.0 debe hacer y de las restricciones bajo las que debe operar. Está dirigida a producto, desarrollo, pruebas, implantación, capacitación y aceptación.</p>
+  <aside class="note"><strong>Vigencia normativa</strong>IEEE 830-1998 está sustituida por ISO/IEC/IEEE 29148. Se conserva la organización familiar de IEEE 830 porque fue solicitada, y se añaden atributos, criterios y gestión de trazabilidad compatibles con la práctica vigente.</aside>
+  <h3>1.1 Ámbito</h3><p>CodePortfolio es una red social web para desarrolladores: portafolios de proyectos, comunidad y acceso a vacantes. No aloja código ni ejecuta demos; solo conserva metadatos, imágenes y enlaces externos.</p>
+  <h3>1.2 Definiciones</h3>
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+    <tbody><tr><td>Usuario</td><td>Cuenta individual con rol User, Recruiter o Admin.</td></tr><tr><td>Proyecto</td><td>Publicación de código con metadatos, estado y posible imagen.</td></tr><tr><td>Borrador</td><td>Proyecto no público, visible solo para autor y Admin.</td></tr><tr><td>Refresh token</td><td>Credencial rotatoria de sesión almacenada en forma de hash.</td></tr><tr><td>Candidato</td><td>Commit y artefactos identificados que se someten a pruebas.</td></tr><tr><td>Conforme (C)</td><td>El resultado observado satisface todo el criterio de aceptación.</td></tr></tbody>
+  </table>
+  <h2><span>2.</span>Descripción general</h2>
+  <h3>2.1 Perspectiva y arquitectura</h3>
+  <p>La SPA React consume una API REST ASP.NET Core. La API aplica reglas de negocio, autenticación JWT, persistencia EF Core/PostgreSQL y manejo de imágenes en volumen. Nginx sirve la SPA y actúa como proxy interno; un terminador TLS protege la exposición pública.</p>
+  <h3>2.2 Clases de usuario</h3>
+
+  <table>
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Actor</th><th>Capacidades</th><th>Limitaciones</th></tr></thead>
+    <tbody><tr><td>Invitado</td><td>Feed, proyectos públicos, perfiles, búsqueda y vacantes.</td><td>No escribe ni ve datos privados.</td></tr><tr><td>User/desarrollador</td><td>Cuenta, proyectos, comunidad, notificaciones y postulaciones.</td><td>Solo recursos propios salvo interacción permitida.</td></tr><tr><td>Recruiter</td><td>Rol previsto.</td><td>En 1.0 no posee permisos diferenciados; no se debe prometer gestión.</td></tr><tr><td>Admin</td><td>CRUD administrativo, estados, moderación y acceso excepcional a borradores.</td><td>Operación por API; no hay panel gráfico 1.0.</td></tr></tbody>
+  </table>
+  <h3>2.3 Restricciones, supuestos y dependencias</h3>
+  <ul><li>Contenedores; PostgreSQL 16; .NET 8; Node.js 20+; React 19; migraciones EF como mecanismo de esquema.</li><li>HTTPS obligatorio en producción; secretos por entorno/gestor, nunca en Git; imágenes fuera de la base.</li><li>Interfaz en español y adaptable desde 360 px. Dependencia de enlaces externos para demos/repositorios.</li><li>Volumen de diseño inicial: hasta 10.000 usuarios; las metas de rendimiento deben validarse con datos representativos.</li><li>Empresas/vacantes son creadas por Admin. No hay autorregistro de empresa.</li></ul>
+  <h3>2.4 Fuera de alcance</h3><p>Mensajería directa y colaboradores en la UI, panel gráfico Admin, correo electrónico, pagos, internacionalización, ejecución/alojamiento de código y alta disponibilidad multirregión. Aunque existen modelos o endpoints administrativos heredados para mensajes/colaboradores, no constituyen una función de usuario aceptada en 1.0.</p>
+  <h2><span>3.</span>Interfaces externas</h2>
+
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>Interfaz</th><th>Especificación</th></tr></thead>
+    <tbody><tr><td>Usuario</td><td>SPA responsive; navegación lateral ≥769 px e inferior ≤768 px; formularios con nombre accesible; teclado; movimiento reducido.</td></tr><tr><td>API</td><td>HTTP/JSON bajo /api; Bearer JWT; multipart/form-data para imágenes; códigos 2xx/4xx/5xx consistentes.</td></tr><tr><td>Datos</td><td>PostgreSQL UTF-8, UUID, UTC para fechas; restricciones únicas/FK/cascadas versionadas.</td></tr><tr><td>Archivos</td><td>JPG, PNG, WEBP o GIF por firma; ≤5 MB; nombre generado; servidos bajo /images.</td></tr><tr><td>Comunicaciones</td><td>HTTPS en producción; CORS por allowlist; red interna para API/DB.</td></tr></tbody>
+  </table>
+  <h2><span>4.</span>Requisitos funcionales</h2>
+
+  <table>
+    <colgroup><col style="width:8%"><col style="width:13%"><col style="width:29%"><col style="width:9%"><col style="width:10%"><col style="width:31%"></colgroup>
+    <thead><tr><th>ID</th><th>Nombre</th><th>Especificación</th><th>Prioridad</th><th>Superficie</th><th>Criterio de aceptación</th></tr></thead>
+    <tbody><tr><td>RF-01</td><td>Registro de usuario</td><td>Crear cuenta con nombre, correo único, contraseña y datos opcionales; el servidor asigna User.</td><td>Alta</td><td>UI/API</td><td>Correo duplicado rechazado; nunca se acepta rol del cliente.</td></tr><tr><td>RF-02</td><td>Autenticación</td><td>Iniciar sesión y emitir acceso + refresh.</td><td>Alta</td><td>UI/API</td><td>Credenciales válidas autentican; inválidas no revelan cuál dato falló.</td></tr><tr><td>RF-03</td><td>Renovación</td><td>Rotar refresh válido y emitir acceso nuevo.</td><td>Alta</td><td>API</td><td>El token usado queda inutilizable; vigencia 7 días.</td></tr><tr><td>RF-04</td><td>Cierre</td><td>Revocar refresh al cerrar sesión.</td><td>Alta</td><td>UI/API</td><td>Reutilizar el refresh revocado falla.</td></tr><tr><td>RF-05</td><td>Crear proyecto</td><td>Título, descripción, URLs y estado published/draft.</td><td>Alta</td><td>UI/API</td><td>Propietario autenticado; validación y persistencia.</td></tr><tr><td>RF-06</td><td>Imagen destacada</td><td>Subir/sustituir imagen válida de hasta 5 MB.</td><td>Media</td><td>UI/API</td><td>Firma válida; nombre de servidor; anterior eliminada al sustituir.</td></tr><tr><td>RF-07</td><td>Editar proyecto</td><td>Solo autor edita contenido/estado.</td><td>Alta</td><td>UI/API</td><td>Ajeno no modifica.</td></tr><tr><td>RF-08</td><td>Eliminar proyecto</td><td>Autor o Admin elimina y limpia dependencias.</td><td>Alta</td><td>UI/API</td><td>Recurso, comentarios y reacciones dejan de existir.</td></tr><tr><td>RF-09</td><td>Privacidad de borrador</td><td>Solo autor o Admin accede a draft.</td><td>Alta</td><td>API</td><td>Invitado/ajeno no distingue existencia.</td></tr><tr><td>RF-10</td><td>Feed público</td><td>Listar publicados recientes con paginación.</td><td>Alta</td><td>UI/API</td><td>Solo published; orden descendente; size 1–50.</td></tr><tr><td>RF-11</td><td>Feed de seguidos</td><td>Listar publicados de autores seguidos.</td><td>Media</td><td>UI/API</td><td>Requiere sesión y excluye no seguidos.</td></tr><tr><td>RF-12</td><td>Exploración y filtros</td><td>Explorar publicados; en propios filtrar published/draft y buscar.</td><td>Media</td><td>UI</td><td>Filtros no revelan borradores ajenos.</td></tr><tr><td>RF-13</td><td>Búsqueda global</td><td>Buscar proyectos publicados, usuarios y vacantes por término.</td><td>Media</td><td>UI/API</td><td>1–100 caracteres; resultados por categoría; sin drafts.</td></tr><tr><td>RF-14</td><td>Perfil público</td><td>Nombre, biografía, ubicación, avatar, contadores y proyectos publicados.</td><td>Alta</td><td>UI/API</td><td>No devuelve correo ni hash.</td></tr><tr><td>RF-15</td><td>Editar perfil</td><td>Propietario edita datos y avatar.</td><td>Media</td><td>UI/API</td><td>Identidad tomada del token.</td></tr><tr><td>RF-16</td><td>Reacciones</td><td>Like/unlike único por usuario/proyecto visible.</td><td>Media</td><td>UI/API</td><td>Contador consistente; restricción única.</td></tr><tr><td>RF-17</td><td>Comentarios</td><td>Crear en publicado; autor/Admin elimina.</td><td>Media</td><td>UI/API</td><td>Autor del proyecto recibe notificación si corresponde.</td></tr><tr><td>RF-18</td><td>Seguimiento</td><td>Follow/unfollow a otro usuario y listar relaciones.</td><td>Media</td><td>UI/API</td><td>No auto-seguimiento; relación única.</td></tr><tr><td>RF-19</td><td>Notificaciones</td><td>Listar propias y marcar una o todas desde UI.</td><td>Media</td><td>UI/API</td><td>El endpoint individual solo afecta al destinatario.</td></tr><tr><td>RF-20</td><td>Vacantes</td><td>Listar/consultar/buscar vacantes públicamente.</td><td>Media</td><td>UI/API</td><td>Respuesta incluye empresa y datos de la oferta.</td></tr><tr><td>RF-21</td><td>Postulación</td><td>Usuario postula con carta opcional y proyecto propio opcional.</td><td>Media</td><td>UI/API</td><td>Una por usuario/vacante; proyecto adjunto debe ser propio.</td></tr><tr><td>RF-22</td><td>Mis postulaciones</td><td>Consultar solo solicitudes propias y estado.</td><td>Media</td><td>UI/API</td><td>No expone postulaciones de otros.</td></tr><tr><td>RF-23</td><td>Contraseña</td><td>Cambiar verificando actual y revocar sesiones.</td><td>Alta</td><td>UI/API</td><td>Actual incorrecta falla; refresh previos inválidos.</td></tr><tr><td>RF-24</td><td>Baja de cuenta</td><td>Eliminar cuenta verificando contraseña.</td><td>Alta</td><td>UI/API</td><td>Datos dependientes eliminados; sesión finaliza.</td></tr><tr><td>RF-25</td><td>Administración</td><td>Admin gestiona empresas, vacantes, estados, usuarios y moderación mediante API.</td><td>Media</td><td>API</td><td>User/Recruiter sin permiso obtiene 403; UI gráfica fuera de alcance.</td></tr></tbody>
+  </table>
+  <h2><span>5.</span>Reglas de negocio y modelo de estados</h2>
+
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>ID</th><th>Regla</th></tr></thead>
+    <tbody><tr><td>RN-01</td><td>El registro público asigna User con independencia del cuerpo enviado.</td></tr><tr><td>RN-02</td><td>Email es único sin distinción operativa de mayúsculas según normalización del repositorio.</td></tr><tr><td>RN-03</td><td>Un usuario no puede reaccionar dos veces al mismo proyecto, seguir dos veces al mismo usuario ni postular dos veces a la misma vacante.</td></tr><tr><td>RN-04</td><td>Solo published participa en feed/búsqueda pública; draft se trata como inexistente para no autorizados.</td></tr><tr><td>RN-05</td><td>Estado de postulación: pending → accepted o rejected; cambios reservados a Admin.</td></tr><tr><td>RN-06</td><td>El identificador de usuario de operaciones propias proviene del token, no de parámetros manipulables.</td></tr><tr><td>RN-07</td><td>El borrado debe mantener integridad referencial y retirar archivos que dejan de estar referenciados.</td></tr></tbody>
+  </table>
+  <h2><span>6.</span>Requisitos no funcionales</h2>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>ID</th><th>Atributo</th><th>Requisito medible</th><th>Verificación</th></tr></thead>
+    <tbody><tr><td>RNF-01</td><td>Credenciales</td><td>BCrypt; contraseña ≥8 caracteres; hashes nunca salen de API.</td><td>Inspección + pruebas</td></tr><tr><td>RNF-02</td><td>Sesión</td><td>Access 60 min; refresh 7 días, hash SHA-256, rotación y revocación.</td><td>Pruebas con reloj/control DB</td></tr><tr><td>RNF-03</td><td>Autorización</td><td>100 % de escrituras y lecturas privadas validan rol/propiedad.</td><td>Matriz actor–recurso</td></tr><tr><td>RNF-04</td><td>Fuerza bruta</td><td>Máx. 10 solicitudes/min/cliente en rutas auth; excedente 429.</td><td>Prueba dinámica</td></tr><tr><td>RNF-05</td><td>Headers</td><td>nosniff, DENY, Referrer-Policy, Permissions-Policy, CSP; HSTS en producción.</td><td>curl/navegador</td></tr><tr><td>RNF-06</td><td>Archivos</td><td>Solo firmas JPG/PNG/WEBP/GIF ≤5 MB; nombre no controlado por cliente.</td><td>Pruebas frontera</td></tr><tr><td>RNF-07</td><td>Errores</td><td>0 trazas, SQL, secretos o rutas internas en respuestas.</td><td>Errores inducidos</td></tr><tr><td>RNF-08</td><td>Compatibilidad</td><td>Flujos críticos en Chrome/Firefox/Safari/Edge vigentes y 360–1440 px.</td><td>Matriz de navegadores</td></tr><tr><td>RNF-09</td><td>Accesibilidad</td><td>Teclado, nombre accesible, foco visible y movimiento reducido sin fallos críticos.</td><td>Auditoría manual/automática</td></tr><tr><td>RNF-10</td><td>Idioma</td><td>100 % de textos de usuario y errores de API en español.</td><td>Recorrido/catálogo</td></tr><tr><td>RNF-11</td><td>Rendimiento</td><td>Lecturas p95 ≤500 ms, error <1 %, con perfil de carga documentado.</td><td>Prueba de carga</td></tr><tr><td>RNF-12</td><td>Integridad</td><td>0 duplicados prohibidos y 0 huérfanos tras bajas.</td><td>SQL + integración</td></tr><tr><td>RNF-13</td><td>Mantenibilidad</td><td>Lint/build/test sin error para candidato; revisión obligatoria.</td><td>Pipeline / logs</td></tr><tr><td>RNF-14</td><td>Portabilidad</td><td>Despliegue reproducible por contenedores y migraciones.</td><td>Ensayo limpio</td></tr><tr><td>RNF-15</td><td>Recuperación</td><td>RPO ≤24 h, RTO ≤60 min, rollback ≤30 min.</td><td>Restore cronometrado</td></tr><tr><td>RNF-16</td><td>Trazabilidad</td><td>100 % de RF/RNF vinculados a pruebas y resultados.</td><td>Auditoría de matriz</td></tr></tbody>
+  </table>
+  <h2><span>7.</span>Modelo de información</h2>
+
+  <table>
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Entidad</th><th>Datos principales</th><th>Relaciones / integridad</th></tr></thead>
+    <tbody><tr><td>Role</td><td>id, name único, description</td><td>Uno a muchos con User</td></tr><tr><td>User</td><td>id, fullName, email único, password, bio, location, avatar, date, role</td><td>Proyectos, comentarios, reacciones, follows, notificaciones, postulaciones, refresh</td></tr><tr><td>Project</td><td>id, title, description, image, demoUrl, repositoryUrl, status, publishDate</td><td>Pertenece a User; comentarios/reacciones; borrado en cascada</td></tr><tr><td>Comment / Reaction</td><td>contenido/tipo, fecha</td><td>User + Project; Reaction única por par</td></tr><tr><td>Follow</td><td>follower, followed, fecha, project opcional heredado</td><td>Único por par de usuarios</td></tr><tr><td>Company / JobOpening</td><td>empresa; oferta y modalidad</td><td>Empresa publica vacantes</td></tr><tr><td>Application</td><td>cover, status, date, project opcional</td><td>Única por User + JobOpening</td></tr><tr><td>Notification</td><td>message, date, isRead</td><td>Pertenece a User; Company opcional</td></tr><tr><td>RefreshToken</td><td>tokenHash, expiry, revoked, created</td><td>Único; pertenece a User</td></tr></tbody>
+  </table>
+  <h2><span>8.</span>Trazabilidad, estado y cambios</h2>
+  <p>La matriz oficial se mantiene en el Plan de Pruebas. Cada cambio de requisito registra solicitante, motivo, impacto, decisión, versión y pruebas afectadas. Los códigos no se reutilizan; los retirados conservan estado “eliminado”.</p>
+
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>Aspecto verificado en código</th><th>Estado al corte</th></tr></thead>
+    <tbody><tr><td>RF-01 a RF-24</td><td><span class="status ok">Implementación visible</span> Existen rutas API y superficies UI principales; falta completar evidencia E2E.</td></tr><tr><td>RF-25</td><td><span class="status partial">Parcial</span> API Admin existente; no hay panel gráfico y se declara fuera de alcance.</td></tr><tr><td>RNF-10</td><td><span class="status pending">No conforme</span> Persisten respuestas en inglés en controladores y desafíos JWT.</td></tr><tr><td>RNF-11/RNF-15</td><td><span class="status pending">Sin evidencia</span> No hay informe actual de carga ni restauración.</td></tr><tr><td>Candidato 1.0</td><td><span class="status pending">No congelado</span> Sin etiqueta Git; árbol con cambios locales.</td></tr></tbody>
+  </table>
+  <aside class="warn"><strong>Criterio de aceptación de la ERS</strong>La existencia de código no demuestra conformidad. Un requisito pasa a “verificado” solo cuando su caso asociado se ejecuta sobre una versión identificada y conserva evidencia.</aside></body></html>

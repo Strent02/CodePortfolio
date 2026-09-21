@@ -49,6 +49,8 @@ namespace CodePortfolio.Controllers
         // PUT /api/user/me/avatar
         [Authorize]
         [HttpPut("me/avatar")]
+        [RequestSizeLimit(ImageUploadHelper.MaxBytes + 64 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = ImageUploadHelper.MaxBytes + 64 * 1024)]
         public async Task<IActionResult> UploadAvatar(IFormFile file)
         {
             var userId = ClaimsHelper.GetUserId(User);
@@ -136,6 +138,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> Search([FromQuery] string q)
         {
             if (string.IsNullOrWhiteSpace(q)) return BadRequest("Escribe algo para buscar.");
+            if (q.Length > 100) return BadRequest("La búsqueda no puede superar 100 caracteres.");
             var users = await _userRepo.Search(q);
             return Ok(users.Select(u => new { u.UserId, u.FullName, u.Bio, u.ProfilePicture }));
         }

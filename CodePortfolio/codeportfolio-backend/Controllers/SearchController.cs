@@ -26,6 +26,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> Search([FromQuery] string q)
         {
             if (string.IsNullOrWhiteSpace(q)) return BadRequest("Escribe algo para buscar.");
+            if (q.Length > 100) return BadRequest("La búsqueda no puede superar 100 caracteres.");
 
             var projects  = await _projectRepo.Search(q);
             var users     = await _userRepo.Search(q);

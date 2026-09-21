@@ -1,0 +1,188 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Plan de Implementación o Implantación</title>
+  <style>
+    @page { size: Letter; margin: 18mm 16mm 18mm 16mm; @bottom-center { content: "CodePortfolio · CP-IMP-002 · Página " counter(page) " de " counter(pages); color: #756b60; font: 8pt Arial; } }
+    @page:first { margin: 16mm; @bottom-center { content: ""; } }
+    * { box-sizing: border-box; }
+    html { color: #27231f; font-family: Arial, Helvetica, sans-serif; font-size: 10.2pt; line-height: 1.45; }
+    body { margin: 0; background: white; }
+    .cover { min-height: 235mm; display: flex; flex-direction: column; justify-content: center; padding: 12mm 8mm; }
+    .brand { width: 24mm; height: 24mm; border-radius: 7mm; display: grid; place-items: center; background: linear-gradient(145deg,#9b7d50,#665033); color: white; font: bold 20pt Consolas, monospace; box-shadow: 0 5mm 14mm rgba(85,65,40,.18); }
+    .kicker { margin-top: 18mm; color: #8a6f47; font-size: 8.5pt; font-weight: 700; letter-spacing: 1.8pt; }
+    h1 { margin: 4mm 0 3mm; font-family: Georgia, serif; font-size: 30pt; font-weight: 500; line-height: 1.08; color: #201d19; }
+    .subtitle { max-width: 145mm; font: 13pt/1.45 Georgia, serif; color: #665f57; }
+    .accent-line { width: 36mm; height: 1.5mm; border-radius: 2mm; background: #3f7d5e; margin: 7mm 0; }
+    .confidential { margin-top: auto; color: #877e73; font-size: 8.5pt; }
+    h2 { break-after: avoid; margin: 9mm 0 4mm; padding-bottom: 2mm; border-bottom: .35mm solid #d8c9b5; font: 19pt Georgia, serif; color: #2f2a25; }
+    h2 span { color: #8a6f47; margin-right: 2mm; }
+    h3 { break-after: avoid; margin: 6mm 0 2.2mm; font-size: 12pt; color: #3f6d55; }
+    p { margin: 0 0 3mm; text-align: justify; }
+    .lead { font-size: 11pt; color: #514b44; }
+    ul, ol { margin: 1.5mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin-bottom: 1.3mm; }
+    table { width: 100%; border-collapse: collapse; margin: 2.5mm 0 5mm; font-size: 8.5pt; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th { padding: 2.2mm; text-align: left; vertical-align: bottom; color: white; background: #6d5735; border: .2mm solid #6d5735; }
+    td { padding: 2mm 2.2mm; vertical-align: top; border: .2mm solid #d9d2c8; }
+    tbody tr:nth-child(even) td { background: #f7f4ef; }
+    aside { break-inside: avoid; margin: 4mm 0; padding: 3.2mm 4mm; border-left: 1.4mm solid #8a6f47; background: #f6f0e7; }
+    aside strong { display: block; margin-bottom: 1mm; color: #6d5735; }
+    aside.warn { border-left-color: #b36b35; background: #fff4e9; }
+    aside.good { border-left-color: #3f7d5e; background: #edf7f1; }
+    aside.risk { border-left-color: #a8433f; background: #fff0ef; }
+    pre { white-space: pre-wrap; break-inside: avoid; padding: 3mm; border: .2mm solid #d9d2c8; border-radius: 2mm; background: #f5f3ef; font: 7.7pt/1.4 Consolas, monospace; color: #3d3934; }
+    .status { display: inline-block; white-space: nowrap; padding: .5mm 1.5mm; border-radius: 4mm; font-size: 7.4pt; font-weight: 700; text-transform: uppercase; letter-spacing: .25pt; }
+    .ok { background:#dcefe4; color:#2f694c; } .partial { background:#fff0ce; color:#805d18; }
+    .pending { background:#f3e3dc; color:#934638; } .info { background:#e5eaf1; color:#495d79; }
+    .page-break { break-after: page; }
+    .small { font-size: 8.5pt; color: #6f675f; }
+    .signature { height: 15mm; }
+    a { color: #3f6d55; text-decoration: none; }
+  </style></head><body><section class="cover">
+    <div class="brand">&lt;/&gt;</div>
+    <div class="kicker">CODEPORTFOLIO · GOBIERNO Y CALIDAD</div>
+    <h1>Plan de Implementación o Implantación</h1>
+    <p class="subtitle">Preparación, despliegue, validación, reversión y cierre · CodePortfolio 1.0</p>
+    <div class="accent-line"></div>
+
+  <table>
+    <colgroup><col style="width:32%"><col style="width:68%"></colgroup>
+    <thead><tr><th>Control</th><th>Valor</th></tr></thead>
+    <tbody><tr><td>Código documental</td><td>CP-IMP-002</td></tr><tr><td>Versión</td><td>2.0</td></tr><tr><td>Fecha de corte</td><td>14 de septiembre de 2026</td></tr><tr><td>Autor / responsable</td><td>Pedro Bonilla</td></tr><tr><td>Estado</td><td>Línea base propuesta para revisión y aprobación</td></tr><tr><td>Proyecto</td><td>CodePortfolio — red social de portafolios de código</td></tr></tbody>
+  </table>
+    <p class="confidential">Documento interno · Copia controlada al aprobarse</p>
+  </section><div class="page-break"></div><h2>Control del documento</h2>
+  <h3>Historia de revisiones</h3>
+
+  <table>
+    <colgroup><col style="width:17%"><col style="width:12%"><col style="width:51%"><col style="width:20%"></colgroup>
+    <thead><tr><th>Fecha</th><th>Versión</th><th>Descripción</th><th>Responsable</th></tr></thead>
+    <tbody><tr><td>09/09/2026</td><td>1.0</td><td>Versiones iniciales y documento consolidado.</td><td>Pedro Bonilla</td></tr><tr><td>14/09/2026</td><td>2.0</td><td>Separación por entregable, contraste con el código, trazabilidad, criterios medibles y registros de evidencia.</td><td>Pedro Bonilla</td></tr></tbody>
+  </table>
+  <h3>Aprobación</h3>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Rol</th><th>Nombre</th><th>Decisión</th><th>Firma / fecha</th></tr></thead>
+    <tbody><tr><td>Responsable del producto</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr><tr><td>Aseguramiento de calidad</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr><tr><td>Responsable de implantación</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr></tbody>
+  </table>
+  <h2><span>1.</span>Objetivo y alcance</h2>
+  <p class="lead">Poner en servicio una versión identificable y recuperable de CodePortfolio mediante PostgreSQL 16, API ASP.NET Core 8, SPA React/Nginx y volúmenes persistentes. Este runbook distingue preparación, ejecución, verificación y reversión; ningún comando se considera autorización automática para operar producción.</p>
+  <h3>1.1 Correcciones frente a la versión 1.0</h3>
+  <ul><li>Se reemplazan etiquetas fijas inexistentes (<code>v1.0</code>/<code>v0.9</code>) por <code>&lt;VERSION_OBJETIVO&gt;</code> y <code>&lt;VERSION_ANTERIOR&gt;</code>, que deben resolverse antes de la ventana.</li><li>Se añade inventario de artefactos, responsables, dependencias, puntos de no retorno, observabilidad y criterios go/no-go.</li><li>Se separan RPO, RTO y tiempo de rollback; se exige evidencia de restauración previa.</li><li>Se registra como bloqueo el estado real: árbol con cambios locales y backend aún sin resultado ejecutado en este entorno.</li></ul>
+  <h2><span>2.</span>Arquitectura objetivo y entornos</h2>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Componente</th><th>Tecnología</th><th>Persistencia / exposición</th><th>Criterio</th></tr></thead>
+    <tbody><tr><td>Proxy público</td><td>Nginx o equivalente + TLS</td><td>Único punto expuesto en 443; 80 solo redirige</td><td>Certificado válido; TLS; cabeceras</td></tr><tr><td>Frontend</td><td>React 19 compilado y servido por Nginx</td><td>Sin estado; red interna</td><td>Carga y consume /api</td></tr><tr><td>Backend</td><td>ASP.NET Core 8</td><td>Volumen de imágenes; red interna</td><td>Responde; aplica migraciones</td></tr><tr><td>Base de datos</td><td>PostgreSQL 16</td><td>Volumen persistente; sin exposición pública</td><td>Healthy; esquema esperado</td></tr></tbody>
+  </table>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Entorno</th><th>Propósito</th><th>Datos permitidos</th><th>Promoción</th></tr></thead>
+    <tbody><tr><td>Desarrollo</td><td>Trabajo local</td><td>Sintéticos</td><td>No se promueve directamente</td></tr><tr><td>Pruebas</td><td>Integración, sistema y recuperación</td><td>Sintéticos o anonimizados</td><td>Mismo commit/configuración estructural</td></tr><tr><td>Producción</td><td>Servicio final</td><td>Reales</td><td>Solo tras G3 aprobado</td></tr></tbody>
+  </table>
+  <h2><span>3.</span>Roles, calendario y dependencias</h2>
+
+  <table>
+    <colgroup><col><col><col><col><col></colgroup>
+    <thead><tr><th>Actividad</th><th>Producto</th><th>Desarrollo/implantación</th><th>Calidad</th><th>Usuarios</th></tr></thead>
+    <tbody><tr><td>Autorizar ventana</td><td>A</td><td>C</td><td>C</td><td>I</td></tr><tr><td>Preparar backup</td><td>I</td><td>R</td><td>C</td><td>I</td></tr><tr><td>Construir/desplegar</td><td>A</td><td>R</td><td>C</td><td>I</td></tr><tr><td>Ejecutar humo</td><td>I</td><td>C</td><td>R</td><td>I</td></tr><tr><td>Decidir rollback</td><td>A</td><td>R</td><td>R</td><td>I</td></tr><tr><td>Comunicar/cerrar</td><td>R</td><td>C</td><td>C</td><td>I</td></tr></tbody>
+  </table>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Hito</th><th>Momento relativo</th><th>Duración</th><th>Salida</th></tr></thead>
+    <tbody><tr><td>Congelar candidato</td><td>T−5 días</td><td>0,5 día</td><td>Commit y versión propuestos</td></tr><tr><td>Regresión / seguridad</td><td>T−4 a T−2</td><td>2 días</td><td>Informe y defectos cerrados</td></tr><tr><td>Ensayo y restauración</td><td>T−2</td><td>0,5 día</td><td>Runbook medido y backup verificado</td></tr><tr><td>Go/no-go</td><td>T−1</td><td>30 min</td><td>Acta aprobada</td></tr><tr><td>Ventana de implantación</td><td>T</td><td>Máx. 4 h</td><td>Sistema o rollback</td></tr><tr><td>Vigilancia intensiva</td><td>T a T+1 h</td><td>1 h</td><td>Sin errores críticos</td></tr><tr><td>Cierre</td><td>T+1 día</td><td>30 min</td><td>Informe y riesgos actualizados</td></tr></tbody>
+  </table>
+  <h2><span>4.</span>Prerrequisitos y lista go/no-go</h2>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>ID</th><th>Control obligatorio</th><th>Evidencia</th><th>Estado actual</th></tr></thead>
+    <tbody><tr><td>G-01</td><td>Commit revisado, árbol limpio y etiqueta firmada/aprobada</td><td>Hash + etiqueta</td><td><span class="status pending">No conforme</span></td></tr><tr><td>G-02</td><td>Frontend lint/build y backend restore/build/test conformes</td><td>Logs + TRX</td><td><span class="status partial">Parcial</span></td></tr><tr><td>G-03</td><td>0 defectos críticos o altos abiertos</td><td>Registro de defectos</td><td><span class="status pending">Sin evidencia</span></td></tr><tr><td>G-04</td><td>Variables/secretos definidos sin valores de ejemplo</td><td>Lista redactada, no secretos</td><td><span class="status pending">Por verificar</span></td></tr><tr><td>G-05</td><td>Backup de DB e imágenes restaurado en entorno aislado</td><td>Acta + conteos/checksums</td><td><span class="status pending">Por ejecutar</span></td></tr><tr><td>G-06</td><td>TLS, DNS, almacenamiento, CPU/RAM y monitoreo preparados</td><td>Checklist de infraestructura</td><td><span class="status pending">Por verificar</span></td></tr><tr><td>G-07</td><td>Ventana, contactos y comunicación aprobados</td><td>Acta / mensaje</td><td><span class="status pending">Por completar</span></td></tr><tr><td>G-08</td><td>Versión anterior y artefactos de rollback disponibles</td><td>Hash/imágenes + backup</td><td><span class="status pending">Por completar</span></td></tr></tbody>
+  </table>
+  <aside class="risk"><strong>Regla go/no-go</strong>Si G-01, G-02, G-03, G-05 o G-08 no está conforme, no se inicia la implantación. El responsable del producto no puede aceptar verbalmente un riesgo crítico sin dejar decisión, controles compensatorios y vencimiento.</aside>
+  <h3>4.1 Variables requeridas</h3>
+
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>Variable</th><th>Regla</th></tr></thead>
+    <tbody><tr><td>POSTGRES_DB / POSTGRES_USER</td><td>Identificadores válidos; no usar cuentas compartidas fuera del servicio.</td></tr><tr><td>POSTGRES_PASSWORD</td><td>Secreto robusto; no versionado ni expuesto en evidencia.</td></tr><tr><td>JWT_KEY</td><td>Aleatoria, al menos 32 bytes, sin valor de ejemplo.</td></tr><tr><td>BOOTSTRAP_ADMIN_EMAIL / PASSWORD</td><td>Solo en alta inicial; retirar/rotar después de verificar la cuenta.</td></tr><tr><td>Cors__AllowedOrigins</td><td>Solo orígenes HTTPS reales de producción.</td></tr></tbody>
+  </table>
+  <h2><span>5.</span>Procedimiento de implantación</h2>
+  <h3>5.1 Preparación y respaldo</h3>
+  <ol><li>Registrar fecha, ejecutor, <code>&lt;VERSION_OBJETIVO&gt;</code>, hash, <code>&lt;VERSION_ANTERIOR&gt;</code>, dominio y ubicación del respaldo.</li><li>Anunciar inicio; impedir nuevas escrituras deteniendo backend y frontend.</li><li>Crear respaldo lógico de PostgreSQL y archivo del volumen de imágenes. Generar SHA-256 y restringir permisos.</li><li>Restaurar ambos en un entorno aislado. Comparar tablas críticas y muestrear imágenes. Si falla, abortar antes de tocar la versión instalada.</li></ol>
+  <pre># Variables resueltas y anotadas en el acta (no dejar marcadores)
+cd /opt/codeportfolio
+docker compose stop backend frontend
+mkdir -p respaldos/&lt;VENTANA&gt;
+
+# La expansión de usuario/base ocurre dentro del contenedor, no depende de exportar .env
+docker compose exec -T db sh -lc 'pg_dump -U &quot;$POSTGRES_USER&quot; -d &quot;$POSTGRES_DB&quot; --format=custom' \
+  &gt; respaldos/&lt;VENTANA&gt;/codeportfolio.dump
+
+docker run --rm -v codeportfolio_uploads_images:/datos:ro \
+  -v /opt/codeportfolio/respaldos/&lt;VENTANA&gt;:/respaldo alpine \
+  tar czf /respaldo/imagenes.tar.gz -C /datos .
+
+shasum -a 256 respaldos/&lt;VENTANA&gt;/codeportfolio.dump \
+  respaldos/&lt;VENTANA&gt;/imagenes.tar.gz &gt; respaldos/&lt;VENTANA&gt;/SHA256SUMS</pre>
+  <h3>5.2 Obtención, construcción y arranque</h3>
+  <pre>git fetch --tags
+git switch --detach &lt;VERSION_OBJETIVO&gt;
+test -z &quot;$(git status --porcelain)&quot;
+git rev-parse HEAD
+
+docker compose build --pull backend frontend
+docker compose up -d db
+docker compose ps db
+docker compose up -d backend
+docker compose logs --since 5m backend
+docker compose up -d frontend
+docker compose ps</pre>
+  <p>Registrar digest de las imágenes construidas. El backend debe mostrar arranque sin excepción y la tabla de historial de migraciones debe contener exactamente las migraciones aprobadas para la versión. El arranque automático de migraciones es un punto de cambio de datos: no se continúa si la migración no fue ensayada sobre una copia representativa.</p>
+  <h3>5.3 Pruebas de humo</h3>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>ID</th><th>Comprobación</th><th>Esperado</th><th>Crítica</th></tr></thead>
+    <tbody><tr><td>PH-01</td><td>GET /api/feed y carga de /</td><td>200; JSON; interfaz sin errores</td><td>Sí</td></tr><tr><td>PH-02</td><td>TLS y cabeceras en web/API</td><td>Certificado válido; HSTS/CSP/nosniff/frame/referrer</td><td>Sí</td></tr><tr><td>PH-03</td><td>Registro, login, refresh y logout</td><td>Ciclo completo; rol User; token revocado</td><td>Sí</td></tr><tr><td>PH-04</td><td>Crear proyecto publicado con imagen</td><td>Visible en feed e imagen recuperable</td><td>Sí</td></tr><tr><td>PH-05</td><td>Crear borrador y consultar sin sesión</td><td>No revela el recurso</td><td>Sí</td></tr><tr><td>PH-06</td><td>Comentar, reaccionar, seguir y notificación</td><td>Estados/contadores correctos</td><td>Sí</td></tr><tr><td>PH-07</td><td>Listar vacantes y postular</td><td>Una postulación propia, visible en “Mis postulaciones”</td><td>Sí</td></tr><tr><td>PH-08</td><td>Reiniciar backend y frontend</td><td>Datos e imágenes persisten</td><td>Sí</td></tr><tr><td>PH-09</td><td>Acceso no autorizado y recurso ajeno</td><td>401/403/404 según contrato, sin datos</td><td>Sí</td></tr><tr><td>PH-10</td><td>Logs, salud y recursos</td><td>Sin 5xx; sin reinicios; uso dentro del umbral</td><td>No</td></tr></tbody>
+  </table>
+  <h2><span>6.</span>Reversión y contingencia</h2>
+
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>Disparador</th><th>Decisión</th></tr></thead>
+    <tbody><tr><td>Migración fallida; pérdida/exposición; PH crítica fallida; reinicio continuo</td><td>Reversión inmediata</td></tr><tr><td>Desviación menor aislada con alternativa, sin seguridad ni integridad afectadas</td><td>Producto puede continuar con riesgo escrito</td></tr><tr><td>Causa desconocida al agotarse el tiempo de diagnóstico (15 min)</td><td>Reversión preventiva</td></tr></tbody>
+  </table>
+  <ol><li>Detener frontend/backend y capturar logs/estado sin alterar la evidencia.</li><li>Restaurar base e imágenes desde el respaldo verificado. La restauración destructiva requiere doble validación del nombre de base y aprobación registrada.</li><li>Cambiar a <code>&lt;VERSION_ANTERIOR&gt;</code> o a sus imágenes inmutables y levantar servicios.</li><li>Ejecutar PH-01, PH-02, PH-03, PH-08 y comparación de conteos; comunicar restablecimiento.</li><li>Abrir incidente y análisis causal en 48 horas; añadir prueba de regresión y actualizar riesgos.</li></ol>
+
+  <table>
+    <colgroup><col><col></colgroup>
+    <thead><tr><th>Objetivo</th><th>Meta</th></tr></thead>
+    <tbody><tr><td>Rollback técnico</td><td>≤30 min desde la decisión</td></tr><tr><td>RTO del servicio</td><td>≤60 min</td></tr><tr><td>RPO operativo</td><td>≤24 h; para la ventana, punto justo antes del despliegue</td></tr></tbody>
+  </table>
+  <h2><span>7.</span>Comunicación, observabilidad y cierre</h2>
+
+  <table>
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Momento</th><th>Destinatarios</th><th>Contenido mínimo</th></tr></thead>
+    <tbody><tr><td>T−48 h</td><td>Usuarios / interesados</td><td>Ventana, afectación, contacto</td></tr><tr><td>Inicio</td><td>Interesados</td><td>Hora, versión, estado</td></tr><tr><td>Cambio de decisión</td><td>Interesados</td><td>Continuación, extensión o rollback</td></tr><tr><td>Fin</td><td>Usuarios</td><td>Restablecimiento y novedades</td></tr><tr><td>T+24 h</td><td>Responsables</td><td>Acta, métricas, incidencias y acciones</td></tr></tbody>
+  </table>
+  <p>Durante la primera hora se observan códigos 5xx, latencia, reinicios, uso de CPU/memoria/disco, conexiones a PostgreSQL y errores de imágenes. El cierre adjunta la lista de pasos, horas, resultados PH, hashes, migraciones, decisión, incidencias y firmas.</p>
+  <h2><span>8.</span>Registro de ejecución</h2>
+
+  <table>
+    <colgroup><col><col><col><col><col></colgroup>
+    <thead><tr><th>Paso</th><th>Inicio/fin</th><th>Ejecutor</th><th>Resultado</th><th>Evidencia / observación</th></tr></thead>
+    <tbody><tr><td>1</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>2</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>3</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>4</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>5</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>6</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>7</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>8</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>9</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr><tr><td>10</td><td></td><td></td><td>[ ] C  [ ] NC</td><td></td></tr></tbody>
+  </table>
+  <p><strong>Decisión final:</strong> [ ] Continuar &nbsp;&nbsp; [ ] Continuar con riesgo aceptado &nbsp;&nbsp; [ ] Revertir</p>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Aprobación</th><th>Nombre</th><th>Firma</th><th>Fecha/hora</th></tr></thead>
+    <tbody><tr><td>Responsable del producto</td><td></td><td></td><td></td></tr><tr><td>Calidad</td><td></td><td></td><td></td></tr></tbody>
+  </table></body></html>

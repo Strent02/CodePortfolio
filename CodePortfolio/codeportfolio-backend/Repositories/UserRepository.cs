@@ -2,6 +2,7 @@ using CodePortfolio.Context;
 using CodePortfolio.Models;
 using CodePortfolio.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace CodePortfolio.Repositories
 {
@@ -14,7 +15,9 @@ namespace CodePortfolio.Repositories
 
         public async Task<List<User>> Search(string query)
             => await _context.Users
-                .Where(u => u.FullName.Contains(query) || u.Email.Contains(query))
+                // El correo es privado; no debe funcionar como índice público de usuarios.
+                .Where(u => u.FullName.Contains(query))
+                .AsNoTracking()
                 .ToListAsync();
 
         public async Task<List<User>> GetUsersByIds(IEnumerable<Guid> userIds)
@@ -29,7 +32,16 @@ namespace CodePortfolio.Repositories
         public async Task<bool> CreateUser(User user)
         {
             _context.Users.Add(user);
-            return await _context.SaveChangesAsync() > 0;
+            try
+            {
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException
+                { SqlState: PostgresErrorCodes.UniqueViolation })
+            {
+                _context.Entry(user).State = EntityState.Detached;
+                return false;
+            }
         }
 
         public async Task<bool> UpdateUser(User user)

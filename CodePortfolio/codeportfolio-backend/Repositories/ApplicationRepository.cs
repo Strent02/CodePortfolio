@@ -2,6 +2,7 @@ using CodePortfolio.Context;
 using CodePortfolio.Models;
 using CodePortfolio.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace CodePortfolio.Repositories
 {
@@ -27,7 +28,16 @@ namespace CodePortfolio.Repositories
                 a.UserId == application.UserId && a.JobOpeningId == application.JobOpeningId);
             if (exists) return false;
             _context.Applications.Add(application);
-            return await _context.SaveChangesAsync() > 0;
+            try
+            {
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException
+                { SqlState: PostgresErrorCodes.UniqueViolation })
+            {
+                _context.Entry(application).State = EntityState.Detached;
+                return false;
+            }
         }
 
         public async Task<bool> UpdateApplication(Application application)

@@ -15,11 +15,13 @@ namespace CodePortfolio.DTOs
 
         [Required(ErrorMessage = "Password is required.")]
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters.")]
+        [MaxLength(150, ErrorMessage = "Password cannot exceed 150 characters.")]
         public string Password { get; set; } = string.Empty;
 
         [MaxLength(100)]
         public string? Location { get; set; }
 
+        [MaxLength(500)]
         public string? Bio { get; set; }
     }
 }

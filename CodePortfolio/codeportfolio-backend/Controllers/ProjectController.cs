@@ -110,6 +110,8 @@ namespace CodePortfolio.Controllers
         // PUT api/project/{id}/image  — subida de imagen featured
         [Authorize]
         [HttpPut("{id:guid}/image")]
+        [RequestSizeLimit(ImageUploadHelper.MaxBytes + 64 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = ImageUploadHelper.MaxBytes + 64 * 1024)]
         public async Task<IActionResult> UploadImage(Guid id, IFormFile file)
         {
             var userId  = ClaimsHelper.GetUserId(User);
@@ -242,6 +244,8 @@ namespace CodePortfolio.Controllers
         [HttpGet("{id:guid}/likes")]
         public async Task<IActionResult> GetLikes(Guid id)
         {
+            var project = await _projectRepo.GetProject(id);
+            if (project == null || !EsVisiblePara(project)) return NotFound("Proyecto no encontrado.");
             var count = await _reactionRepo.GetLikesCount(id);
             return Ok(new { likes = count });
         }
@@ -252,6 +256,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> Search([FromQuery] string q)
         {
             if (string.IsNullOrWhiteSpace(q)) return BadRequest("Escribe algo para buscar.");
+            if (q.Length > 100) return BadRequest("La búsqueda no puede superar 100 caracteres.");
             var results = await _projectRepo.Search(q);
             return Ok(await BuildResponseList(results));
         }

@@ -2,6 +2,7 @@ using CodePortfolio.Context;
 using CodePortfolio.Models;
 using CodePortfolio.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace CodePortfolio.Repositories
 {
@@ -31,7 +32,16 @@ namespace CodePortfolio.Repositories
         public async Task<bool> CreateFollow(Follow follow)
         {
             _context.Follows.Add(follow);
-            return await _context.SaveChangesAsync() > 0;
+            try
+            {
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException
+                { SqlState: PostgresErrorCodes.UniqueViolation })
+            {
+                _context.Entry(follow).State = EntityState.Detached;
+                return false;
+            }
         }
 
         public async Task<bool> DeleteFollow(Guid followId)

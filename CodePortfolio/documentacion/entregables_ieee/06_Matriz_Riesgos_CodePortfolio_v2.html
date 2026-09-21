@@ -1,0 +1,121 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Matriz de Riesgos</title>
+  <style>
+    @page { size: Letter; margin: 18mm 16mm 18mm 16mm; @bottom-center { content: "CodePortfolio · CP-RSK-002 · Página " counter(page) " de " counter(pages); color: #756b60; font: 8pt Arial; } }
+    @page:first { margin: 16mm; @bottom-center { content: ""; } }
+    * { box-sizing: border-box; }
+    html { color: #27231f; font-family: Arial, Helvetica, sans-serif; font-size: 10.2pt; line-height: 1.45; }
+    body { margin: 0; background: white; }
+    .cover { min-height: 235mm; display: flex; flex-direction: column; justify-content: center; padding: 12mm 8mm; }
+    .brand { width: 24mm; height: 24mm; border-radius: 7mm; display: grid; place-items: center; background: linear-gradient(145deg,#9b7d50,#665033); color: white; font: bold 20pt Consolas, monospace; box-shadow: 0 5mm 14mm rgba(85,65,40,.18); }
+    .kicker { margin-top: 18mm; color: #8a6f47; font-size: 8.5pt; font-weight: 700; letter-spacing: 1.8pt; }
+    h1 { margin: 4mm 0 3mm; font-family: Georgia, serif; font-size: 30pt; font-weight: 500; line-height: 1.08; color: #201d19; }
+    .subtitle { max-width: 145mm; font: 13pt/1.45 Georgia, serif; color: #665f57; }
+    .accent-line { width: 36mm; height: 1.5mm; border-radius: 2mm; background: #3f7d5e; margin: 7mm 0; }
+    .confidential { margin-top: auto; color: #877e73; font-size: 8.5pt; }
+    h2 { break-after: avoid; margin: 9mm 0 4mm; padding-bottom: 2mm; border-bottom: .35mm solid #d8c9b5; font: 19pt Georgia, serif; color: #2f2a25; }
+    h2 span { color: #8a6f47; margin-right: 2mm; }
+    h3 { break-after: avoid; margin: 6mm 0 2.2mm; font-size: 12pt; color: #3f6d55; }
+    p { margin: 0 0 3mm; text-align: justify; }
+    .lead { font-size: 11pt; color: #514b44; }
+    ul, ol { margin: 1.5mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin-bottom: 1.3mm; }
+    table { width: 100%; border-collapse: collapse; margin: 2.5mm 0 5mm; font-size: 8.5pt; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th { padding: 2.2mm; text-align: left; vertical-align: bottom; color: white; background: #6d5735; border: .2mm solid #6d5735; }
+    td { padding: 2mm 2.2mm; vertical-align: top; border: .2mm solid #d9d2c8; }
+    tbody tr:nth-child(even) td { background: #f7f4ef; }
+    aside { break-inside: avoid; margin: 4mm 0; padding: 3.2mm 4mm; border-left: 1.4mm solid #8a6f47; background: #f6f0e7; }
+    aside strong { display: block; margin-bottom: 1mm; color: #6d5735; }
+    aside.warn { border-left-color: #b36b35; background: #fff4e9; }
+    aside.good { border-left-color: #3f7d5e; background: #edf7f1; }
+    aside.risk { border-left-color: #a8433f; background: #fff0ef; }
+    pre { white-space: pre-wrap; break-inside: avoid; padding: 3mm; border: .2mm solid #d9d2c8; border-radius: 2mm; background: #f5f3ef; font: 7.7pt/1.4 Consolas, monospace; color: #3d3934; }
+    .status { display: inline-block; white-space: nowrap; padding: .5mm 1.5mm; border-radius: 4mm; font-size: 7.4pt; font-weight: 700; text-transform: uppercase; letter-spacing: .25pt; }
+    .ok { background:#dcefe4; color:#2f694c; } .partial { background:#fff0ce; color:#805d18; }
+    .pending { background:#f3e3dc; color:#934638; } .info { background:#e5eaf1; color:#495d79; }
+    .page-break { break-after: page; }
+    .small { font-size: 8.5pt; color: #6f675f; }
+    .signature { height: 15mm; }
+    a { color: #3f6d55; text-decoration: none; }
+  </style></head><body><section class="cover">
+    <div class="brand">&lt;/&gt;</div>
+    <div class="kicker">CODEPORTFOLIO · GOBIERNO Y CALIDAD</div>
+    <h1>Matriz de Riesgos</h1>
+    <p class="subtitle">Identificación, tratamiento, seguimiento y aceptación · CodePortfolio 1.0</p>
+    <div class="accent-line"></div>
+
+  <table>
+    <colgroup><col style="width:32%"><col style="width:68%"></colgroup>
+    <thead><tr><th>Control</th><th>Valor</th></tr></thead>
+    <tbody><tr><td>Código documental</td><td>CP-RSK-002</td></tr><tr><td>Versión</td><td>2.0</td></tr><tr><td>Fecha de corte</td><td>14 de septiembre de 2026</td></tr><tr><td>Autor / responsable</td><td>Pedro Bonilla</td></tr><tr><td>Estado</td><td>Línea base propuesta para revisión y aprobación</td></tr><tr><td>Proyecto</td><td>CodePortfolio — red social de portafolios de código</td></tr></tbody>
+  </table>
+    <p class="confidential">Documento interno · Copia controlada al aprobarse</p>
+  </section><div class="page-break"></div><h2>Control del documento</h2>
+  <h3>Historia de revisiones</h3>
+
+  <table>
+    <colgroup><col style="width:17%"><col style="width:12%"><col style="width:51%"><col style="width:20%"></colgroup>
+    <thead><tr><th>Fecha</th><th>Versión</th><th>Descripción</th><th>Responsable</th></tr></thead>
+    <tbody><tr><td>09/09/2026</td><td>1.0</td><td>Versiones iniciales y documento consolidado.</td><td>Pedro Bonilla</td></tr><tr><td>14/09/2026</td><td>2.0</td><td>Separación por entregable, contraste con el código, trazabilidad, criterios medibles y registros de evidencia.</td><td>Pedro Bonilla</td></tr></tbody>
+  </table>
+  <h3>Aprobación</h3>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Rol</th><th>Nombre</th><th>Decisión</th><th>Firma / fecha</th></tr></thead>
+    <tbody><tr><td>Responsable del producto</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr><tr><td>Aseguramiento de calidad</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr><tr><td>Responsable de implantación</td><td>Pedro Bonilla</td><td>[ ] Aprobado  [ ] Rechazado</td><td>________________</td></tr></tbody>
+  </table>
+  <h2><span>1.</span>Método y apetito de riesgo</h2>
+  <p class="lead">Se valora probabilidad (P) e impacto (I) de 1 a 5. La exposición es P×I antes y después de controles. La matriz cubre riesgos de producto, proyecto, operación, seguridad, datos, cadena de suministro, calidad y adopción.</p>
+
+  <table>
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Valor</th><th>Probabilidad</th><th>Impacto</th></tr></thead>
+    <tbody><tr><td>1</td><td>Rara: excepcional</td><td>Insignificante: sin interrupción ni dato afectado</td></tr><tr><td>2</td><td>Improbable</td><td>Menor: alternativa simple</td></tr><tr><td>3</td><td>Posible</td><td>Moderado: función/cronograma afectado</td></tr><tr><td>4</td><td>Probable</td><td>Mayor: flujo crítico, >1 día o datos en riesgo</td></tr><tr><td>5</td><td>Casi seguro</td><td>Catastrófico: pérdida/exposición, autorización eludida o indisponibilidad prolongada</td></tr></tbody>
+  </table>
+
+  <table>
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>P×I</th><th>Nivel</th><th>Tratamiento</th></tr></thead>
+    <tbody><tr><td>1–4</td><td>Bajo (B)</td><td>Aceptar/observar</td></tr><tr><td>5–9</td><td>Medio (M)</td><td>Mitigar con responsable</td></tr><tr><td>10–14</td><td>Alto (A)</td><td>Plan y seguimiento frecuente</td></tr><tr><td>15–25</td><td>Crítico (C)</td><td>Bloquea liberación salvo reducción/aprobación excepcional</td></tr></tbody>
+  </table>
+  <aside class="risk"><strong>Apetito</strong>No se acepta para producción riesgo residual crítico, ni riesgo alto de seguridad/integridad sin aprobación explícita y control compensatorio. Un riesgo materializado se gestiona además como hallazgo o defecto.</aside>
+  <h2><span>2.</span>Registro de riesgos</h2>
+
+  <table>
+    <colgroup><col style="width:5%"><col style="width:16%"><col style="width:8%"><col style="width:3%"><col style="width:3%"><col style="width:5%"><col style="width:7%"><col style="width:19%"><col style="width:18%"><col style="width:3%"><col style="width:3%"><col style="width:5%"><col style="width:5%"></colgroup>
+    <thead><tr><th>ID</th><th>Riesgo</th><th>Categoría</th><th>P</th><th>I</th><th>Inh.</th><th>Dueño</th><th>Prevención / mitigación</th><th>Contingencia</th><th>Pr</th><th>Ir</th><th>Residual</th><th>Estado</th></tr></thead>
+    <tbody><tr><td>R-01</td><td>Pérdida/corrupción de datos en migración o baja</td><td>Técnico</td><td>2</td><td>5</td><td>10 A</td><td>Implantación</td><td>Backup DB+imágenes; migración ensayada; cascadas probadas</td><td>Restore verificado; rollback; congelar escrituras</td><td>1</td><td>5</td><td>5 M</td><td>Abierto</td></tr><tr><td>R-02</td><td>Exposición de secretos o datos personales</td><td>Seguridad</td><td>3</td><td>5</td><td>15 C</td><td>Desarrollo</td><td>Variables; .gitignore; errores neutros; evidencia redactada</td><td>Rotar/revocar; aislar; investigar alcance; notificar según obligación</td><td>2</td><td>5</td><td>10 A</td><td>Abierto</td></tr><tr><td>R-03</td><td>Acceso indebido a recurso ajeno o rol Admin</td><td>Seguridad</td><td>3</td><td>5</td><td>15 C</td><td>Calidad</td><td>JWT; [Authorize]; propiedad; pruebas actor–recurso</td><td>Bloquear liberación; revocar sesiones; corregir y regresión</td><td>1</td><td>5</td><td>5 M</td><td>Abierto</td></tr><tr><td>R-04</td><td>Fuerza bruta / abuso del login</td><td>Seguridad</td><td>3</td><td>4</td><td>12 A</td><td>Desarrollo</td><td>10 solicitudes/min/cliente; mensajes neutros</td><td>Bloqueo temporal/WAF; revisar IP real y logs</td><td>2</td><td>4</td><td>8 M</td><td>Controlado</td></tr><tr><td>R-05</td><td>Archivo malicioso o agotamiento de almacenamiento</td><td>Seguridad</td><td>2</td><td>4</td><td>8 M</td><td>Desarrollo</td><td>Firma, tipo, 5 MB, nombre del servidor, volumen</td><td>Aislar/eliminar; ampliar cuota; escanear y revisar logs</td><td>1</td><td>4</td><td>4 B</td><td>Controlado</td></tr><tr><td>R-06</td><td>Indisponibilidad de contenedor/servidor</td><td>Operación</td><td>3</td><td>4</td><td>12 A</td><td>Operación</td><td>Restart; health DB; monitoreo; capacidad</td><td>Reiniciar/failover proveedor; restaurar versión estable</td><td>2</td><td>4</td><td>8 M</td><td>Abierto</td></tr><tr><td>R-07</td><td>Persona única concentra conocimiento y aprobación</td><td>Proyecto</td><td>4</td><td>4</td><td>16 C</td><td>Producto</td><td>Runbooks; repositorio; registros; capacitación cruzada</td><td>Revisor externo; suplente; congelar cambios de alto riesgo</td><td>3</td><td>4</td><td>12 A</td><td>Abierto</td></tr><tr><td>R-08</td><td>Requisito ambiguo o cambio tardío</td><td>Alcance</td><td>3</td><td>3</td><td>9 M</td><td>Producto</td><td>ERS versionada; criterios; control de cambios</td><td>Replanificar; diferir con aceptación; actualizar pruebas</td><td>2</td><td>3</td><td>6 M</td><td>Abierto</td></tr><tr><td>R-09</td><td>Estimación/calendario insuficiente</td><td>Proyecto</td><td>3</td><td>3</td><td>9 M</td><td>Producto</td><td>Hitos, puertas y seguimiento semanal</td><td>Reducir alcance no crítico; priorizar defectos y controles</td><td>2</td><td>3</td><td>6 M</td><td>Abierto</td></tr><tr><td>R-10</td><td>Degradación de rendimiento/crecimiento</td><td>Técnico</td><td>3</td><td>3</td><td>9 M</td><td>Desarrollo</td><td>Paginación; índices; límite 50; meta p95</td><td>Optimizar consulta/índice; limitar tráfico; escalar recursos</td><td>2</td><td>3</td><td>6 M</td><td>Abierto</td></tr><tr><td>R-11</td><td>Vulnerabilidad de dependencia o imagen</td><td>Cadena suministro</td><td>3</td><td>4</td><td>12 A</td><td>Desarrollo</td><td>Lockfile; imágenes versionadas; revisión/escaneo</td><td>Actualizar/pinear; retirar versión; aceptar temporalmente con control</td><td>2</td><td>4</td><td>8 M</td><td>Abierto</td></tr><tr><td>R-12</td><td>Contenido abusivo / enlaces externos dañinos</td><td>Producto</td><td>3</td><td>3</td><td>9 M</td><td>Producto</td><td>Moderación Admin; rel=noopener; reporte por soporte</td><td>Retirar contenido/usuario; registrar evidencia; bloquear dominio</td><td>2</td><td>3</td><td>6 M</td><td>Abierto</td></tr><tr><td>R-13</td><td>Pérdida o inconsistencia de imágenes</td><td>Datos</td><td>3</td><td>3</td><td>9 M</td><td>Operación</td><td>Volumen persistente; backup conjunto; sustitución controlada</td><td>Restaurar volumen; marcador temporal; reconciliar referencias</td><td>2</td><td>3</td><td>6 M</td><td>Abierto</td></tr><tr><td>R-14</td><td>Despliegue fallido / etiqueta incorrecta</td><td>Operación</td><td>3</td><td>4</td><td>12 A</td><td>Implantación</td><td>Gates; tag/hash; ensayo; humo; versión anterior</td><td>Rollback ≤30 min; comunicar; análisis causal</td><td>1</td><td>4</td><td>4 B</td><td>Abierto</td></tr><tr><td>R-15</td><td>Baja adopción o errores de usuario</td><td>Adopción</td><td>2</td><td>3</td><td>6 M</td><td>Capacitación</td><td>Práctica; evaluación; guía; soporte 2 semanas</td><td>Refuerzo; tutoría; mejorar interfaz/material</td><td>1</td><td>3</td><td>3 B</td><td>Abierto</td></tr><tr><td>R-16</td><td>Inconsistencia de idioma y mensajes</td><td>Calidad</td><td>4</td><td>2</td><td>8 M</td><td>Desarrollo</td><td>RNF-10; catálogo; revisión</td><td>Corregir strings; regresión; aceptar explícitamente si se difiere</td><td>2</td><td>2</td><td>4 B</td><td>Materializado</td></tr><tr><td>R-17</td><td>Ausencia de evidencia backend/E2E/restore</td><td>Calidad</td><td>4</td><td>5</td><td>20 C</td><td>Calidad</td><td>Plan, puertas G2/G3, formatos de evidencia</td><td>No liberar; habilitar herramientas; ejecutar y documentar</td><td>1</td><td>5</td><td>5 M</td><td>Materializado</td></tr><tr><td>R-18</td><td>Candidato no reproducible por cambios locales/sin tag</td><td>Configuración</td><td>4</td><td>4</td><td>16 C</td><td>Desarrollo</td><td>Árbol limpio; tag; digest; migraciones inventariadas</td><td>Congelar, revisar e identificar nueva línea base</td><td>1</td><td>4</td><td>4 B</td><td>Materializado</td></tr><tr><td>R-19</td><td>TLS/CORS/proxy mal configurados</td><td>Operación/seguridad</td><td>3</td><td>5</td><td>15 C</td><td>Operación</td><td>Overlay producción; allowlist; prueba externa; headers</td><td>Retirar exposición; corregir; rotar secretos si hubo fuga</td><td>1</td><td>5</td><td>5 M</td><td>Abierto</td></tr><tr><td>R-20</td><td>Borrado en cascada incompleto o excesivo</td><td>Datos</td><td>2</td><td>5</td><td>10 A</td><td>Desarrollo</td><td>FK revisadas; pruebas de huérfanos; backup</td><td>Restaurar; corregir migración/repositorio; regresión</td><td>1</td><td>5</td><td>5 M</td><td>Abierto</td></tr></tbody>
+  </table>
+  <h2><span>3.</span>Indicadores, disparadores y escalamiento</h2>
+
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>Riesgo(s)</th><th>Indicador / disparador</th><th>Umbral</th><th>Acción</th></tr></thead>
+    <tbody><tr><td>R-01/R-13/R-20</td><td>Backup/restore, conteos, huérfanos</td><td>Un restore fallido o diferencia no explicada</td><td>No-go; investigar y repetir</td></tr><tr><td>R-02/R-03/R-04/R-05/R-19</td><td>Alertas, 401/403/429, secretos, archivos</td><td>Una fuga o bypass; aumento anómalo</td><td>Contener y escalar de inmediato</td></tr><tr><td>R-06/R-10</td><td>5xx, p95, reinicios, CPU/RAM/disco</td><td>5xx ≥1 % o p95 >500 ms sostenido</td><td>Diagnóstico; capacidad; rollback si afecta críticos</td></tr><tr><td>R-07</td><td>Revisiones y cobertura de suplente</td><td>Sin revisor/suplente en G3</td><td>Reprogramar o aceptar formalmente exposición</td></tr><tr><td>R-11</td><td>Escaneo de paquetes/imágenes</td><td>CVE crítica/alta explotable</td><td>Bloquear hasta parche/control aprobado</td></tr><tr><td>R-16</td><td>Mensajes no españoles</td><td>Cualquier mensaje de usuario</td><td>Corregir o registrar excepción RNF-10</td></tr><tr><td>R-17</td><td>Casos con resultado y evidencia</td><td><100 % críticos o backend sin resultado</td><td>No liberar</td></tr><tr><td>R-18</td><td>Git status/tag/digest</td><td>Árbol sucio o versión sin identificar</td><td>Congelar nueva línea base</td></tr></tbody>
+  </table>
+  <h2><span>4.</span>Priorización actual</h2>
+
+  <table>
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Prioridad</th><th>Riesgos</th><th>Decisión requerida</th></tr></thead>
+    <tbody><tr><td>1 · Bloqueantes actuales</td><td>R-17, R-18</td><td>Habilitar/ejecutar backend y E2E; integrar cambios y etiquetar candidato.</td></tr><tr><td>2 · Críticos inherentes</td><td>R-02, R-03, R-07, R-19</td><td>Probar controles; incorporar revisor/suplente; verificar producción.</td></tr><tr><td>3 · Altos operativos</td><td>R-01, R-04, R-06, R-11, R-14, R-20</td><td>Ensayo, restore, escaneo, monitoreo y rollback.</td></tr><tr><td>4 · Calidad materializada</td><td>R-16</td><td>Resolver mensajes en inglés o ajustar el requisito.</td></tr></tbody>
+  </table>
+  <h2><span>5.</span>Cadencia y ciclo de vida</h2>
+  <ol><li>Revisar semanalmente y en cada puerta G0–G5; registrar fecha, cambio de P/I, evidencia y decisión.</li><li>El dueño ejecuta acciones; calidad desafía valoración y verifica evidencia; producto acepta el residual.</li><li>Cerrar solo si la causa desaparece o el control demuestra riesgo bajo estable. Conservar el registro histórico.</li><li>Todo incidente actualiza esta matriz, el plan de pruebas y, si aplica, requisitos, capacitación o implantación.</li></ol>
+  <h3>5.1 Registro de revisión</h3>
+
+  <table>
+    <colgroup><col><col><col><col><col><col></colgroup>
+    <thead><tr><th>Fecha</th><th>Riesgo</th><th>Cambio / evidencia</th><th>P/I residual</th><th>Decisión</th><th>Responsable</th></tr></thead>
+    <tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+  </table>
+  <h2><span>6.</span>Aceptación de riesgos</h2>
+
+  <table>
+    <colgroup><col><col><col><col><col></colgroup>
+    <thead><tr><th>ID</th><th>Residual aceptado</th><th>Justificación / control compensatorio</th><th>Vencimiento</th><th>Aprobador / firma</th></tr></thead>
+    <tbody><tr><td></td><td>[ ] Sí [ ] No</td><td></td><td></td><td></td></tr><tr><td></td><td>[ ] Sí [ ] No</td><td></td><td></td><td></td></tr><tr><td></td><td>[ ] Sí [ ] No</td><td></td><td></td><td></td></tr><tr><td></td><td>[ ] Sí [ ] No</td><td></td><td></td><td></td></tr><tr><td></td><td>[ ] Sí [ ] No</td><td></td><td></td><td></td></tr></tbody>
+  </table>
+  <aside class="good"><strong>Mejora frente a la matriz previa</strong>La versión inicial listaba riesgo, P, I y mitigación, pero no tenía dueño, riesgo residual, estado, disparadores, apetito, aceptación ni registro de revisión. Esta matriz incorpora esos controles y añade los riesgos materializados durante la revisión del repositorio.</aside></body></html>

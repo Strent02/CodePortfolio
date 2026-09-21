@@ -15,14 +15,16 @@ namespace CodePortfolio.Controllers
         private readonly IApplicationRepository _appRepo;
         private readonly IUserRepository        _userRepo;
         private readonly ICompanyRepository     _companyRepo;
+        private readonly IProjectRepository     _projectRepo;
 
         public VacancyController(IJobOpeningRepository jobRepo, IApplicationRepository appRepo,
-            IUserRepository userRepo, ICompanyRepository companyRepo)
+            IUserRepository userRepo, ICompanyRepository companyRepo, IProjectRepository projectRepo)
         {
             _jobRepo     = jobRepo;
             _appRepo     = appRepo;
             _userRepo    = userRepo;
             _companyRepo = companyRepo;
+            _projectRepo = projectRepo;
         }
 
         // GET api/vacancy — público, enriquecido con nombre de empresa
@@ -70,6 +72,7 @@ namespace CodePortfolio.Controllers
         public async Task<IActionResult> Search([FromQuery] string q)
         {
             if (string.IsNullOrWhiteSpace(q)) return BadRequest("Escribe algo para buscar.");
+            if (q.Length > 100) return BadRequest("La búsqueda no puede superar 100 caracteres.");
             var results = await _jobRepo.Search(q);
             return Ok(results.Select(j => new { j.JobOpeningId, j.Title, j.Description, j.ContractType, j.WorkMode }));
         }
@@ -79,9 +82,20 @@ namespace CodePortfolio.Controllers
         [HttpPost("{id:guid}/apply")]
         public async Task<IActionResult> Apply(Guid id, [FromBody] ApplyDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var userId = ClaimsHelper.GetUserId(User);
             var job    = await _jobRepo.GetJobOpening(id);
             if (job == null) return NotFound("Vacante no encontrada.");
+
+            // Un usuario solo puede adjuntar un proyecto propio. Sin esta comprobación
+            // bastaba adivinar un GUID para revelar un proyecto privado a un tercero.
+            if (dto.ProjectId.HasValue)
+            {
+                var project = await _projectRepo.GetProject(dto.ProjectId.Value);
+                if (project == null || project.UserId != userId)
+                    return BadRequest("El proyecto adjunto no existe o no te pertenece.");
+            }
 
             var app = new Application
             {

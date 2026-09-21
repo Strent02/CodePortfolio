@@ -99,8 +99,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("FrontendPolicy", policy =>
         policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials());
+              .AllowAnyMethod());
 });
 
 // ── JWT Authentication ────────────────────────────────────────────────────────
@@ -108,6 +107,12 @@ var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("Jwt:Key must be configured through secrets or environment variables.");
 if (Encoding.UTF8.GetByteCount(jwtKey) < 32 || jwtKey.StartsWith("replace-with", StringComparison.OrdinalIgnoreCase))
     throw new InvalidOperationException("Jwt:Key must contain at least 32 bytes.");
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+if (string.IsNullOrWhiteSpace(jwtIssuer) || string.IsNullOrWhiteSpace(jwtAudience))
+    throw new InvalidOperationException("Jwt:Issuer and Jwt:Audience must be configured.");
+if (!int.TryParse(builder.Configuration["Jwt:ExpiresInMinutes"], out var jwtMinutes) || jwtMinutes is < 1 or > 1440)
+    throw new InvalidOperationException("Jwt:ExpiresInMinutes must be between 1 and 1440.");
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -118,8 +123,8 @@ builder.Services
             ValidateAudience         = true,
             ValidateLifetime         = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer              = builder.Configuration["Jwt:Issuer"],
-            ValidAudience            = builder.Configuration["Jwt:Audience"],
+            ValidIssuer              = jwtIssuer,
+            ValidAudience            = jwtAudience,
             IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
             RoleClaimType            = ClaimTypes.Role,
             NameClaimType            = "userId",
@@ -150,8 +155,12 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
     options.ForwardLimit     = 1;
-    options.KnownNetworks.Clear();   // el proxy tiene IP dinámica dentro de la red de contenedores
+    options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
+    // Rango privado usado por las redes bridge de Docker. No se confía en
+    // X-Forwarded-* enviado directamente desde Internet.
+    options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(
+        System.Net.IPAddress.Parse("172.16.0.0"), 12));
 });
 
 builder.Services.AddRateLimiter(options =>

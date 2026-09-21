@@ -101,7 +101,8 @@ function MobileNav({ page, navigate, user }) {
 /* ─── App inner ──────────────────────────────────────────────────────────── */
 function AppInner() {
   const { user, logout, loading } = useAuth();
-  const initialRoute = window.location.hash.replace(/^#\/?/, '') || 'feed';
+  const hashRoute = window.location.hash.replace(/^#\/?/, '');
+  const initialRoute = hashRoute || (sessionStorage.getItem('cp_token') ? 'feed' : 'login');
   const [page, setPage] = useState(initialRoute.split('/')[0]);
   const [profileUserId, setProfileUserId] = useState(initialRoute.split('/')[1] || null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
@@ -118,8 +119,8 @@ function AppInner() {
     });
   }, []);
 
-  const navigate = useCallback((target, param) => {
-    if (target === 'logout') { logout(); window.location.hash = '/feed'; return; }
+  const navigate = useCallback(async (target, param) => {
+    if (target === 'logout') { await logout(); window.location.hash = '/login'; return; }
     if (target === 'profile') {
       if (!param && !user) { setPage('login'); return; }
       setProfileUserId(param || user?.userId);
@@ -131,17 +132,35 @@ function AppInner() {
 
   useEffect(() => {
     function onRouteChange() {
-      const route = window.location.hash.replace(/^#\/?/, '') || 'feed';
+      const route = window.location.hash.replace(/^#\/?/, '') || (user ? 'feed' : 'login');
       const [nextPage, parameter] = route.split('/');
       setPage(nextPage);
       if (nextPage === 'profile') setProfileUserId(parameter || null);
     }
     window.addEventListener('hashchange', onRouteChange);
     return () => window.removeEventListener('hashchange', onRouteChange);
-  }, []);
+  }, [user]);
+
+  // El acceso inicial siempre pasa por autenticación. Esta guarda también evita
+  // que una ruta escrita manualmente muestre el contenido antes de iniciar sesión.
+  useEffect(() => {
+    if (loading) return;
+
+    const route = window.location.hash.replace(/^#\/?/, '');
+    const routePage = route.split('/')[0];
+    const isAuthRoute = routePage === 'login' || routePage === 'register';
+
+    if (!user && !isAuthRoute) {
+      setPage('login');
+      window.location.hash = '/login';
+    } else if (user && (!route || isAuthRoute)) {
+      setPage('feed');
+      window.location.hash = '/feed';
+    }
+  }, [loading, user]);
 
   useEffect(() => {
-    function onSessionExpired() { logout(); window.location.hash = '/login'; }
+    async function onSessionExpired() { await logout(); window.location.hash = '/login'; }
     window.addEventListener('cp:session-expired', onSessionExpired);
     return () => window.removeEventListener('cp:session-expired', onSessionExpired);
   }, [logout]);
@@ -149,10 +168,10 @@ function AppInner() {
   if (loading) return <AppLoader />;
 
   const isAuth = page === 'login' || page === 'register';
-  if (isAuth) {
-    return page === 'login'
-      ? <LoginPage onNavigate={navigate} />
-      : <RegisterPage onNavigate={navigate} />;
+  if (isAuth || !user) {
+    return page === 'register'
+      ? <RegisterPage onNavigate={navigate} />
+      : <LoginPage onNavigate={navigate} />;
   }
 
   return (
